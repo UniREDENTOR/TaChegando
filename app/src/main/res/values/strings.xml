@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TaChegando</string>
+    <string name="title_activity_mapas">Mapa</string>
 </resources>
