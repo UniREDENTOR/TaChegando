@@ -1,37 +1,25 @@
 package br.edu.uniredentor.tachegando;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,9 +27,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -50,7 +37,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 4000, FASTEST_INTERVAL = 4000; // = 5 seconds
+    private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 5000; // = 5 seconds
     private LocationCallback locationCallback;
     private Marker meuOnibus;
     private double latitude = -21.200;
@@ -84,6 +71,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             };
         }
+
+        new InformacaoOnibusDialogFragment().show(getSupportFragmentManager(), "info");
 
     }
 
@@ -119,7 +108,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        startLocationUpdates();
+        iniciaAtualizacaoDaLocalizacao();
     }
 
 
@@ -131,7 +120,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
             return false;
         }
-        return true;
+        return false;
     }
 
     private void moveCamera(LatLng latLng){
@@ -142,14 +131,15 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng sydney = new LatLng(latitude, longitude);
-        meuOnibus = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        meuOnibus = mMap.addMarker(new MarkerOptions().position(sydney).title("Vinhosa - Cehab"));
         moveCamera(sydney);
         mMap.setMyLocationEnabled(true);
         getMinhaLocalizacao();
 
+
     }
 
-    private void startLocationUpdates() {
+    private void iniciaAtualizacaoDaLocalizacao() {
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(UPDATE_INTERVAL);
