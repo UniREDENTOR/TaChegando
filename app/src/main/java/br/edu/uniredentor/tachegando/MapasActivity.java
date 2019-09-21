@@ -1,6 +1,7 @@
 package br.edu.uniredentor.tachegando;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -11,9 +12,19 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,11 +38,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
+
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int CODIGO_PERMISSAO = 123;
+    private static final float ZOOM_CAMERA = 18f;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
+    private LocationRequest locationRequest;
+    private static final long UPDATE_INTERVAL = 4000, FASTEST_INTERVAL = 4000; // = 5 seconds
+    private LocationCallback locationCallback;
+    private Marker meuOnibus;
+    private double latitude = -21.200;
+    private double longitude = -41.888;
+    private ArrayList<LatLng> locais;
+    private int contador = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +64,45 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_mapas);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        criaDemo();
+        if(possuiPermissao()) {
+            mapFragment.getMapAsync(this);
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    for (Location location : locationResult.getLocations()) {
+
+                        LatLng latLng = locais.get(contador);
+                        meuOnibus.setPosition(latLng);
+                        moveCamera(latLng);
+                        if(contador == locais.size() - 1){
+                            contador = 0;
+                        }else{
+                            contador++;
+                        }
+                    }
+                }
+            };
+        }
+
+    }
+
+    private void criaDemo(){
+        locais = new ArrayList<>();
+        locais.add(new LatLng(-21.209075, -41.886608));
+        locais.add(new LatLng(-21.208900, -41.886715));
+        locais.add(new LatLng(-21.208635, -41.886994));
+        locais.add(new LatLng(-21.208345, -41.887273));
+        locais.add(new LatLng(-21.208000, -41.887552));
+        locais.add(new LatLng(-21.207686, -41.887865));
+        locais.add(new LatLng(-21.207448, -41.888050));
+        locais.add(new LatLng(-21.207245, -41.888222));
 
     }
 
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
+
         try{
             final Task localizacao = fusedLocation.getLastLocation();
             localizacao.addOnCompleteListener(new OnCompleteListener() {
@@ -56,10 +114,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     }
                 }
             });
+
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        startLocationUpdates();
     }
+
 
     private boolean possuiPermissao(){
 
@@ -73,20 +135,26 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void moveCamera(LatLng latLng){
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_CAMERA));
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(-21.2030985, -41.8884492);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15f));
-        if(possuiPermissao()){
-            mMap.setMyLocationEnabled(true);
-            getMinhaLocalizacao();
-        }
-
+        LatLng sydney = new LatLng(latitude, longitude);
+        meuOnibus = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        moveCamera(sydney);
+        mMap.setMyLocationEnabled(true);
+        getMinhaLocalizacao();
 
     }
+
+    private void startLocationUpdates() {
+        locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+    }
+
 }
