@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">TaChegando</string>
     <string name="title_activity_mapas">Mapa</string>
+    <string name="chave_desktop">AIzaSyDrcv33f40d-Rq4okkJQ4-KQZF1vRwfJ_g</string>
+    <string name="chave_mac">AIzaSyAR-7_6bW8fTNhq1RWilsf_pUNpMDq1p0M</string>
 </resources>
