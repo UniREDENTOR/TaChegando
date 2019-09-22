@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "254053913165",
+    "firebase_url": "https://tachegando-b9960.firebaseio.com",
+    "project_id": "tachegando-b9960",
+    "storage_bucket": "tachegando-b9960.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254053913165:android:367da721c2715e732a8204",
+        "android_client_info": {
+          "package_name": "br.edu.uniredentor.tachegando"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254053913165-7mfqc9rmv91524a153epk2ecag3f4krq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.edu.uniredentor.tachegando",
+            "certificate_hash": "a014667529f014d6a2849b4d15ecdc202a5d7f02"
+          }
+        },
+        {
+          "client_id": "254053913165-4lhpi8gruuibuktpd6c5fone8lk0crf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqEwF4mkrOBfcPnPs5XIUJVeE-lX6zwpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254053913165-4lhpi8gruuibuktpd6c5fone8lk0crf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
