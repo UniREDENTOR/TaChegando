@@ -1,6 +1,7 @@
 package br.edu.uniredentor.tachegando;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.ArraySet;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -25,25 +27,37 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
+import br.edu.uniredentor.tachegando.model.Viagem;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int CODIGO_PERMISSAO = 123;
-    private static final float ZOOM_CAMERA = 18f;
+    private static final float ZOOM_CAMERA = 17f;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
     private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 5000; // = 5 seconds
     private LocationCallback locationCallback;
-    private Marker meuOnibus;
-    private double latitude = -21.200;
-    private double longitude = -41.888;
     private ArrayList<LatLng> locais;
     private int contador = 0;
+    private boolean isCriador = true;
+    private ArrayList<LatLng> locais2;
+    private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,31 +67,84 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         criaDemo();
         if(possuiPermissao()) {
-            mapFragment.getMapAsync(this);
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(this);
+            }
             locationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
 
                         LatLng latLng = locais.get(contador);
-                        meuOnibus.setPosition(latLng);
-                        moveCamera(latLng);
+                        Viagem viagem = new Viagem();
+                        viagem.setIdUsuario("1");
+                        viagem.setId(contador+"");
+                        viagem.setNome("Teste");
+                        viagem.setLatLng(latLng);
+                        FirebaseUtils.salva(viagem);
+
                         if(contador == locais.size() - 1){
                             contador = 0;
                         }else{
                             contador++;
                         }
+
+                        latLng = locais2.get(contador);
+                        viagem = new Viagem();
+                        viagem.setIdUsuario("2");
+                        viagem.setId((contador-1)+"");
+                        viagem.setNome("Teste 2");
+                        viagem.setLatLng(latLng);
+                        FirebaseUtils.salva(viagem);
+
+
                     }
                 }
             };
         }
 
-        new InformacaoOnibusDialogFragment().show(getSupportFragmentManager(), "info");
+        mapeiaViagens();
 
+    }
+
+    private void mapeiaViagens(){
+        FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                List<Viagem> viagens = queryDocumentSnapshots.toObjects(Viagem.class);
+
+                for(Viagem viagem : viagens){
+                    if(existe(viagem)){
+                        getOnibus(viagem).setPosition(viagem.getLatLng());
+                    }else{
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(viagem.getLatLng()).title(viagem.getNome()));
+                        marker.setTag(viagem.getIdUsuario());
+                        listaDeOnibus.add(marker);
+                    }
+                }
+
+            }
+        });
+    }
+
+    private boolean existe(Viagem viagem) {
+        return getOnibus(viagem) != null;
+    }
+
+    private Marker getOnibus(Viagem viagem) {
+
+        for(Marker marker : listaDeOnibus){
+            if(marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())){
+                return marker;
+            }
+        }
+        return null;
     }
 
     private void criaDemo(){
         locais = new ArrayList<>();
+        locais2 = new ArrayList<>();
         locais.add(new LatLng(-21.209075, -41.886608));
         locais.add(new LatLng(-21.208900, -41.886715));
         locais.add(new LatLng(-21.208635, -41.886994));
@@ -86,6 +153,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         locais.add(new LatLng(-21.207686, -41.887865));
         locais.add(new LatLng(-21.207448, -41.888050));
         locais.add(new LatLng(-21.207245, -41.888222));
+
+        locais2.add(new LatLng(-21.207454, -41.888480));
+        locais2.add(new LatLng(-21.207982, -41.888006));
+        locais2.add(new LatLng(-21.208655, -41.887408));
+        locais2.add(new LatLng(-21.209291, -41.886664));
+        locais2.add(new LatLng(-21.207454, -41.888480));
+        locais2.add(new LatLng(-21.207982, -41.888006));
+        locais2.add(new LatLng(-21.208655, -41.887408));
+        locais2.add(new LatLng(-21.209291, -41.886664));
+
 
     }
 
@@ -97,9 +174,17 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             localizacao.addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
+                    if(task.isSuccessful() && localizacao != null){
                         Location localizacaoAtual = (Location) task.getResult();
-                        moveCamera(new LatLng(localizacaoAtual.getLatitude(), localizacaoAtual.getLongitude()));
+                        if(isCriador){
+                            Viagem viagem = new Viagem();
+                            viagem.setId("1");
+                            viagem.setIdUsuario("3");
+                            viagem.setLatitude(localizacaoAtual.getLatitude());
+                            viagem.setLongitude(localizacaoAtual.getLongitude());
+                            viagem.setNome("Vinhosa - centro");
+                       //     FirebaseUtils.salva(viagem);
+                        }
                     }
                 }
             });
@@ -107,6 +192,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }catch (Exception e){
             e.printStackTrace();
         }
+
 
         iniciaAtualizacaoDaLocalizacao();
     }
@@ -120,7 +206,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
             return false;
         }
-        return false;
+        return true;
     }
 
     private void moveCamera(LatLng latLng){
@@ -130,11 +216,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(latitude, longitude);
-        meuOnibus = mMap.addMarker(new MarkerOptions().position(sydney).title("Vinhosa - Cehab"));
-        moveCamera(sydney);
         mMap.setMyLocationEnabled(true);
         getMinhaLocalizacao();
+        LatLng latLng = new LatLng(-21.209075, -41.886608);
+        moveCamera(latLng);
 
 
     }
