@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
+import br.edu.uniredentor.tachegando.fragments.NovaViagemQrCodeDialogFragment;
 
 public class NovaViagemController {
 
@@ -17,6 +18,7 @@ public class NovaViagemController {
         alerta.setTitle(activity.getString(R.string.nova_viagem)).setMessage("Deseja adicionar uma nova viagem de que forma?").setPositiveButton("QRCode", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                 NovaViagemQrCodeDialogFragment.novaInstancia(latitude, longitude).show(activity.getSupportFragmentManager(),"novaViagemCrCode");
 
             }
         }).setNegativeButton("Manual", new DialogInterface.OnClickListener() {
