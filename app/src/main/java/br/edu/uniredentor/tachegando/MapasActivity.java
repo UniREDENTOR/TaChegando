@@ -37,14 +37,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.controller.NovaViagemController;
+import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.MapaUtils;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final int CODIGO_PERMISSAO = 123;
-    private static final float ZOOM_CAMERA = 17f;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
@@ -53,18 +55,36 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private ArrayList<LatLng> locais;
     private int contador = 0;
     private double latitude, longitude;
-    private boolean isCriador = true;
     private ArrayList<LatLng> locais2;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
+    private List<Viagem> viagens;
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         criaDemo();
+        mostraMapa();
+
+        toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nova_viagem:
+                        NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        break;
+                }
+                return false;
+            }
+        });
+        mapeiaViagens();
+    }
+
+    private void mostraMapa() {
         if(possuiPermissao()) {
             if (mapFragment != null) {
                 mapFragment.getMapAsync(this);
@@ -95,45 +115,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         viagem.setNome("Teste 2");
                         viagem.setLatLng(latLng);
                         FirebaseUtils.salva(viagem);
-
-
                     }
                 }
             };
         }
-
-        toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nova_viagem:
-                        novaViagemDialog();
-                        break;
-                }
-                return false;
-            }
-        });
-
-
-        mapeiaViagens();
-
-    }
-
-    private void novaViagemDialog() {
-
-        AlertDialog.Builder alerta = new AlertDialog.Builder(MapasActivity.this);
-        alerta.setTitle("Nova viagem").setMessage("Deseja adicionar uma nova viagem de que forma?").setPositiveButton("QRCode", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        }).setNegativeButton("Manual", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                NovaViagemManualDialogFragment.newInstance(latitude, longitude).show(getSupportFragmentManager(), "novaViagem");
-            }
-        }).show();
-
     }
 
     private void mapeiaViagens(){
@@ -141,7 +126,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                List<Viagem> viagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                viagens = queryDocumentSnapshots.toObjects(Viagem.class);
 
                 for(Viagem viagem : viagens){
                     if(existe(viagem)){
@@ -152,7 +137,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         listaDeOnibus.add(marker);
                     }
                 }
-
             }
         });
     }
@@ -205,12 +189,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful() && localizacao != null){
                         Location localizacaoAtual = (Location) task.getResult();
-                        if(isCriador){
-
-                            latitude = localizacaoAtual.getLatitude();
-                            longitude = localizacaoAtual.getLongitude();
-                            moveCamera(localizacaoAtual);
-                        }
+                        latitude = localizacaoAtual.getLatitude();
+                        longitude = localizacaoAtual.getLongitude();
                     }
                 }
             });
@@ -225,7 +205,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void moveCamera(Location localizacaoAtual) {
         LatLng latLng = new LatLng(localizacaoAtual.getLatitude(), localizacaoAtual.getLongitude());
-        moveCamera(latLng);
+        MapaUtils.moveCamera(mMap, latLng);
     }
 
 
@@ -240,19 +220,34 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         return true;
     }
 
-    private void moveCamera(LatLng latLng){
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_CAMERA));
-    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Viagem viagem = getViagem(marker.getTag().toString());
+                new InformacaoOnibusDialogFragment().show(getSupportFragmentManager(), "informacao");
+            }
+        });
+
         getMinhaLocalizacao();
         LatLng latLng = new LatLng(-21.209075, -41.886608);
-        moveCamera(latLng);
+        MapaUtils.moveCamera(mMap, latLng);
 
 
+    }
+
+    private Viagem getViagem(String id) {
+        for(Viagem viagem : viagens){
+            if(viagem.getIdUsuario().equalsIgnoreCase(id)){
+                return viagem;
+            }
+        }
+        return new Viagem();
     }
 
     private void iniciaAtualizacaoDaLocalizacao() {
