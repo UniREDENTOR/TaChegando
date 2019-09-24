@@ -2,6 +2,7 @@ package br.edu.uniredentor.tachegando;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -12,6 +13,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.ArraySet;
+import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.Set;
 
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
+import br.edu.uniredentor.tachegando.fragments.NovaViagemDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
@@ -55,6 +58,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private LocationCallback locationCallback;
     private ArrayList<LatLng> locais;
     private int contador = 0;
+    private double latitude, longitude;
     private boolean isCriador = true;
     private ArrayList<LatLng> locais2;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -63,6 +67,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
+        Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         criaDemo();
@@ -103,8 +108,28 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             };
         }
 
+        toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nova_viagem:
+                        novaViagemDialog();
+                        break;
+                }
+                return false;
+            }
+        });
+
+
         mapeiaViagens();
 
+    }
+
+    private void novaViagemDialog() {
+
+        NovaViagemDialogFragment novaViagemDialogFragment = new NovaViagemDialogFragment();
+        novaViagemDialogFragment.show(getSupportFragmentManager(), "novaViagem");
+        novaViagemDialogFragment.pegarDados(latitude,longitude);
     }
 
     private void mapeiaViagens(){
@@ -177,13 +202,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     if(task.isSuccessful() && localizacao != null){
                         Location localizacaoAtual = (Location) task.getResult();
                         if(isCriador){
-                            Viagem viagem = new Viagem();
-                            viagem.setId("1");
-                            viagem.setIdUsuario("3");
-                            viagem.setLatitude(localizacaoAtual.getLatitude());
-                            viagem.setLongitude(localizacaoAtual.getLongitude());
-                            viagem.setNome("Vinhosa - centro");
-                       //     FirebaseUtils.salva(viagem);
+
+                            latitude = localizacaoAtual.getLatitude();
+                            longitude = localizacaoAtual.getLongitude();
+                           // Viagem viagem = new Viagem();
+                            //viagem.setId("1");
+                            //viagem.setIdUsuario("3");
+                            //viagem.setLatitude(localizacaoAtual.getLatitude());
+                           //viagem.setLongitude(localizacaoAtual.getLongitude());
+                            //viagem.setNome("teste");
+                        //FirebaseUtils.salva(viagem);
                         }
                     }
                 }
