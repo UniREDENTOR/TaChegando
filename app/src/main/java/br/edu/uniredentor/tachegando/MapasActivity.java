@@ -8,11 +8,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.ArraySet;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,23 +30,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
-import br.edu.uniredentor.tachegando.fragments.NovaViagemDialogFragment;
+import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
-import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -127,9 +121,19 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void novaViagemDialog() {
 
-        NovaViagemDialogFragment novaViagemDialogFragment = new NovaViagemDialogFragment();
-        novaViagemDialogFragment.show(getSupportFragmentManager(), "novaViagem");
-        novaViagemDialogFragment.pegarDados(latitude,longitude);
+        AlertDialog.Builder alerta = new AlertDialog.Builder(MapasActivity.this);
+        alerta.setTitle("Nova viagem").setMessage("Deseja adicionar uma nova viagem de que forma?").setPositiveButton("QRCode", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).setNegativeButton("Manual", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                NovaViagemManualDialogFragment.newInstance(latitude, longitude).show(getSupportFragmentManager(), "novaViagem");
+            }
+        }).show();
+
     }
 
     private void mapeiaViagens(){
@@ -205,13 +209,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
-                           // Viagem viagem = new Viagem();
-                            //viagem.setId("1");
-                            //viagem.setIdUsuario("3");
-                            //viagem.setLatitude(localizacaoAtual.getLatitude());
-                           //viagem.setLongitude(localizacaoAtual.getLongitude());
-                            //viagem.setNome("teste");
-                        //FirebaseUtils.salva(viagem);
+                            moveCamera(localizacaoAtual);
                         }
                     }
                 }
@@ -223,6 +221,11 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
 
         iniciaAtualizacaoDaLocalizacao();
+    }
+
+    private void moveCamera(Location localizacaoAtual) {
+        LatLng latLng = new LatLng(localizacaoAtual.getLatitude(), localizacaoAtual.getLongitude());
+        moveCamera(latLng);
     }
 
 

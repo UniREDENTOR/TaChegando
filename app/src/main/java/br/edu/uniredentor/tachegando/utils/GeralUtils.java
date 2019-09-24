@@ -1,10 +1,16 @@
 package br.edu.uniredentor.tachegando.utils;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class GeralUtils {
     public static void show(String s) {
@@ -13,5 +19,42 @@ public class GeralUtils {
 
     public static void mostraImagemCircular(Context context, ImageView imageView, String url){
         Glide.with(context).load(url).circleCrop().into(imageView);
+    }
+
+    public static String getEndereco(Context context, double lat, double lng) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+
+            String add = obj.getAddressLine(0);
+            add = add + "," + obj.getAdminArea();
+            add = add + "," + obj.getCountryName();
+
+            return add;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getLocalizacaoPeloEndereco(Context context, String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 1);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+
+            return lat + "," + lng;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
