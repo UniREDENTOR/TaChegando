@@ -26,6 +26,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
 import br.edu.uniredentor.tachegando.model.Passageiro;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -56,7 +58,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        ArrayList<Passageiro> passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
+        final ArrayList<Passageiro> passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
                 new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
                 new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
                 new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos") ));
@@ -66,13 +68,25 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
                 switch (item.getItemId()){
                     case R.id.item_entrar:
-                        AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
                         alerta.setTitle("Ônibus").setMessage("Deseja entrar no ônibus?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+                            }
+                        });
+                        alerta.show();
+                        break;
+
+                    case R.id.item_denunciar:
+                        alerta.setTitle("Ônibus").setMessage("Deseja denunciar o passageiro?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Passageiro passageiroCriador = new Passageiro();
+                                String idUsuario = "";
+                                FirebaseUtils.denuncia(passageiroCriador, idUsuario);
                             }
                         });
                         alerta.show();

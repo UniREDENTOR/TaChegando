@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
 
@@ -72,5 +73,11 @@ public class FirebaseUtils {
                 GeralUtils.show("" + queryDocumentSnapshots.getDocuments());
             }
         });
+    }
+
+    public static void denuncia(Passageiro passageiroCriador, String idUsuario) {
+        HashMap<String, Object> map = passageiroCriador.getMap();
+        map.put("idDenuncia", idUsuario);
+        getBanco().collection("denuncias").document().set(map);
     }
 }

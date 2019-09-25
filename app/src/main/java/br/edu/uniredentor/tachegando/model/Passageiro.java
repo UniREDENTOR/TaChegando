@@ -1,10 +1,13 @@
 package br.edu.uniredentor.tachegando.model;
 
+import java.util.HashMap;
+
 public class Passageiro {
 
     private String foto;
     private String nome;
     private String tempo;
+    private String id;
 
     public Passageiro(){}
 
@@ -35,5 +38,22 @@ public class Passageiro {
 
     public void setTempo(String tempo) {
         this.tempo = tempo;
+    }
+
+    public HashMap<String, Object> getMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("foto", getFoto());
+        map.put("nome", getNome());
+        map.put("tempo", getTempo());
+        map.put("id", getId());
+        return map;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
