@@ -9,4 +9,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sua_localizacao_atual_e">Sua localização atual é:</string>
     <string name="nova_viagem">Nova viagem</string>
+    <string name="denunciar">Denunciar</string>
+    <string name="entrar">Entrar</string>
 </resources>

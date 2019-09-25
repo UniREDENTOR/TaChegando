@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="Denunciar" app:showAsAction="always" android:id="@+id/item_denunciar"></item>
+    <item android:title="@string/entrar" app:showAsAction="always" android:id="@+id/item_entrar"></item>
+    <item android:title="@string/denunciar" app:showAsAction="always" android:id="@+id/item_denunciar"></item>
+
 
 </menu>

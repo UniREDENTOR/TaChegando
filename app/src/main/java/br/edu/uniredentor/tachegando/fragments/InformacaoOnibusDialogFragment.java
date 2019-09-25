@@ -1,7 +1,9 @@
 package br.edu.uniredentor.tachegando.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -64,7 +66,18 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // Handle the menu item
+                switch (item.getItemId()){
+                    case R.id.item_entrar:
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+                        alerta.setTitle("Ônibus").setMessage("Deseja entrar no ônibus?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        alerta.show();
+                        break;
+                }
                 return true;
             }
         });
@@ -95,12 +108,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_informacao_dialog, menu);
     }
 
 }
