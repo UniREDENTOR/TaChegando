@@ -24,21 +24,27 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 public class FirebaseUtils {
 
     public static void salva(Viagem viagem) {
-        Map<String, Object> viagemMap = new HashMap<>();
-        viagemMap.put("id", viagem.getId());
-        viagemMap.put("idUsuario", viagem.getIdUsuario());
-        viagemMap.put("nome", viagem.getNome());
-        viagemMap.put("latitude", viagem.getLatitude());
-        viagemMap.put("longitude", viagem.getLongitude());
+        DocumentReference reference = getBanco().collection("viagens")
+                .document(viagem.getIdUsuario());
+        if(!viagem.getId().isEmpty()){
+            String id= getBanco().collection("viagens")
+                    .document().getId();
+             viagem.setId(id);
+             reference.set(viagem.getMapInicial());
+        }else{
+            reference.set(viagem.getMap());
+        }
 
-        getBanco().collection("viagens")
-                .document(viagem.getIdUsuario())
-                .set(viagemMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+       // salvaHistorico(viagem);
+    }
 
-            }
-        });
+    private static void salvaHistorico(Viagem viagem) {
+        DocumentReference reference = getBanco().collection("historico").document();
+        String id = reference.getId();
+        reference.collection(id).document(viagem.getIdUsuario());
+        viagem.setId(id);
+        GeralUtils.show("Id " + viagem.getId());
+        reference.set(viagem.getMap());
     }
 
     public static void getViagem(String id){

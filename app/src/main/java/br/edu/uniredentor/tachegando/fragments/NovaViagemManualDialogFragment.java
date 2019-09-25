@@ -35,7 +35,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     private double latitude;
     private double longitude;
 
-    public static NovaViagemManualDialogFragment newInstance(double latitude, double longitude) {
+    public static NovaViagemManualDialogFragment novaInstancia(double latitude, double longitude) {
         NovaViagemManualDialogFragment fragment = new NovaViagemManualDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putDouble(ConstantsUtils.LATITUDE, latitude);

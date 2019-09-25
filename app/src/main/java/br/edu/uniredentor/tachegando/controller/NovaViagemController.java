@@ -1,12 +1,10 @@
 package br.edu.uniredentor.tachegando.controller;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import androidx.fragment.app.FragmentActivity;
 
-import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemQrCodeDialogFragment;
@@ -24,7 +22,7 @@ public class NovaViagemController {
         }).setNegativeButton("Manual", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                NovaViagemManualDialogFragment.newInstance(latitude, longitude).show(activity.getSupportFragmentManager(), "novaViagem");
+                NovaViagemManualDialogFragment.novaInstancia(latitude, longitude).show(activity.getSupportFragmentManager(), "novaViagem");
             }
         }).show();
     }

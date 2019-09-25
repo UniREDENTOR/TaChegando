@@ -3,6 +3,7 @@ package br.edu.uniredentor.tachegando.fragments;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +49,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,8 +69,21 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             }
         });
         toolbar.inflateMenu(R.menu.menu_informacao_dialog);
-        toolbar.setTitle("Title");
 
+
+        Location origem = new Location("");
+        origem.setLatitude(-21.209075);
+        origem.setLongitude(-41.886608);
+
+        Location destino = new Location("");
+        destino.setLatitude(-21.197089);
+        destino.setLongitude(-41.867111);
+
+        float distancia = origem.distanceTo(destino);
+        String resultado = String.format("%.2f", distancia);
+        TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
+        textViewDistancia.setText("Distância: " + resultado + " m");
+        toolbar.setTitle("Onibus 1");
         return view;
     }
 
