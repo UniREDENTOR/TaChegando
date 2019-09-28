@@ -11,6 +11,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
@@ -43,6 +45,7 @@ import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -94,28 +97,31 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
 
-                        LatLng latLng = locais.get(contador);
-                        Viagem viagem = new Viagem();
-                        viagem.setIdUsuario("1");
-                        viagem.setId(contador+"");
-                        viagem.setNome("Teste");
-                        viagem.setLatLng(latLng);
-                        FirebaseUtils.salva(viagem);
+                        try{
+                            LatLng latLng = locais.get(contador);
+                            Viagem viagem = new Viagem();
+                            viagem.setId(Singleton.getInstance().getIdViagem());
+                            viagem.setIdUsuario("1");
+                            viagem.setLatLng(latLng);
+                            FirebaseUtils.atualizaLocalizacao(viagem);
+                            if(contador == locais.size() - 1){
+                                contador = 0;
+                            }else{
+                                contador++;
+                            }
 
-                        if(contador == locais.size() - 1){
-                            contador = 0;
-                        }else{
-                            contador++;
+                            latLng = locais2.get(contador);
+                            viagem = new Viagem();
+                            viagem.setIdUsuario("2");
+                            viagem.setNome("Teste 2");
+                            viagem.setLatLng(latLng);
+                            //    FirebaseUtils.salva(viagem);
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-
-                        latLng = locais2.get(contador);
-                        viagem = new Viagem();
-                        viagem.setIdUsuario("2");
-                        viagem.setId((contador-1)+"");
-                        viagem.setNome("Teste 2");
-                        viagem.setLatLng(latLng);
-                        FirebaseUtils.salva(viagem);
                     }
+
+                    mMap.addPolyline(new PolylineOptions().addAll(locais).color(Color.GRAY));
                 }
             };
         }
@@ -148,9 +154,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private Marker getOnibus(Viagem viagem) {
 
         for(Marker marker : listaDeOnibus){
-            if(marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())){
-                return marker;
+            try{
+                if(marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())){
+                    return marker;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
         return null;
     }
@@ -166,6 +177,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         locais.add(new LatLng(-21.207686, -41.887865));
         locais.add(new LatLng(-21.207448, -41.888050));
         locais.add(new LatLng(-21.207245, -41.888222));
+
 
         locais2.add(new LatLng(-21.207454, -41.888480));
         locais2.add(new LatLng(-21.207982, -41.888006));
@@ -202,12 +214,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         iniciaAtualizacaoDaLocalizacao();
     }
-
-    private void moveCamera(Location localizacaoAtual) {
-        LatLng latLng = new LatLng(localizacaoAtual.getLatitude(), localizacaoAtual.getLongitude());
-        MapaUtils.moveCamera(mMap, latLng);
-    }
-
 
     private boolean possuiPermissao(){
 

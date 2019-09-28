@@ -29,6 +29,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class NovaViagemManualDialogFragment extends DialogFragment {
 
@@ -62,8 +63,12 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                 viagem.setNome(editTextRotaManual.getText().toString());
                 viagem.setLatitude(latitude);
                 viagem.setLongitude(longitude);
-                viagem.setIdUsuario("10");
-                FirebaseUtils.salva(viagem);
+                viagem.setIdUsuario("1");
+                String id = FirebaseUtils.salva(viagem);
+                viagem.setId(id);
+                FirebaseUtils.atualizaId(viagem);
+                GeralUtils.show("Id " + id);
+                Singleton.getInstance().setIdViagem(viagem.getId());
                 dismiss();
             }
         });
