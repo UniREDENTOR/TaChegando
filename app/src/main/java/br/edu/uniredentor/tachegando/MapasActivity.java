@@ -8,13 +8,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -22,7 +22,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -34,14 +33,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
-import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
@@ -62,17 +62,19 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
     private List<Viagem> viagens;
     private SupportMapFragment mapFragment;
+    private List<Viagem> listaViagens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         criaDemo();
         mostraMapa();
-
+        buscarViagens();
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -80,11 +82,18 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     case R.id.nova_viagem:
                         NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
                         break;
+                    case R.id.pesquisar_onibus:
+                        BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens);
+                        break;
+
                 }
                 return false;
             }
         });
         mapeiaViagens();
+
+
+
     }
 
     private void mostraMapa() {
@@ -138,14 +147,31 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     if(existe(viagem)){
                         getOnibus(viagem).setPosition(viagem.getLatLng());
                     }else{
-                        Marker marker = mMap.addMarker(new MarkerOptions().position(viagem.getLatLng()).title(viagem.getNome()));
-                        marker.setTag(viagem.getIdUsuario());
-                        listaDeOnibus.add(marker);
+                        try {
+                            Marker marker = mMap.addMarker(new MarkerOptions().position(viagem.getLatLng()).title(viagem.getNome()));
+                            marker.setTag(viagem.getIdUsuario());
+                            listaDeOnibus.add(marker);
+
+                        }catch (Exception ex) {
+
+                        }
                     }
                 }
             }
         });
     }
+
+
+    private void buscarViagens() {
+        FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                 Log.d("locais", listaViagens.toString());
+            }
+        });
+    }
+
 
     private boolean existe(Viagem viagem) {
         return getOnibus(viagem) != null;
@@ -263,5 +289,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         locationRequest.setFastestInterval(FASTEST_INTERVAL);
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
+
+
 
 }

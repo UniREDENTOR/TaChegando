@@ -10,16 +10,20 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
 
 public class FirebaseUtils {
+
+
 
     public static String salva(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
@@ -35,6 +39,7 @@ public class FirebaseUtils {
 
         return viagem.getId();
     }
+
 
     private static void salvaHistorico(Viagem viagem) {
         getBanco().collection("historico").document(viagem.getId()).collection(viagem.getIdUsuario()).add(viagem.getLocalizacao());
@@ -63,9 +68,12 @@ public class FirebaseUtils {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 GeralUtils.show("" + queryDocumentSnapshots.getDocuments());
+
+
             }
         });
     }
+
 
     public static void denuncia(Passageiro passageiroCriador, String idUsuario) {
         HashMap<String, Object> map = passageiroCriador.getMap();
@@ -88,4 +96,6 @@ public class FirebaseUtils {
                 .document(viagem.getIdUsuario()).update(viagem.getLocalizacao());
         salvaHistorico(viagem);
     }
+
+
 }
