@@ -71,11 +71,15 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
-        Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         criaDemo();
+        iniciaMapa();
+    }
+
+    private void iniciaMapa() {
+        Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         mostraMapa();
         buscarViagens();
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -94,9 +98,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
         mapeiaViagens();
-
-
-
     }
 
     private void mostraMapa() {
@@ -151,9 +152,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         getOnibus(viagem).setPosition(viagem.getLatLng());
                     }else{
                         try {
-                            Marker marker = mMap.addMarker(new MarkerOptions().position(viagem.getLatLng()).title(viagem.getNome()));
-                            marker.setTag(viagem.getIdUsuario());
-                            listaDeOnibus.add(marker);
+                            listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
 
                         }catch (Exception ex) {
 
@@ -320,5 +319,23 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void limpar(Polyline polyline) {
         this.polyline = polyline;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == CODIGO_PERMISSAO){
+            boolean permissoesAceitas = true;
+            for(int permission : grantResults){
+                if(permission == PackageManager.PERMISSION_DENIED){
+                    permissoesAceitas = false;
+                }
+            }
+            if(permissoesAceitas){
+                iniciaMapa();
+            }
+        }
+
     }
 }
