@@ -3,4 +3,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item  android:id="@+id/nova_viagem" android:title="Nova Viagem" app:showAsAction="always"></item>
+    <item  android:id="@+id/pesquisar_onibus" android:title="Pesquisar Onibus" app:showAsAction="always"></item>
 </menu>
