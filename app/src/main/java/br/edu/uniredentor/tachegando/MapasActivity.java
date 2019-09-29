@@ -29,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,10 +45,11 @@ import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
-public class MapasActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
 
     private static final int CODIGO_PERMISSAO = 123;
     private GoogleMap mMap;
@@ -62,6 +64,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
     private List<Viagem> viagens;
     private SupportMapFragment mapFragment;
+    private Polyline polyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +124,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         }
                     }
 
-                    mMap.addPolyline(new PolylineOptions().addAll(locais).color(Color.GRAY));
+
                 }
             };
         }
@@ -235,8 +238,25 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                removePolyline();
                 Viagem viagem = getViagem(marker.getTag().toString());
-                new InformacaoOnibusDialogFragment().show(getSupportFragmentManager(), "informacao");
+                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).show(getSupportFragmentManager(), "informacao");
+
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                removePolyline();
+                return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                removePolyline();
             }
         });
 
@@ -245,6 +265,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         MapaUtils.moveCamera(mMap, latLng);
 
 
+    }
+
+    //Sempre chamar antes das interações de click no mapa. Isso evitará ser traçada dois trojetos no mapa.
+    private void removePolyline() {
+        if(polyline != null){
+            polyline.remove();
+        }
     }
 
     private Viagem getViagem(String id) {
@@ -264,4 +291,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
+    @Override
+    public void limpar(Polyline polyline) {
+        this.polyline = polyline;
+    }
 }

@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -25,16 +26,25 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.MapaUtils;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -44,6 +54,8 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private PassageiroAdapter adapter = new PassageiroAdapter();
+    private GoogleMap mapa;
+    private MarcacaoUpdate marcacaoUpdate;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -91,6 +103,28 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         });
                         alerta.show();
                         break;
+
+                    case R.id.item_trajeto:
+                        FirebaseUtils.getBanco().collection("historico").document("pzmQpv1jXVSUrfWAUSvZ").collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                                ArrayList<LatLng> locais = new ArrayList<>();
+                                for(DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
+                                    try{
+                                        LatLng latLng = new LatLng((Double) snapshot.get("latitude"), (Double) snapshot.get("longitude"));
+                                        locais.add(latLng);
+                                    }catch (Exception ex){
+                                        ex.printStackTrace();
+                                    }
+                                }
+                                Polyline polyline = MapaUtils.mostrarTrajeto(mapa, locais);
+                                marcacaoUpdate.limpar(polyline);
+                                dismiss();
+
+                            }
+                        });
+                        break;
                 }
                 return true;
             }
@@ -114,6 +148,11 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return view;
     }
 
+    public InformacaoOnibusDialogFragment setMapa(GoogleMap mapa){
+        this.mapa = mapa;
+        return this;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -122,6 +161,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         if (dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
+    }
+
+    public InformacaoOnibusDialogFragment setMarcacaoUpdate(MapasActivity activity) {
+        this.marcacaoUpdate = activity;
+        return this;
+    }
+
+    public interface MarcacaoUpdate{
+        void limpar(Polyline pontos);
     }
 
 }
