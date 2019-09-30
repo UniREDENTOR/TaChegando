@@ -42,6 +42,7 @@ import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
 import br.edu.uniredentor.tachegando.model.Passageiro;
+import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
@@ -56,6 +57,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private PassageiroAdapter adapter = new PassageiroAdapter();
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
+    private Viagem viagem;
+    private TextView textViewNomeDaRota;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -66,6 +69,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
+        textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
+        textViewNomeDaRota.setText(viagem.getNome());
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
@@ -166,6 +171,12 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     public InformacaoOnibusDialogFragment setMarcacaoUpdate(MapasActivity activity) {
         this.marcacaoUpdate = activity;
         return this;
+    }
+
+    public InformacaoOnibusDialogFragment setViagem(Viagem viagem) {
+        this.viagem = viagem;
+        return this;
+
     }
 
     public interface MarcacaoUpdate{

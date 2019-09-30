@@ -86,14 +86,18 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
         buttonSalvarRotaQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Viagem viagem = new Viagem();
-                               viagem.setLongitude(longitude);
-                               viagem.setLatitude(latitude);
-                               viagem.setNome(rota);
-                               viagem.setIdUsuario("4");
-                               viagem.setId("4");
-                               FirebaseUtils.salva(viagem);
-                               dismiss();
+                        if(!rota.isEmpty()) {
+                            Viagem viagem = new Viagem();
+                            viagem.setLongitude(longitude);
+                            viagem.setLatitude(latitude);
+                            viagem.setNome(rota);
+                            viagem.setIdUsuario("4");
+                            viagem.setId("4");
+                            FirebaseUtils.salva(viagem);
+                            dismiss();
+                        } else {
+                            Toast.makeText(getContext(), "Tente scannear novamente", Toast.LENGTH_SHORT).show();
+                        }
 
             }
         });

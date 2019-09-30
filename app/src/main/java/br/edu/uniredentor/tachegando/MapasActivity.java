@@ -263,7 +263,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public void onInfoWindowClick(Marker marker) {
                 removePolyline();
                 Viagem viagem = getViagem(marker.getTag().toString());
-                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).show(getSupportFragmentManager(), "informacao");
+                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).show(getSupportFragmentManager(), "informacao");
 
             }
         });
