@@ -23,8 +23,6 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 
 public class FirebaseUtils {
 
-
-
     public static String salva(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
                 .document(viagem.getIdUsuario());
@@ -39,7 +37,6 @@ public class FirebaseUtils {
 
         return viagem.getId();
     }
-
 
     private static void salvaHistorico(Viagem viagem) {
         getBanco().collection("historico").document(viagem.getId()).collection(viagem.getIdUsuario()).add(viagem.getLocalizacao());
@@ -73,8 +70,6 @@ public class FirebaseUtils {
             }
         });
     }
-
-
     public static void denuncia(Passageiro passageiroCriador, String idUsuario) {
         HashMap<String, Object> map = passageiroCriador.getMap();
         map.put("idDenuncia", idUsuario);
@@ -96,6 +91,5 @@ public class FirebaseUtils {
                 .document(viagem.getIdUsuario()).update(viagem.getLocalizacao());
         salvaHistorico(viagem);
     }
-
 
 }

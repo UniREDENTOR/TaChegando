@@ -20,9 +20,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 
 public class BuscarOnibusController {
 
-
-
-    public static void alertaDeBusca(final FragmentActivity activity, final List<Viagem> listaLocal) {
+    public static void alertaDeBusca(final FragmentActivity activity, final List<Viagem> listaLocal, final GoogleMap mapa) {
         final AlertDialog.Builder alerta = new AlertDialog.Builder(activity);
         final  List<Viagem> listaDeViagensFiltrada = new ArrayList<>();
         final EditText editTextlocal = new EditText(activity.getApplicationContext());
@@ -34,13 +32,11 @@ public class BuscarOnibusController {
                 for (Viagem viagem : listaLocal) {
                     if(viagem.getNome().toLowerCase().contains(localDesejado) && !localDesejado.isEmpty()){
                         listaDeViagensFiltrada.add(viagem);
-                        BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).show(activity.getSupportFragmentManager(), "buscarOnibus");
+                        BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).setMapa(mapa).show(activity.getSupportFragmentManager(), "buscarOnibus");
                     } else {
-                        Toast.makeText(activity, "não encontrado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Onibus não encontrado", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-
             }
         }).setNegativeButton("Cancelar", null).show();
     }

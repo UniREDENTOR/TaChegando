@@ -42,6 +42,7 @@ import java.util.List;
 
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
+import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -90,7 +91,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
                         break;
                     case R.id.pesquisar_onibus:
-                        BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens);
+                        BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
                         break;
 
                 }
@@ -101,7 +102,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void mostraMapa() {
-        if(possuiPermissao()) {
+        if (possuiPermissao()) {
             if (mapFragment != null) {
                 mapFragment.getMapAsync(this);
             }
@@ -110,16 +111,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
 
-                        try{
+                        try {
                             LatLng latLng = locais.get(contador);
                             Viagem viagem = new Viagem();
                             viagem.setId(Singleton.getInstance().getIdViagem());
                             viagem.setIdUsuario("1");
                             viagem.setLatLng(latLng);
                             FirebaseUtils.atualizaLocalizacao(viagem);
-                            if(contador == locais.size() - 1){
+                            if (contador == locais.size() - 1) {
                                 contador = 0;
-                            }else{
+                            } else {
                                 contador++;
                             }
 
@@ -129,7 +130,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             viagem.setNome("Teste 2");
                             viagem.setLatLng(latLng);
                             //    FirebaseUtils.salva(viagem);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -140,21 +141,21 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
-    private void mapeiaViagens(){
+    private void mapeiaViagens() {
         FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                 viagens = queryDocumentSnapshots.toObjects(Viagem.class);
 
-                for(Viagem viagem : viagens){
-                    if(existe(viagem)){
+                for (Viagem viagem : viagens) {
+                    if (existe(viagem)) {
                         getOnibus(viagem).setPosition(viagem.getLatLng());
-                    }else{
+                    } else {
                         try {
                             listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
 
-                        }catch (Exception ex) {
+                        } catch (Exception ex) {
 
                         }
                     }
@@ -163,17 +164,15 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         });
     }
 
-
     private void buscarViagens() {
         FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                 Log.d("locais", listaViagens.toString());
+                listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                Log.d("locais", listaViagens.toString());
             }
         });
     }
-
 
     private boolean existe(Viagem viagem) {
         return getOnibus(viagem) != null;
@@ -181,12 +180,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private Marker getOnibus(Viagem viagem) {
 
-        for(Marker marker : listaDeOnibus){
-            try{
-                if(marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())){
+        for (Marker marker : listaDeOnibus) {
+            try {
+                if (marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())) {
                     return marker;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -194,7 +193,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         return null;
     }
 
-    private void criaDemo(){
+    private void criaDemo() {
         locais = new ArrayList<>();
         locais2 = new ArrayList<>();
         locais.add(new LatLng(-21.209075, -41.886608));
@@ -222,12 +221,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
+        try {
             final Task localizacao = fusedLocation.getLastLocation();
             localizacao.addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful() && localizacao != null){
+                    if (task.isSuccessful() && localizacao != null) {
                         Location localizacaoAtual = (Location) task.getResult();
                         latitude = localizacaoAtual.getLatitude();
                         longitude = localizacaoAtual.getLongitude();
@@ -235,7 +234,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -243,17 +242,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         iniciaAtualizacaoDaLocalizacao();
     }
 
-    private boolean possuiPermissao(){
+    private boolean possuiPermissao() {
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
             return false;
         }
         return true;
     }
-
 
 
     @Override
@@ -294,14 +292,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     //Sempre chamar antes das interações de click no mapa. Isso evitará ser traçada dois trojetos no mapa.
     private void removePolyline() {
-        if(polyline != null){
+        if (polyline != null) {
             polyline.remove();
         }
     }
 
     private Viagem getViagem(String id) {
-        for(Viagem viagem : viagens){
-            if(viagem.getIdUsuario().equalsIgnoreCase(id)){
+        for (Viagem viagem : viagens) {
+            if (viagem.getIdUsuario().equalsIgnoreCase(id)) {
                 return viagem;
             }
         }
@@ -325,14 +323,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == CODIGO_PERMISSAO){
+        if (requestCode == CODIGO_PERMISSAO) {
             boolean permissoesAceitas = true;
-            for(int permission : grantResults){
-                if(permission == PackageManager.PERMISSION_DENIED){
+            for (int permission : grantResults) {
+                if (permission == PackageManager.PERMISSION_DENIED) {
                     permissoesAceitas = false;
                 }
             }
-            if(permissoesAceitas){
+            if (permissoesAceitas) {
                 iniciaMapa();
             }
         }
