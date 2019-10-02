@@ -39,16 +39,25 @@
     <string name="e_necessario_aceitar_a_permissao_para_utilizar_o_qrCode">É necessario aceitar a permissão para utilizar o QRCODE</string>
     <string name="tente_scannear_novamente">Tente scannear novamente</string>
 
-    <string name="style_json">[
-  {
-    "featureType": "poi.business",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }
-]</string>
+    <!-- fragment buscar onibus dialog xml -->
+    <string name="onibus_encontrado">Onibus encontrado</string>
+
+    <!-- fragment nova viagem dialog xml -->
+    <string name="salvar">Salvar</string>
+
+    <!-- estilo do mapa -->
+    <string name="style_json">
+        [
+          {
+            "featureType": "poi.business",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          }
+        ]
+    </string>
 
 
 </resources>
