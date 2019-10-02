@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
@@ -92,4 +93,7 @@ public class FirebaseUtils {
         salvaHistorico(viagem);
     }
 
+    public static void salva(MensagemChat mensagemChat) {
+        getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
+    }
 }

@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -69,6 +70,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        mostraChat();
+
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
         textViewNomeDaRota.setText(viagem.getNome());
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
@@ -80,8 +84,28 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                 new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
                 new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos") ));
         adapter.atualiza(passageiros);
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getToolbar(view);
+
+
+        Location origem = new Location("");
+        origem.setLatitude(-21.209075);
+        origem.setLongitude(-41.886608);
+
+        Location destino = new Location("");
+        destino.setLatitude(-21.197089);
+        destino.setLongitude(-41.867111);
+
+        float distancia = origem.distanceTo(destino);
+        String resultado = String.format("%.2f", distancia);
+        TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
+        textViewDistancia.setText("Distância: " + resultado + " m");
+
+        return view;
+    }
+
+    private Toolbar getToolbar(View view) {
         Toolbar toolbar = view.findViewById(R.id.toolbar_informacao);
+        toolbar.setTitle("Onibus 1");
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -135,22 +159,11 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             }
         });
         toolbar.inflateMenu(R.menu.menu_informacao_dialog);
+        return toolbar;
+    }
 
-
-        Location origem = new Location("");
-        origem.setLatitude(-21.209075);
-        origem.setLongitude(-41.886608);
-
-        Location destino = new Location("");
-        destino.setLatitude(-21.197089);
-        destino.setLongitude(-41.867111);
-
-        float distancia = origem.distanceTo(destino);
-        String resultado = String.format("%.2f", distancia);
-        TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
-        textViewDistancia.setText("Distância: " + resultado + " m");
-        toolbar.setTitle("Onibus 1");
-        return view;
+    private void mostraChat() {
+        getChildFragmentManager().beginTransaction().replace(R.id.linearLayout_chat, new ChatFragment(), "").commit();
     }
 
     public InformacaoOnibusDialogFragment setMapa(GoogleMap mapa){

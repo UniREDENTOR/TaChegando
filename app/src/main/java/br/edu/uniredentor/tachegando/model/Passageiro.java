@@ -14,6 +14,13 @@ public class Passageiro {
     public Passageiro(String foto, String tempo) {
         setFoto(foto);
         setTempo(tempo);
+        setNome("Zé");
+    }
+
+    public Passageiro(String foto, String tempo, String nome) {
+        setFoto(foto);
+        setTempo(tempo);
+        setNome(nome);
     }
 
     public String getFoto() {

@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,6 +39,11 @@ public class GeralUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String getData(Calendar calendar) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
+        return format.format(calendar.getTime());
     }
 
     public String getLocalizacaoPeloEndereco(Context context, String strAddress) {
