@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,6 +61,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
+    private ArrayList<Passageiro> passageiros;
+
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -79,10 +82,10 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        final ArrayList<Passageiro> passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
+        passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
                 new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
                 new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
-                new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos") ));
+                new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos", "Matheus") ));
         adapter.atualiza(passageiros);
         getToolbar(view);
 
@@ -116,6 +119,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+
                             }
                         });
                         alerta.show();
@@ -128,6 +132,22 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 Passageiro passageiroCriador = new Passageiro();
                                 String idUsuario = "";
                                 FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                            }
+                        });
+                        alerta.show();
+                        break;
+
+                    case R.id.item_sair:
+                        alerta.setTitle("Ônibus").setMessage("Deseja sair do onibus?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for(Passageiro passageiro : passageiros) {
+                                        if(passageiro.getNome().equals("Matheus")) {
+                                            passageiros.remove(passageiro);
+                                            adapter.atualiza(passageiros);
+                                        }
+                                }
+
                             }
                         });
                         alerta.show();

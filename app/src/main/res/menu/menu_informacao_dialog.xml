@@ -5,6 +5,7 @@
     <item android:title="@string/entrar" app:showAsAction="always" android:id="@+id/item_entrar"></item>
     <item android:title="@string/denunciar" app:showAsAction="always" android:id="@+id/item_denunciar"></item>
     <item android:title="Trajeto" app:showAsAction="always" android:id="@+id/item_trajeto"></item>
+    <item android:title="Descer do onibus" app:showAsAction="always" android:id="@+id/item_sair"></item>
 
 
 </menu>
