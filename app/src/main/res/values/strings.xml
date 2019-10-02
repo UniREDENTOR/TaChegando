@@ -13,9 +13,31 @@
     <string name="denunciar">Denunciar</string>
     <string name="entrar">Entrar</string>
 
+    <!-- buscar onibus controller -->
+    <string name="procurar_onibus">Procurar Onibus:</string>
+    <string name="informe_para_onde_deseja_ir">Informe para onde deseja ir:</string>
+    <string name="procurar">Procurar</string>
+    <string name="onibus_nao_encontrado">Ônibus não encontrado</string>
+    <string name="cancelar">Cancelar</string>
 
+    <!-- nova Viagem controller -->
+    <string name="deseja_adicionar_uma_nova_viagem_de_que_forma">Deseja adicionar uma nova viagem de que forma?</string>
+    <string name="qrCode">QRCode</string>
+    <string name="manual">Manual</string>
 
+    <!-- informação onibus dialog Fragment -->
+    <string name="distancia">Distância: </string>
+    <string name="onibus">Ônibus</string>
+    <string name="deseja_entrar_no_onibus">Deseja entrar no ônibus?</string>
+    <string name="nao">Não</string>
+    <string name="sim">Sim</string>
+    <string name="deseja_denunciar_o_passageiro">Deseja denunciar o passageiro?</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
 
+    <!-- nova viagem qrCode dialog fragment -->
+    <string name="e_necessario_aceitar_a_permissao_para_utilizar_o_qrCode">É necessario aceitar a permissão para utilizar o QRCODE</string>
+    <string name="tente_scannear_novamente">Tente scannear novamente</string>
 
     <string name="style_json">[
   {
@@ -27,4 +49,6 @@
     ]
   }
 ]</string>
+
+
 </resources>

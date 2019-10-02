@@ -98,21 +98,21 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         float distancia = origem.distanceTo(destino);
         String resultado = String.format("%.2f", distancia);
         TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
-        textViewDistancia.setText("Distância: " + resultado + " m");
+        textViewDistancia.setText(getString(R.string.distancia) + resultado + " m");
 
         return view;
     }
 
     private Toolbar getToolbar(View view) {
         Toolbar toolbar = view.findViewById(R.id.toolbar_informacao);
-        toolbar.setTitle("Onibus 1");
+        toolbar.setTitle(getString(R.string.onibus) + " 1");
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
                 switch (item.getItemId()){
                     case R.id.item_entrar:
-                        alerta.setTitle("Ônibus").setMessage("Deseja entrar no ônibus?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        alerta.setTitle(getString(R.string.onibus)).setMessage(getString(R.string.deseja_entrar_no_onibus)).setNegativeButton(getString(R.string.nao), null).setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -122,7 +122,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         break;
 
                     case R.id.item_denunciar:
-                        alerta.setTitle("Ônibus").setMessage("Deseja denunciar o passageiro?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        alerta.setTitle(getString(R.string.onibus)).setMessage(getString(R.string.deseja_denunciar_o_passageiro)).setNegativeButton(getString(R.string.nao), null).setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Passageiro passageiroCriador = new Passageiro();
@@ -141,7 +141,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 ArrayList<LatLng> locais = new ArrayList<>();
                                 for(DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
                                     try{
-                                        LatLng latLng = new LatLng((Double) snapshot.get("latitude"), (Double) snapshot.get("longitude"));
+                                        LatLng latLng = new LatLng((Double) snapshot.get(getString(R.string.latitude)), (Double) snapshot.get(getString(R.string.longitude)));
                                         locais.add(latLng);
                                     }catch (Exception ex){
                                         ex.printStackTrace();
