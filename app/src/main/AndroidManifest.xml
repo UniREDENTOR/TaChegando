@@ -21,6 +21,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".activity.PerfilPassageiroActivity"></activity>
+        <activity android:name=".activity.EditarPerfilPassageiroActivity"></activity>
+        <activity android:name=".activity.LoginPassageiroActivity"></activity>
+        <activity android:name=".activity.VerificarLoginPassageiroActivity"></activity>
+
         <activity android:name=".MapasActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
