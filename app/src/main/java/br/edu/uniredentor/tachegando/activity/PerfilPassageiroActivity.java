@@ -1,4 +1,4 @@
-package br.edu.uniredentor.tachegando.activities;
+package br.edu.uniredentor.tachegando.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,11 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import br.edu.uniredentor.tachegando.R;
-import br.edu.uniredentor.tachegando.activity.EditarPerfilPassageiroActivity;
 
 public class PerfilPassageiroActivity extends AppCompatActivity {
 
@@ -57,10 +54,10 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item_sair:
+            case R.id.item_sair_app:
                 finishAffinity();
                 break;
-            case R.id.item_sair_app:
+            case R.id.editar_perfil:
                 Intent i = new Intent(this, EditarPerfilPassageiroActivity.class);
                 startActivity(i);
         }

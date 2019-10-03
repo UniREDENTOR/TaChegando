@@ -132,9 +132,9 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
                 try {
                     if (task.isSuccessful()) {
                         //Verificação realizada
-                        Toast toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Verificado", Toast.LENGTH_SHORT);
                         toast.show();
-                        Intent i = new Intent(getApplicationContext(), br.edu.uniredentor.tachegando.activities.PerfilPassageiroActivity.class);
+                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
 
                     }
@@ -149,10 +149,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void salvarUsuario() {
-
     }
 
 }

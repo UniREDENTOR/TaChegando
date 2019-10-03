@@ -51,7 +51,6 @@ public class LoginPassageiroActivity extends AppCompatActivity {
                     return;
                 }
 
-                //enviando o numero do telefone para o verificarlogin.class
                 Intent intent = new Intent(getApplicationContext(), VerificarLoginPassageiroActivity.class);
                 intent.putExtra("mobile", mobile);
                 startActivity(intent);
