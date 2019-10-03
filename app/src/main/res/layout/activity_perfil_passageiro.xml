@@ -140,7 +140,7 @@
                 android:layout_width="56dp"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"
-                android:src="@drawable/ic_travel" />
+                android:src="@drawable/ic_bus" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
