@@ -28,7 +28,7 @@
         android:id="@+id/button_salvar_rota_qrcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Salvar" />
+        android:text="@string/salvar" />
 
 
 

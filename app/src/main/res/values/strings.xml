@@ -4,6 +4,7 @@
     <string name="chave_desktop">AIzaSyDrcv33f40d-Rq4okkJQ4-KQZF1vRwfJ_g</string>
     <string name="chave_mac">AIzaSyAR-7_6bW8fTNhq1RWilsf_pUNpMDq1p0M</string>
     <string name="chave_matheus">AIzaSyCbGmJFxVYWBpy51UF7khZWPrMRZ6vt0y0</string>
+    <string name="chave_rodrigo">AIzaSyAvI1Xwfvx9ZfY1oj2G4o6mMrMv8eAeYz0</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -11,4 +12,52 @@
     <string name="nova_viagem">Nova viagem</string>
     <string name="denunciar">Denunciar</string>
     <string name="entrar">Entrar</string>
+
+    <!-- buscar onibus controller -->
+    <string name="procurar_onibus">Procurar Onibus:</string>
+    <string name="informe_para_onde_deseja_ir">Informe para onde deseja ir:</string>
+    <string name="procurar">Procurar</string>
+    <string name="onibus_nao_encontrado">Ônibus não encontrado</string>
+    <string name="cancelar">Cancelar</string>
+
+    <!-- nova Viagem controller -->
+    <string name="deseja_adicionar_uma_nova_viagem_de_que_forma">Deseja adicionar uma nova viagem de que forma?</string>
+    <string name="qrCode">QRCode</string>
+    <string name="manual">Manual</string>
+
+    <!-- informação onibus dialog Fragment -->
+    <string name="distancia">Distância: </string>
+    <string name="onibus">Ônibus</string>
+    <string name="deseja_entrar_no_onibus">Deseja entrar no ônibus?</string>
+    <string name="nao">Não</string>
+    <string name="sim">Sim</string>
+    <string name="deseja_denunciar_o_passageiro">Deseja denunciar o passageiro?</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+
+    <!-- nova viagem qrCode dialog fragment -->
+    <string name="e_necessario_aceitar_a_permissao_para_utilizar_o_qrCode">É necessario aceitar a permissão para utilizar o QRCODE</string>
+    <string name="tente_scannear_novamente">Tente scannear novamente</string>
+
+    <!-- fragment buscar onibus dialog xml -->
+    <string name="onibus_encontrado">Onibus encontrado</string>
+
+    <!-- fragment nova viagem dialog xml -->
+    <string name="salvar">Salvar</string>
+
+    <!-- estilo do mapa -->
+    <string name="style_json">
+        [
+          {
+            "featureType": "poi.business",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          }
+        ]
+    </string>
+
+
 </resources>

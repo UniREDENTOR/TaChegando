@@ -72,7 +72,7 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                        Toast.makeText(getContext(), "É necessario aceitar a permissão para utilizar o QRCODE", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.e_necessario_aceitar_a_permissao_para_utilizar_o_qrCode), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -96,7 +96,7 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
                             FirebaseUtils.salva(viagem);
                             dismiss();
                         } else {
-                            Toast.makeText(getContext(), "Tente scannear novamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.tente_scannear_novamente), Toast.LENGTH_SHORT).show();
                         }
 
             }
