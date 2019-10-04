@@ -39,7 +39,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verificar_login);
 
-        getSupportActionBar().setTitle("Verificação");
+        getSupportActionBar().setTitle(getString(R.string.verificacao));
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -62,7 +62,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String codigo = editTextCodigo.getText().toString().trim();
                 if (codigo.isEmpty() || codigo.length() < 6) {
-                    editTextCodigo.setError("Entre com o código");
+                    editTextCodigo.setError(getString(R.string.entre_com_codigo));
                     editTextCodigo.requestFocus();
                     return;
                 }
@@ -132,7 +132,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
                 try {
                     if (task.isSuccessful()) {
                         //Verificação realizada
-                        Toast toast = Toast.makeText(getApplicationContext(), "Verificado", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificado), Toast.LENGTH_SHORT);
                         toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
@@ -141,7 +141,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),
-                            "Verificação não realizada",
+                            getString(R.string.verificacao_nao_realizada),
                             Toast.LENGTH_SHORT);
 
                     toast.show();

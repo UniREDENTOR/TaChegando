@@ -19,7 +19,7 @@ public class EditarPerfilPassageiroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_perfil_passageiro);
 
         getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Editar");
+        getSupportActionBar().setTitle(getString(R.string.editar));
 
         getSupportActionBar().setHomeButtonEnabled(true);
 

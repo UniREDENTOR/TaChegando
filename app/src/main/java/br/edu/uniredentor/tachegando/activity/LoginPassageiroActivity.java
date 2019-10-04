@@ -27,7 +27,7 @@ public class LoginPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_passageiro);
 
-        getSupportActionBar().setTitle("Login");
+        getSupportActionBar().setTitle(getString(R.string.login));
         getSupportActionBar().setElevation(0);
 
         ActionBar bar = getSupportActionBar();
@@ -46,7 +46,7 @@ public class LoginPassageiroActivity extends AppCompatActivity {
                 String mobile = editTextNumero.getText().toString().trim();
 
                 if(mobile.isEmpty() || mobile.length() < 10){
-                    editTextNumero.setError("Entre com número válido");
+                    editTextNumero.setError(getString(R.string.entre_com_numero_valido));
                     editTextNumero.requestFocus();
                     return;
                 }

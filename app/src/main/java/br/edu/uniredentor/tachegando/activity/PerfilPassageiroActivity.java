@@ -29,7 +29,7 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
 
-        getSupportActionBar().setTitle("Perfil");
+        getSupportActionBar().setTitle(getString(R.string.perfil));
         getSupportActionBar().setElevation(0);
 
         ActionBar bar = getSupportActionBar();
