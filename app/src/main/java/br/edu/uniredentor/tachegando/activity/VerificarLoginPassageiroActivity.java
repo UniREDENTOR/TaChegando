@@ -1,8 +1,7 @@
 package br.edu.uniredentor.tachegando.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import br.edu.uniredentor.tachegando.R;
 
-public class VerificarLoginPassageiroActivity extends AppCompatActivity {
+public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
     private String mVerificacaoId;
     private EditText editTextCodigo;
@@ -39,13 +38,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verificar_login);
 
-        getSupportActionBar().setTitle(getString(R.string.verificacao));
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
+        createToolbar();
 
         mAuth = FirebaseAuth.getInstance();
         editTextCodigo = findViewById(R.id.editTextCodigo);
@@ -72,17 +65,25 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(this, LoginPassageiroActivity.class));
-                finishAffinity();
-                break;
-            default:
-                break;
-        }
-        return true;
+    @SuppressLint("NewApi")
+    private void createToolbar() {
+        Toolbar toolbarVerificarLogin = findViewById(R.id.toolbar_principal);
+        toolbarVerificarLogin.setTitle(R.string.verificacao);
+        toolbarVerificarLogin.setElevation(0);
+
+        toolbarVerificarLogin.inflateMenu(R.menu.menu_verificacao_login_passageiro);
+        toolbarVerificarLogin.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.item_cancelar:
+                        startActivity(new Intent(VerificarLoginPassageiroActivity.this, LoginPassageiroActivity.class));
+                        finishAffinity();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void enviarVerificacaoCodigo(String mobile) {
