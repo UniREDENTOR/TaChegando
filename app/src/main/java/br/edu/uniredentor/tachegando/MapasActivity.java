@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -28,28 +27,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
-import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
-import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
-import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
@@ -97,7 +90,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
                         break;
                     case R.id.perfil:
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                        Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
                         startActivity(i);
 
                 }
@@ -135,7 +128,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             viagem.setIdUsuario("2");
                             viagem.setNome("Teste 2");
                             viagem.setLatLng(latLng);
-                            //    FirebaseUtils.salva(viagem);
+                            //FirebaseUtils.salva(viagem);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

@@ -1,30 +1,41 @@
 package br.edu.uniredentor.tachegando.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
 
-public class FirebaseUtils {
+public class FirebaseUtils extends AppCompatActivity {
 
-    public static String salva(Viagem viagem) {
+    private static Context context;
+
+    public static String salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
                 .document(viagem.getIdUsuario());
         if(viagem.getId().isEmpty()){
@@ -57,10 +68,6 @@ public class FirebaseUtils {
         });
     }
 
-    public static FirebaseFirestore getBanco() {
-        return FirebaseFirestore.getInstance();
-    }
-
     public static void getViagens() {
         getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -77,7 +84,7 @@ public class FirebaseUtils {
         getBanco().collection("denuncias").document().set(map);
     }
 
-    public static void salva(ArrayList<LatLng> locais) {
+    public static void salvaLocal(ArrayList<LatLng> locais) {
         DocumentReference reference = getBanco().collection("historico").document();
         reference.set(locais);
     }
@@ -93,7 +100,33 @@ public class FirebaseUtils {
         salvaHistorico(viagem);
     }
 
-    public static void salva(MensagemChat mensagemChat) {
+    public static void salvaMensagem(MensagemChat mensagemChat) {
         getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
     }
+
+    public static void novoUsuario(String telefone, String id) {
+        CollectionReference reference = FirebaseUtils.getBanco().collection("users");
+
+        Passageiro passageiro = new Passageiro(telefone, id);
+
+        reference.add(passageiro).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(context, "User add", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+    public static FirebaseFirestore getBanco() {
+        return FirebaseFirestore.getInstance();
+    }
+
+    public static FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
+
 }
