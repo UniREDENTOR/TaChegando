@@ -1,38 +1,21 @@
 package br.edu.uniredentor.tachegando.activity;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import br.edu.uniredentor.tachegando.R;
 
-public class EditarPerfilPassageiroActivity extends AppCompatActivity {
+public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil_passageiro);
 
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle(getString(R.string.editar));
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
-        getSupportActionBar().setElevation(0);
-
-
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-
+        Toolbar toolbarEditarPerfil = findViewById(R.id.toolbar_principal);
+        toolbarEditarPerfil.setTitle(R.string.editar);
     }
 }
