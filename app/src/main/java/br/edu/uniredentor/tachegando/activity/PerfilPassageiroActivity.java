@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,13 +17,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.google.firebase.auth.FirebaseUser;
+
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 public class PerfilPassageiroActivity extends AppCompatActivity {
 
     private TextView textViewNomePassageiro, textViewCorridaPassageiro;
     private ProgressBar reputacaoPassageiro;
     private ImageView imagemPassageiro, imagemCorrida, imagemEmblema;
+
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +49,17 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         imagemEmblema = findViewById(R.id.imageView_emblema_perfil);
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (FirebaseUtils.getCurrentUser() != null) {
+            FirebaseUtils.novoUsuario(user.getPhoneNumber(), user.getUid());
+        }
+        else {
+            Log.v("TAG", "nao peguei");
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

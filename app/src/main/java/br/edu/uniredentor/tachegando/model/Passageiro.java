@@ -8,8 +8,18 @@ public class Passageiro {
     private String nome;
     private String tempo;
     private String id;
+    private String telefone;
 
-    public Passageiro(){}
+
+    public Passageiro() {}
+
+    public Passageiro(String foto, String nome, String tempo, String id, String telefone) {
+        this.foto = foto;
+        this.nome = nome;
+        this.tempo = tempo;
+        this.id = id;
+        this.telefone = telefone;
+    }
 
     public Passageiro(String foto, String tempo) {
         setFoto(foto);
@@ -62,5 +72,13 @@ public class Passageiro {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

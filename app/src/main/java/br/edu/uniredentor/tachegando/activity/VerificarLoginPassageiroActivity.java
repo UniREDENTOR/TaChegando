@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -20,12 +21,14 @@ import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
@@ -33,6 +36,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
     private EditText editTextCodigo;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         editTextCodigo = findViewById(R.id.editTextCodigo);
 
-        //recebendo o numero
+        //Recebendo o numero
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
 
@@ -66,8 +70,16 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
                     editTextCodigo.requestFocus();
                     return;
                 }
+                try {
+                    verificacaoCodigoEnviado(codigo);
+                } catch (Exception e) {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Código expirado",
+                            Toast.LENGTH_SHORT);
 
-                verificacaoCodigoEnviado(codigo);
+                    toast.show();
+                }
+
             }
         });
     }
@@ -87,7 +99,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
     private void enviarVerificacaoCodigo(String mobile) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+55" + mobile, //código do pais
+                "+55" + mobile, //Código do pais
                 60,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
@@ -105,9 +117,8 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             String codigo = phoneAuthCredential.getSmsCode();
 
             if (codigo != null) {
-                //altera o campo do texto
+                //Altera o campo do texto
                 editTextCodigo.setText(codigo);
-
                 verificacaoCodigoEnviado(codigo);
             }
         }
@@ -130,16 +141,13 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
-                    if (task.isSuccessful()) {
-                        //Verificação realizada
-                        Toast toast = Toast.makeText(getApplicationContext(), "Verificado", Toast.LENGTH_SHORT);
-                        toast.show();
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
-                        startActivity(i);
-
+                    if (task.isSuccessful()) {  //Verificação realizada
+                            Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                            startActivity(i);
+                            Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);
+                            toast.show();
                     }
-                } catch (Exception e) {
-                    //Verificação não foi realizada
+                } catch (Exception e) {     //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Verificação não realizada",
                             Toast.LENGTH_SHORT);
@@ -149,6 +157,9 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
             }
         });
+
     }
+
+
 
 }
