@@ -1,24 +1,21 @@
 package br.edu.uniredentor.tachegando.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 
 import br.edu.uniredentor.tachegando.R;
 
-public class PerfilPassageiroActivity extends AppCompatActivity {
+public class PerfilPassageiroActivity extends FragmentActivity {
 
     private TextView textViewNomePassageiro, textViewCorridaPassageiro;
     private ProgressBar reputacaoPassageiro;
@@ -29,11 +26,8 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
 
-        getSupportActionBar().setTitle(getString(R.string.perfil));
-        getSupportActionBar().setElevation(0);
+        createToolbar();
 
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
 
         textViewNomePassageiro = findViewById(R.id.textView_nome_perfil);
         textViewCorridaPassageiro = findViewById(R.id.textView_qtd_corrida);
@@ -45,23 +39,29 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
 
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_perfil_passageiro, menu);
-        return true;
-    }
+    @SuppressLint({"NewApi", "ResourceAsColor"})
+    private void createToolbar() {
+        Toolbar toolbarPerfilActivity = findViewById(R.id.toolbar_principal);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_sair_app:
-                finishAffinity();
-                break;
-            case R.id.editar_perfil:
-                Intent i = new Intent(this, EditarPerfilPassageiroActivity.class);
-                startActivity(i);
-        }
-        return true;
+        toolbarPerfilActivity.setTitle(R.string.perfil);
+        toolbarPerfilActivity.setElevation(0);
+
+        //infla menu do perfil na toolbar
+        toolbarPerfilActivity.inflateMenu(R.menu.menu_perfil_passageiro);
+        toolbarPerfilActivity.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_sair_app:
+                        finishAffinity();
+                        break;
+                    case R.id.editar_perfil:
+                        Intent i = new Intent(PerfilPassageiroActivity.this, EditarPerfilPassageiroActivity.class);
+                        startActivity(i);
+                }
+                return true;
+            }
+        });
     }
 
 }
