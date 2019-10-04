@@ -93,7 +93,7 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
                             viagem.setNome(rota);
                             viagem.setIdUsuario("4");
                             viagem.setId("4");
-                            FirebaseUtils.salva(viagem);
+                            FirebaseUtils.salvaViagem(viagem);
                             dismiss();
                         } else {
                             Toast.makeText(getContext(), getString(R.string.tente_scannear_novamente), Toast.LENGTH_SHORT).show();

@@ -81,7 +81,7 @@ public class ChatFragment extends Fragment {
                 MensagemChat mensagemChat = new MensagemChat(p, mensagem, Calendar.getInstance());
                 mensagemChat.setIdViagem("1");
                 mensagemChat.setIdUsuario("123");
-                FirebaseUtils.salva(mensagemChat);
+                FirebaseUtils.salvaMensagem(mensagemChat);
                 editTextMensagem.setText("");
             }
         });
