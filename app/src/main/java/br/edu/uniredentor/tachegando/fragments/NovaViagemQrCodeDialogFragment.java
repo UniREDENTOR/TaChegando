@@ -3,6 +3,7 @@ package br.edu.uniredentor.tachegando.fragments;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -104,11 +105,16 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
 
 
 
-
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return view;
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
 
     @Override
     public void onStart() {

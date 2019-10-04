@@ -21,12 +21,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.PerfilPassageiroActivity"></activity>
-        <activity android:name=".activity.EditarPerfilPassageiroActivity"></activity>
-        <activity android:name=".activity.LoginPassageiroActivity"></activity>
-        <activity android:name=".activity.VerificarLoginPassageiroActivity"></activity>
+        <activity android:name=".activity.PerfilPassageiroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+        <activity android:name=".activity.EditarPerfilPassageiroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+        <activity android:name=".activity.LoginPassageiroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+        <activity android:name=".activity.VerificarLoginPassageiroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
 
-        <activity android:name=".MapasActivity">
+        <activity android:name=".MapasActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
