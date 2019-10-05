@@ -59,6 +59,8 @@
           }
         ]
     </string>
+    <string name="sair">Sair</string>
+    <string name="trajeto">Trajeto</string>
 
 
 </resources>
