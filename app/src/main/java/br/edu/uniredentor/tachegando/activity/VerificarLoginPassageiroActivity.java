@@ -146,6 +146,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
                             startActivity(i);
                             Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);
                             toast.show();
+
                     }
                 } catch (Exception e) {     //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),

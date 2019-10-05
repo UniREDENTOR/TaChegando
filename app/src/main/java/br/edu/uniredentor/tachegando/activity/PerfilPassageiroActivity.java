@@ -11,16 +11,20 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getAuth;
 
 public class PerfilPassageiroActivity extends AppCompatActivity {
 
@@ -29,6 +33,7 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
     private ImageView imagemPassageiro, imagemCorrida, imagemEmblema;
 
     private FirebaseUser user;
+    private static FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,18 +53,11 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         imagemCorrida = findViewById(R.id.imageView_qtd_corrida);
         imagemEmblema = findViewById(R.id.imageView_emblema_perfil);
 
+        String mUid = getAuth().getCurrentUser().getUid();
 
-    }
+        Toast toast = Toast.makeText(getApplicationContext(), mUid, Toast.LENGTH_SHORT);
+        toast.show();
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (FirebaseUtils.getCurrentUser() != null) {
-            FirebaseUtils.novoUsuario(user.getPhoneNumber(), user.getUid());
-        }
-        else {
-            Log.v("TAG", "nao peguei");
-        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

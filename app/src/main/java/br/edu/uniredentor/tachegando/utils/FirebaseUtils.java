@@ -1,7 +1,6 @@
 package br.edu.uniredentor.tachegando.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -34,6 +31,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 public class FirebaseUtils extends AppCompatActivity {
 
     private static Context context;
+    private static FirebaseAuth auth;
 
     public static String salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
@@ -125,8 +123,17 @@ public class FirebaseUtils extends AppCompatActivity {
         return FirebaseFirestore.getInstance();
     }
 
-    public static FirebaseUser getCurrentUser() {
-        return FirebaseAuth.getInstance().getCurrentUser();
+    public static FirebaseAuth getAuth(){
+        if (auth == null) {
+            auth = FirebaseAuth.getInstance();
+        }
+        return auth;
+    }
+
+
+    public static FirebaseAuth signOut() {
+        FirebaseAuth.getInstance().signOut();
+        return auth;
     }
 
 }
