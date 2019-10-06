@@ -11,20 +11,21 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
-import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getAuth;
 
 public class PerfilPassageiroActivity extends AppCompatActivity {
 
@@ -32,8 +33,6 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
     private ProgressBar reputacaoPassageiro;
     private ImageView imagemPassageiro, imagemCorrida, imagemEmblema;
 
-    private FirebaseUser user;
-    private static FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,12 +52,20 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         imagemCorrida = findViewById(R.id.imageView_qtd_corrida);
         imagemEmblema = findViewById(R.id.imageView_emblema_perfil);
 
-        String mUid = getAuth().getCurrentUser().getUid();
-
-        Toast toast = Toast.makeText(getApplicationContext(), mUid, Toast.LENGTH_SHORT);
-        toast.show();
-
+        FirebaseUtils.getBanco().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("Tag", document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d("Tag", "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -70,7 +77,7 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_sair_app:
-                finishAffinity();
+                FirebaseUtils.signOut();
                 break;
             case R.id.editar_perfil:
                 Intent i = new Intent(this, EditarPerfilPassageiroActivity.class);

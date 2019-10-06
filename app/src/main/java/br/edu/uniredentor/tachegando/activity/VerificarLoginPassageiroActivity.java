@@ -28,7 +28,10 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getAuth;
 
 public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
@@ -135,6 +138,25 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         }
     };
 
+    private void verificaUsuario() {
+        FirebaseUser user = getAuth().getCurrentUser();
+        if (user != null) {
+            String id = user.getUid();
+            String telefone = user.getPhoneNumber();
+            String nome = "";
+            String foto = "";
+            String tempo = "";
+            int reputacao = 0;
+            String tituloReputacao = "";
+            Double credito = 0.0;
+
+            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, tituloReputacao, credito);
+            FirebaseUtils.salvaUsuario(passageiro);
+
+        } else {
+
+        }
+    }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
@@ -142,10 +164,10 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
                     if (task.isSuccessful()) {  //Verificação realizada
-                            Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
-                            startActivity(i);
-                            Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);
-                            toast.show();
+                        verificaUsuario();
+                        Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);toast.show();
+                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                        startActivity(i);
 
                     }
                 } catch (Exception e) {     //Verificação não foi realizada
@@ -158,7 +180,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
