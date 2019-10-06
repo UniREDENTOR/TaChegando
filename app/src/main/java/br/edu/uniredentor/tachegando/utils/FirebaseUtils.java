@@ -1,6 +1,7 @@
 package br.edu.uniredentor.tachegando.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -30,7 +33,6 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 
 public class FirebaseUtils extends AppCompatActivity {
 
-    private static Context context;
     private static FirebaseAuth auth;
 
     public static String salvaViagem(Viagem viagem) {
@@ -102,23 +104,8 @@ public class FirebaseUtils extends AppCompatActivity {
         getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
     }
 
-    public static void novoUsuario(String telefone, String id) {
-        CollectionReference reference = FirebaseUtils.getBanco().collection("users");
 
-        Passageiro passageiro = new Passageiro(telefone, id);
 
-        reference.add(passageiro).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(context, "User add", Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
-    }
     public static FirebaseFirestore getBanco() {
         return FirebaseFirestore.getInstance();
     }
@@ -133,7 +120,24 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static FirebaseAuth signOut() {
         FirebaseAuth.getInstance().signOut();
+        Log.w("SAIR", "Usuário saiu da Sessão");
         return auth;
+    }
+
+
+    public static void salvaUsuario(Passageiro passageiro) {
+        FirebaseUtils.getBanco().collection("users").add(passageiro.getUser()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
     }
 
 }
