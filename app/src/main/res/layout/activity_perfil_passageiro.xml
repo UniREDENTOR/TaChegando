@@ -115,8 +115,14 @@
             app:layout_constraintTop_toBottomOf="@+id/card_linear"
             tools:layout_editor_absoluteX="207dp">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView_qtd_corrida"
+                android:layout_width="56dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp"
+                android:src="@drawable/ic_bus" />
             <TextView
-                android:id="@+id/textView_qtd_viagem_passageiro"
+                android:id="@+id/textView_qtd_viagens_passageiro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="110dp"
@@ -125,12 +131,7 @@
                 android:textStyle="bold"
                 android:text="Viagens" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_qtd_corrida"
-                android:layout_width="56dp"
-                android:layout_height="50dp"
-                android:layout_margin="20dp"
-                android:src="@drawable/ic_bus" />
+
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -172,7 +173,7 @@
             android:layout_width="56dp"
             android:layout_height="50dp"
             android:layout_margin="20dp"
-            android:src="@drawable/ic_star" />
+            android:src="@drawable/ic_time" />
 
         <TextView
             android:id="@+id/textView_qtd_tempo_percorrido"

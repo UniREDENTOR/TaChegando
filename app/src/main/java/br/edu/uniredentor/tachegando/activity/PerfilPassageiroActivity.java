@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -43,21 +44,11 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
 
-        textViewQtdTempoPercorrido = findViewById(R.id.textView_qtd_tempo_percorrido);
-        textViewTiuloPassageiro = findViewById(R.id.textView_titulo_perfil_passageiro);
-        textViewNomePassageiro = findViewById(R.id.textView_nome_perfil_passageiro);
-        textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagem_passageiro);
-        textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
-        textViewTelefonePassageiro = findViewById(R.id.textView_telefone_passageiro);
-        textViewCreditoPassageiro = findViewById(R.id.textView_credito_perfil_passageiro);
+        inicializaComponentePerfil();
+        recuperaPerfilPassageiro();
+    }
 
-        imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
-        imagemReputacao = findViewById(R.id.imageView_reputacao);
-        imagemViagem = findViewById(R.id.imageView_qtd_corrida);
-        imagemCredito = findViewById(R.id.imageView_credito_perfil);
-        imagemTituloPassageiro = findViewById(R.id.imageView_emblema_perfil);
-
-
+    private void recuperaPerfilPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -67,17 +58,8 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
                         Log.d("", "Dado" + documentSnapshot);
 
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                       // String id = passageiro.getId();
-
-                        textViewTiuloPassageiro.setText(passageiro.getTitulo());
-                        textViewNomePassageiro.setText(passageiro.getNome());
-                        textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
-                        textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
-                        textViewTelefonePassageiro.setText(passageiro.getTelefone());
-                        textViewCreditoPassageiro.setText(String.valueOf(passageiro.getCredito()));
-                        textViewQtdTempoPercorrido.setText((passageiro.getTempo()));
-                       // Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
-                       // toast.show();
+                        recuperaInformacaoPerfil(passageiro);
+                        exibeInfoPassageiro(passageiro);
                     } else {
                         Log.d("", "Não existe");
                     }
@@ -86,8 +68,40 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
             });
         }
         else {
-            // User n está logado
+            //Usuario não logado
         }
+    }
+
+    private void exibeInfoPassageiro(Passageiro passageiro) {
+        String id = passageiro.getId();
+        Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void recuperaInformacaoPerfil(Passageiro passageiro) {
+        textViewTiuloPassageiro.setText(passageiro.getTitulo());
+        textViewNomePassageiro.setText(passageiro.getNome());
+        textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
+        textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
+        textViewTelefonePassageiro.setText(passageiro.getTelefone());
+        textViewCreditoPassageiro.setText(String.valueOf(passageiro.getCredito()));
+        textViewQtdTempoPercorrido.setText(String.valueOf(passageiro.getTempo()));
+    }
+
+    private void inicializaComponentePerfil() {
+        textViewQtdTempoPercorrido = findViewById(R.id.textView_qtd_tempo_percorrido);
+        textViewTiuloPassageiro = findViewById(R.id.textView_titulo_perfil_passageiro);
+        textViewNomePassageiro = findViewById(R.id.textView_nome_perfil_passageiro);
+        textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagens_passageiro);
+        textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
+        textViewTelefonePassageiro = findViewById(R.id.textView_telefone_passageiro);
+        textViewCreditoPassageiro = findViewById(R.id.textView_credito_perfil_passageiro);
+
+        imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
+        imagemReputacao = findViewById(R.id.imageView_reputacao);
+        imagemViagem = findViewById(R.id.imageView_qtd_corrida);
+        imagemCredito = findViewById(R.id.imageView_credito_perfil);
+        imagemTituloPassageiro = findViewById(R.id.imageView_emblema_perfil);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

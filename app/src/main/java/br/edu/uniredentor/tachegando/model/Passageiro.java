@@ -12,21 +12,22 @@ public class Passageiro {
     private String titulo;
     private double credito;
     private int reputacao;
-    private int qtdViagem;
+
+    private int viagem;
 
     public Passageiro() {}
 
 
-    public Passageiro(String id, String telefone, String nome, String foto, String tempo, int reputacao, String tituloReputacao, Double credito, int qtdViagem) {
+    public Passageiro(String id, String telefone, String nome, String foto, String tempo, int reputacao, String titulo, double credito, int viagem) {
         this.id = id;
         this.telefone = telefone;
         this.nome = nome;
         this.foto = foto;
         this.tempo = tempo;
         this.reputacao = reputacao;
-        this.titulo = tituloReputacao;
+        this.titulo = titulo;
         this.credito = credito;
-        this.qtdViagem = qtdViagem;
+        this.viagem = viagem;
     }
 
 
@@ -90,17 +91,18 @@ public class Passageiro {
         return titulo;
     }
 
-    public void setTitulo(String tituloReputacao) {
-        this.titulo = tituloReputacao;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
+
 
 
     public int getQtdViagem() {
-        return qtdViagem;
+        return viagem;
     }
 
     public void setQtdViagem(int qtdViagem) {
-        this.qtdViagem = qtdViagem;
+        this.viagem = qtdViagem;
     }
 
     public HashMap<String, Object> getMap() {

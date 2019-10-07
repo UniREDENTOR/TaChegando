@@ -144,12 +144,11 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             String nome = "";
             String foto = "";
             String tempo = "";
-            String tituloReputacao = "Iniciante";
-            int qtdViagem = 0;
+            String titulo = "Iniciante";
+            int viagem = 0;
             int reputacao = 0;
-            Double credito = 0.0;
-
-            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, tituloReputacao, credito, qtdViagem);
+            double credito = 0.0;
+            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, titulo, credito, viagem);
             FirebaseUtils.salvaUsuario(passageiro);
 
         } else {
@@ -163,7 +162,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
                     if (task.isSuccessful()) {
-                        //Verificação realizada
                         verificaUsuario();
                         Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
@@ -171,7 +169,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
 
                     }
                 } catch (Exception e) {
-                    //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Verificação não realizada",
                             Toast.LENGTH_SHORT);

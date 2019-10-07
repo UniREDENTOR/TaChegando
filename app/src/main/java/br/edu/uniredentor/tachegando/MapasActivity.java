@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
+import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
@@ -90,7 +91,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
                         break;
                     case R.id.perfil:
-                        Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
+                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
 
                 }
@@ -227,8 +228,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful() && localizacao != null) {
                         Location localizacaoAtual = (Location) task.getResult();
-                        latitude = localizacaoAtual.getLatitude();
-                        longitude = localizacaoAtual.getLongitude();
+                       //latitude = localizacaoAtual.getLatitude();
+                        //longitude = localizacaoAtual.getLongitude();
                     }
                 }
             });
