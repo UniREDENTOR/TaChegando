@@ -40,6 +40,7 @@ public class LoginPassageiroActivity extends FragmentActivity {
                 Intent intent = new Intent(getApplicationContext(), VerificarLoginPassageiroActivity.class);
                 intent.putExtra("mobile", mobile);
                 startActivity(intent);
+                finishAffinity();
             }
         });
     }
