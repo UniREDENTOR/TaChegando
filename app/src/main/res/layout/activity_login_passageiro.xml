@@ -18,6 +18,16 @@
         android:background="#6A5ACD"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/imageview"
+            android:layout_marginTop="55dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_phone_white"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            >
+
+        </ImageView>
 
     </LinearLayout>
 
@@ -46,11 +56,13 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:digits="0123456789"
-            android:drawableLeft="@drawable/ic_phone"
-            android:drawablePadding="10dp"
-            android:hint="@string/entre_com_o_telefone"
+            android:drawablePadding="5dp"
             android:inputType="phone"
-            android:maxLength="12" />
+            android:maxLength="12"
+            android:hint="Entre com o telefone"
+            android:drawableLeft="@drawable/ic_phone">
+
+        </EditText>
 
         <Button
             android:id="@+id/buttonContinue"
@@ -58,11 +70,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="#6A5ACD"
-            android:text="@string/continuar"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:layout_gravity="center"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:text="@string/continuar">
 
+        </Button>
     </LinearLayout>
 </LinearLayout>

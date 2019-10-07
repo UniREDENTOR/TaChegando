@@ -138,7 +138,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             viagem.setIdUsuario("2");
                             viagem.setNome("Teste 2");
                             viagem.setLatLng(latLng);
-                            //    FirebaseUtils.salva(viagem);
+                            //FirebaseUtils.salva(viagem);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -236,8 +236,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful() && localizacao != null) {
                         Location localizacaoAtual = (Location) task.getResult();
-                        latitude = localizacaoAtual.getLatitude();
-                        longitude = localizacaoAtual.getLongitude();
+                       latitude = localizacaoAtual.getLatitude();
+                       longitude = localizacaoAtual.getLongitude();
                     }
                 }
             });
