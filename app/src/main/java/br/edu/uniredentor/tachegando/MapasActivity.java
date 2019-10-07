@@ -84,6 +84,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void iniciaMapa() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
+        toolbarPrincipal.setTitle(getString(R.string.app_name));
         mostraMapa();
         buscarViagens();
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
