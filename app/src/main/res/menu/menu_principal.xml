@@ -2,7 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item  android:id="@+id/nova_viagem" android:title="Nova Viagem" app:showAsAction="always"></item>
-    <item  android:id="@+id/perfil" android:icon="@drawable/ic_person" android:title="perfil" app:showAsAction="always" android:orderInCategory="1"></item>
-    <item  android:id="@+id/pesquisar_onibus" android:title="Pesquisar Onibus" app:showAsAction="always"></item>
+    <item  android:id="@+id/nova_viagem" android:title="Nova Viagem" app:showAsAction="always"
+        android:icon="@drawable/ic_action_nova"
+        ></item>
+    <item  android:id="@+id/perfil" android:icon="@drawable/ic_person" android:title="perfil"
+        app:showAsAction="always" android:orderInCategory="1"></item>
+    <item  android:id="@+id/pesquisar_onibus" android:title="Pesquisar Onibus"
+        android:icon="@drawable/ic_action_pesquisar"
+        app:showAsAction="always"></item>
 </menu>
