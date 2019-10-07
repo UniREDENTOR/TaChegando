@@ -87,6 +87,9 @@
     <!-- menu perfil passageiro xml -->
     <string name="sair">Sair</string>
 
+    <!-- menu verificação login passageiro -->
+    <string name="voltar">Voltar</string>
+
     <!-- estilo do mapa -->
     <string name="style_json">
         [
@@ -99,9 +102,6 @@
             ]
           }
         ]
-
-
     </string>
-    <string name="voltar">Voltar</string>
 
 </resources>

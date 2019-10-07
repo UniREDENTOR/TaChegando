@@ -1,10 +1,12 @@
 package br.edu.uniredentor.tachegando.utils;
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -95,5 +97,9 @@ public class FirebaseUtils {
 
     public static void salva(MensagemChat mensagemChat) {
         getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
+    }
+
+    public static boolean usuarioCadastrado() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 }
