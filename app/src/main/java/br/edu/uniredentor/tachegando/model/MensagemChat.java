@@ -49,16 +49,6 @@ public class MensagemChat {
         this.idViagem = idViagem;
     }
 
-    public HashMap<String, Object> getMap() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("texto", texto);
-        map.put("diaEHora", diaEHora);
-        map.put("nomeUsuario", nomeUsuario);
-        map.put("fotoUsuario", fotoUsuario);
-        map.put("idUsuario", idUsuario);
-        return map;
-    }
-
     public String getNomeUsuario() {
         return nomeUsuario;
     }
@@ -81,5 +71,15 @@ public class MensagemChat {
 
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public HashMap<String, Object> getMap() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("texto", texto);
+        map.put("diaEHora", diaEHora);
+        map.put("nomeUsuario", nomeUsuario);
+        map.put("fotoUsuario", fotoUsuario);
+        map.put("idUsuario", idUsuario);
+        return map;
     }
 }

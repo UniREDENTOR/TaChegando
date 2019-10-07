@@ -12,8 +12,8 @@ public class Passageiro {
     private String titulo;
     private double credito;
     private int reputacao;
-
     private int viagem;
+
 
     public Passageiro() {}
 
@@ -31,6 +31,22 @@ public class Passageiro {
     }
 
 
+    public String getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(String tempo) {
+        this.tempo = tempo;
+    }
+
+    public int getViagem() {
+        return viagem;
+    }
+
+    public void setViagem(int viagem) {
+        this.viagem = viagem;
+    }
+
     public String getFoto() {
         return foto;
     }
@@ -45,14 +61,6 @@ public class Passageiro {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getTempo() {
-        return tempo;
-    }
-
-    public void setTempo(String tempo) {
-        this.tempo = tempo;
     }
 
     public String getId() {
