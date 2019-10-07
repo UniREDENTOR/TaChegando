@@ -1,20 +1,17 @@
 package br.edu.uniredentor.tachegando.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +24,7 @@ import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 
-public class PerfilPassageiroActivity extends AppCompatActivity {
+public class PerfilPassageiroActivity extends FragmentActivity {
 
     private TextView textViewQtdTempoPercorrido, textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewTelefonePassageiro, textViewReputacaoPassageiro, textViewCreditoPassageiro;
     private ImageView imagemPassageiro, imagemViagem, imagemCredito, imagemReputacao, imagemTituloPassageiro;
@@ -38,14 +35,35 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
 
-        getSupportActionBar().setTitle("Perfil");
-        getSupportActionBar().setElevation(0);
-
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
-
+        createToolbar();
         inicializaComponentePerfil();
         recuperaPerfilPassageiro();
+    }
+
+    @SuppressLint({"NewApi", "ResourceAsColor"})
+    private void createToolbar() {
+        Toolbar toolbarPerfilActivity = findViewById(R.id.toolbar_principal);
+
+        toolbarPerfilActivity.setTitle(R.string.perfil);
+        toolbarPerfilActivity.setElevation(0);
+
+        //infla menu do perfil na toolbar
+        toolbarPerfilActivity.inflateMenu(R.menu.menu_perfil_passageiro);
+        toolbarPerfilActivity.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_sair_app:
+                        FirebaseUtils.signOut();
+                        finishAffinity();
+                        break;
+                    case R.id.editar_perfil:
+                        Intent i = new Intent(PerfilPassageiroActivity.this, EditarPerfilPassageiroActivity.class);
+                        startActivity(i);
+                }
+                return true;
+            }
+        });
     }
 
     private void recuperaPerfilPassageiro() {
@@ -55,11 +73,8 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
-                        Log.d("", "Dado" + documentSnapshot);
-
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                        recuperaInformacaoPerfil(passageiro);
-                        exibeInfoPassageiro(passageiro);
+                        alteraInformacaoPerfil(passageiro);
                     } else {
                         Log.d("", "Não existe");
                     }
@@ -72,20 +87,21 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         }
     }
 
+
     private void exibeInfoPassageiro(Passageiro passageiro) {
         String id = passageiro.getId();
         Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
         toast.show();
     }
 
-    private void recuperaInformacaoPerfil(Passageiro passageiro) {
+    private void alteraInformacaoPerfil(Passageiro passageiro) {
         textViewTiuloPassageiro.setText(passageiro.getTitulo());
         textViewNomePassageiro.setText(passageiro.getNome());
         textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
         textViewTelefonePassageiro.setText(passageiro.getTelefone());
         textViewCreditoPassageiro.setText(String.valueOf(passageiro.getCredito()));
-        textViewQtdTempoPercorrido.setText(String.valueOf(passageiro.getTempo()));
+        textViewQtdTempoPercorrido.setText(passageiro.getTempo());
     }
 
     private void inicializaComponentePerfil() {
@@ -96,31 +112,10 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
         textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
         textViewTelefonePassageiro = findViewById(R.id.textView_telefone_passageiro);
         textViewCreditoPassageiro = findViewById(R.id.textView_credito_perfil_passageiro);
-
         imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
         imagemReputacao = findViewById(R.id.imageView_reputacao);
         imagemViagem = findViewById(R.id.imageView_qtd_corrida);
         imagemCredito = findViewById(R.id.imageView_credito_perfil);
         imagemTituloPassageiro = findViewById(R.id.imageView_emblema_perfil);
     }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_perfil_passageiro, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_sair_app:
-                FirebaseUtils.signOut();
-                break;
-            case R.id.editar_perfil:
-                Intent i = new Intent(this, EditarPerfilPassageiroActivity.class);
-                startActivity(i);
-        }
-        return true;
-    }
-
 }

@@ -1,10 +1,8 @@
 package br.edu.uniredentor.tachegando.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -12,15 +10,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -33,26 +30,18 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getAuth;
 
-public class VerificarLoginPassageiroActivity extends AppCompatActivity {
+public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
     private String mVerificacaoId;
     private EditText editTextCodigo;
 
-    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verificar_login);
 
-        getSupportActionBar().setTitle("Verificação");
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        createToolbar();
 
-        ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#6A5ACD")));
-
-        mAuth = FirebaseAuth.getInstance();
         editTextCodigo = findViewById(R.id.editTextCodigo);
 
         //Recebendo o numero
@@ -67,7 +56,7 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String codigo = editTextCodigo.getText().toString().trim();
                 if (codigo.isEmpty() || codigo.length() < 6) {
-                    editTextCodigo.setError("Entre com o código");
+                    editTextCodigo.setError(getString(R.string.entre_com_codigo));
                     editTextCodigo.requestFocus();
                     return;
                 }
@@ -85,17 +74,25 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                startActivity(new Intent(this, LoginPassageiroActivity.class));
-                finishAffinity();
-                break;
-            default:
-                break;
-        }
-        return true;
+    @SuppressLint("NewApi")
+    private void createToolbar() {
+        Toolbar toolbarVerificarLogin = findViewById(R.id.toolbar_principal);
+        toolbarVerificarLogin.setTitle(R.string.verificacao);
+        toolbarVerificarLogin.setElevation(0);
+
+        toolbarVerificarLogin.inflateMenu(R.menu.menu_verificacao_login_passageiro);
+        toolbarVerificarLogin.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.item_cancelar:
+                        startActivity(new Intent(VerificarLoginPassageiroActivity.this, LoginPassageiroActivity.class));
+                        finishAffinity();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void enviarVerificacaoCodigo(String mobile) {
@@ -118,7 +115,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             String codigo = phoneAuthCredential.getSmsCode();
 
             if (codigo != null) {
-                //Altera o campo do texto
                 editTextCodigo.setText(codigo);
                 verificacaoCodigoEnviado(codigo);
             }
@@ -136,14 +132,15 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
         }
     };
 
-    private void verificaUsuario() {
+    //Mudar esse método para só salvar se nao existir usuario cadastrado; fazer depois..
+    private void verificaPassageiro() {
         FirebaseUser user = getAuth().getCurrentUser();
         if (user != null) {
             String id = user.getUid();
             String telefone = user.getPhoneNumber();
-            String nome = "";
+            String nome = "user";
             String foto = "";
-            String tempo = "";
+            String tempo = "0"; //reformular var para date time
             String titulo = "Iniciante";
             int viagem = 0;
             int reputacao = 0;
@@ -157,20 +154,21 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
+        getAuth().signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
                     if (task.isSuccessful()) {
-                        verificaUsuario();
-                        Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);toast.show();
+                        verificaPassageiro();
+                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificado), Toast.LENGTH_SHORT);
+                        toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
 
                     }
                 } catch (Exception e) {
                     Toast toast = Toast.makeText(getApplicationContext(),
-                            "Verificação não realizada",
+                            getString(R.string.verificacao_nao_realizada),
                             Toast.LENGTH_SHORT);
 
                     toast.show();
