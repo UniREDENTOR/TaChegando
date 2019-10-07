@@ -20,7 +20,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_weight="1"
-            android:hint="Digite sua mensagem..."
+            android:hint="@string/digite_sua_mensagem"
             android:layout_width="0dip"
             android:layout_height="wrap_content">
 

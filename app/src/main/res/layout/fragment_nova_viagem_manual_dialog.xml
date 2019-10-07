@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"></TextView>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:hint="Nome da rota"
+        android:hint="@string/nome_da_rota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

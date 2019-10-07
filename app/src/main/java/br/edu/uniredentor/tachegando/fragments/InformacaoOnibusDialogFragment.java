@@ -107,8 +107,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private Toolbar getToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar_informacao);
+        Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(getString(R.string.onibus) + " 1");
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

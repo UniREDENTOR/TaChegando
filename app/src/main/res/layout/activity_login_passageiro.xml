@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar_principal" />
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -28,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="Telefone"
+            android:text="@string/telefone"
             android:layout_gravity="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
             android:textColor="#6A5ACD"
@@ -43,7 +48,7 @@
             android:digits="0123456789"
             android:drawableLeft="@drawable/ic_phone"
             android:drawablePadding="10dp"
-            android:hint="Entre com o telefone"
+            android:hint="@string/entre_com_o_telefone"
             android:inputType="phone"
             android:maxLength="12" />
 
@@ -53,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="#6A5ACD"
-            android:text="Continuar"
+            android:text="@string/continuar"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:layout_gravity="center"

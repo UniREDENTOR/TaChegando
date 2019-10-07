@@ -7,14 +7,7 @@
     android:orientation="vertical"
     tools:context=".fragments.InformacaoOnibusDialogFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_informacao"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></androidx.appcompat.widget.Toolbar>
+    <include android:id="@+id/toolbar_principal" layout="@layout/toolbar_principal"/>
 
     <TextView
         android:id="@+id/textView_nome_rota"
