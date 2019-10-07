@@ -91,14 +91,17 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nova_viagem:
-                        NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        }
                         break;
                     case R.id.pesquisar_onibus:
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
                         break;
                     case R.id.perfil:
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
-                        startActivity(i);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
+                        }
 
                 }
                 return false;
@@ -175,7 +178,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                Log.d("locais", listaViagens.toString());
             }
         });
     }
