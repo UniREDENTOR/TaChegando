@@ -10,9 +10,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sua_localizacao_atual_e">Sua localização atual é:</string>
+
+    <!-- menu principal xml -->
     <string name="nova_viagem">Nova viagem</string>
-    <string name="denunciar">Denunciar</string>
-    <string name="entrar">Entrar</string>
+    <string name="pesquisar_onibus">Pesquisar Onibus</string>
 
     <!-- buscar onibus controller -->
     <string name="procurar_onibus">Procurar Onibus:</string>
@@ -46,6 +47,49 @@
     <!-- fragment nova viagem dialog xml -->
     <string name="salvar">Salvar</string>
 
+    <!-- verificar login passageiro activity -->
+    <string name="verificacao">Verificação</string>
+    <string name="entre_com_codigo">Entre com o código</string>
+    <string name="verificado">Verificado</string>
+    <string name="verificacao_nao_realizada">Verificação não realizada</string>
+
+    <!-- perfil passageiro activity -->
+    <string name="perfil">Perfil</string>
+
+    <!-- login passageiro activity -->
+    <string name="login">Login</string>
+    <string name="entre_com_numero_valido">Entre com número válido</string>
+
+    <!-- editar perfil passageiro activity -->
+    <string name="editar">Editar</string>
+
+    <!-- activity login passageiro xml -->
+    <string name="telefone">Telefone</string>
+    <string name="entre_com_o_telefone">Entre com o telefone</string>
+    <string name="continuar">Continuar</string>
+
+    <!-- activity verificar login xml -->
+    <string name="codigo">Código</string>
+    <string name="verificacao_do_codigo">Verificação do código</string>
+
+    <!-- fragment chat xml -->
+    <string name="digite_sua_mensagem">Digite sua mensagem...</string>
+
+    <!-- fragment nova viagem manual dialog xml -->
+    <string name="nome_da_rota">Nome da rota</string>
+
+    <!-- menu informacao dialog xml -->
+    <string name="denunciar">Denunciar</string>
+    <string name="entrar">Entrar</string>
+    <string name="trajeto">Trajeto</string>
+    <string name="descer_do_onibus">Descer do onibus</string>
+
+    <!-- menu perfil passageiro xml -->
+    <string name="sair">Sair</string>
+
+    <!-- menu verificação login passageiro -->
+    <string name="voltar">Voltar</string>
+
     <!-- estilo do mapa -->
     <string name="style_json">
         [
@@ -59,6 +103,5 @@
           }
         ]
     </string>
-
 
 </resources>

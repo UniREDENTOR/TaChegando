@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar_principal" />
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -38,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="Telefone"
+            android:text="@string/telefone"
             android:layout_gravity="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
             android:textColor="#6A5ACD"
@@ -51,11 +56,13 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
             android:digits="0123456789"
-            android:drawableLeft="@drawable/ic_phone"
             android:drawablePadding="5dp"
-            android:hint="Entre com o telefone"
             android:inputType="phone"
-            android:maxLength="12" />
+            android:maxLength="12"
+            android:hint="Entre com o telefone"
+            android:drawableLeft="@drawable/ic_phone">
+
+        </EditText>
 
         <Button
             android:id="@+id/buttonContinue"
@@ -63,11 +70,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="#6A5ACD"
-            android:text="Enviar"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:layout_gravity="center"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:text="@string/continuar">
 
+        </Button>
     </LinearLayout>
 </LinearLayout>
