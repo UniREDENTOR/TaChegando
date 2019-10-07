@@ -4,35 +4,34 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 
 public class PerfilPassageiroActivity extends AppCompatActivity {
 
     private TextView textViewNomePassageiro, textViewCorridaPassageiro;
-    private ProgressBar reputacaoPassageiro;
+    private TextView textViewReputacaoPassageiro;
     private ImageView imagemPassageiro, imagemCorrida, imagemEmblema;
 
+    FirebaseUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,25 +46,33 @@ public class PerfilPassageiroActivity extends AppCompatActivity {
 
         textViewNomePassageiro = findViewById(R.id.textView_nome_perfil);
         textViewCorridaPassageiro = findViewById(R.id.textView_qtd_corrida);
-        reputacaoPassageiro = findViewById(R.id.progressBar_reputacao_perfil);
+        textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
         imagemPassageiro = findViewById(R.id.imageView_foto_perfil_passageiro);
         imagemCorrida = findViewById(R.id.imageView_qtd_corrida);
         imagemEmblema = findViewById(R.id.imageView_emblema_perfil);
-
-        FirebaseUtils.getBanco().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d("Tag", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.d("Tag", "Error getting documents: ", task.getException());
-                }
-            }
-        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseUtils.getBanco().collection("users").document(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                    String id = passageiro.getId();
+                    textViewNomePassageiro.setText(passageiro.getId());
+                    Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
+        }
+        else {
+            // No user is signed in
+        }
+    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
