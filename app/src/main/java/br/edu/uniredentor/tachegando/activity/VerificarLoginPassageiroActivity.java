@@ -164,6 +164,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                         toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
+                        finishAffinity();
 
                     }
                 } catch (Exception e) {
