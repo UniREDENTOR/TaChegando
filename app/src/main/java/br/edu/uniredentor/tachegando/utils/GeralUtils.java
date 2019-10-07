@@ -14,13 +14,11 @@ import androidx.fragment.app.FragmentActivity;
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 
 public class GeralUtils {

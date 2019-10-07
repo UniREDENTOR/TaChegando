@@ -18,20 +18,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getAuth;
 
 public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
     private String mVerificacaoId;
     private EditText editTextCodigo;
-
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,10 +42,9 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
         createToolbar();
 
-        mAuth = FirebaseAuth.getInstance();
         editTextCodigo = findViewById(R.id.editTextCodigo);
 
-        //recebendo o numero
+        //Recebendo o numero
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
 
@@ -59,8 +60,16 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                     editTextCodigo.requestFocus();
                     return;
                 }
+                try {
+                    verificacaoCodigoEnviado(codigo);
+                } catch (Exception e) {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Código expirado",
+                            Toast.LENGTH_SHORT);
 
-                verificacaoCodigoEnviado(codigo);
+                    toast.show();
+                }
+
             }
         });
     }
@@ -88,7 +97,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
     private void enviarVerificacaoCodigo(String mobile) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+55" + mobile, //código do pais
+                "+55" + mobile, //Código do pais
                 60,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
@@ -106,9 +115,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
             String codigo = phoneAuthCredential.getSmsCode();
 
             if (codigo != null) {
-                //altera o campo do texto
                 editTextCodigo.setText(codigo);
-
                 verificacaoCodigoEnviado(codigo);
             }
         }
@@ -125,14 +132,34 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
         }
     };
 
+    //Mudar esse método para só salvar se nao existir usuario cadastrado; fazer depois..
+    private void verificaPassageiro() {
+        FirebaseUser user = getAuth().getCurrentUser();
+        if (user != null) {
+            String id = user.getUid();
+            String telefone = user.getPhoneNumber();
+            String nome = "user";
+            String foto = "";
+            String tempo = "0"; //reformular var para date time
+            String titulo = "Iniciante";
+            int viagem = 0;
+            int reputacao = 0;
+            double credito = 0.0;
+            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, titulo, credito, viagem);
+            FirebaseUtils.salvaUsuario(passageiro);
+
+        } else {
+
+        }
+    }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
+        getAuth().signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
                     if (task.isSuccessful()) {
-                        //Verificação realizada
+                        verificaPassageiro();
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificado), Toast.LENGTH_SHORT);
                         toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
@@ -140,7 +167,6 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
                     }
                 } catch (Exception e) {
-                    //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),
                             getString(R.string.verificacao_nao_realizada),
                             Toast.LENGTH_SHORT);
@@ -151,5 +177,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
             }
         });
     }
+
+
 
 }

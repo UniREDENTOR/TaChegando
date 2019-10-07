@@ -2,19 +2,12 @@ package br.edu.uniredentor.tachegando.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-
 
 import br.edu.uniredentor.tachegando.R;
 
@@ -22,22 +15,15 @@ public class LoginPassageiroActivity extends FragmentActivity {
 
     private EditText editTextNumero;
 
-    FirebaseAuth auth;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_passageiro);
 
-        createToolbar();
-
-
-        auth = FirebaseAuth.getInstance();
-
-
         editTextNumero = findViewById(R.id.editTextMobile);
 
+        createToolbar();
 
         findViewById(R.id.buttonContinue).setOnClickListener(new View.OnClickListener() {
             @Override

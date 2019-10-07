@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +24,7 @@
             tools:ignore="MissingConstraints">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_foto_perfil_passageiro"
+                android:id="@+id/imageView_foto_passageiro"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_gravity="center"
@@ -35,23 +36,23 @@
             </de.hdodenhof.circleimageview.CircleImageView>
 
             <TextView
-                android:id="@+id/textView_nome_perfil"
+                android:id="@+id/textView_nome_perfil_passageiro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Gustavo Souza"
+                android:text="Nome"
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView_nome_reputacao"
+                android:id="@+id/textView_titulo_perfil_passageiro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
-                android:text="Viajante"
+                android:text="Título"
                 android:textColor="@android:color/background_light"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -86,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110dp"
                     android:layout_marginTop="35dp"
-                    android:text="100% de reputação"
+                    android:text="Reputação Passageiro"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -115,12 +116,12 @@
                     android:src="@drawable/ic_phone" />
 
                 <TextView
-                    android:id="@+id/textView_nivel_emblema"
+                    android:id="@+id/textView_telefone_passageiro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110dp"
                     android:layout_marginTop="35dp"
-                    android:text="(22) 99819-5028"
+                    android:text="Telefone"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
@@ -133,12 +134,12 @@
                 tools:layout_editor_absoluteX="207dp">
 
                 <TextView
-                    android:id="@+id/textView_qtd_corrida"
+                    android:id="@+id/textView_qtd_viagens_passageiro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110dp"
                     android:layout_marginTop="35dp"
-                    android:text="110 corridas"
+                    android:text="Corridas"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -166,16 +167,15 @@
                     android:src="@drawable/ic_money" />
 
                 <TextView
-                    android:id="@+id/textView_credito_perfil"
+                    android:id="@+id/textView_credito_perfil_passageiro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110dp"
                     android:layout_marginTop="35dp"
-                    android:text="R$ 500,00 crédito"
+                    android:text="Crédito"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -188,18 +188,18 @@
                     android:layout_width="56dp"
                     android:layout_height="50dp"
                     android:layout_margin="20dp"
-                    android:src="@drawable/ic_star" />
+                    android:src="@drawable/ic_time" />
 
                 <TextView
-                    android:id="@+id/textView_nome_titulo_desbloquear"
+                    android:id="@+id/textView_qtd_tempo_percorrido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Tempo"
                     android:layout_marginLeft="110dp"
                     android:layout_marginTop="35dp"
-                    android:src="@drawable/ic_build"
-                    android:text="Desbloquear Viajante Insano"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="16sp">
+                </TextView>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </LinearLayout>

@@ -11,17 +11,6 @@ public class Viagem implements Serializable {
     private String id = "", nome, idUsuario;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
-    public Map<String, Object> getInicialMap() {
-        Map<String, Object> map = getLocalizacao();
-        map.put("idUsuario", getIdUsuario());
-        map.put("latitude", getLatitude());
-        map.put("longitude", getLatitude());
-        map.put("nome", getNome());
-        map.put("latitudeInicial", getLatitude());
-        map.put("longitudeInicial", getLongitude());
-        return map;
-    }
-
     public Map<String, Object> getIdMap(){
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
@@ -77,13 +66,6 @@ public class Viagem implements Serializable {
         return new LatLng(latitude, longitude);
     }
 
-    public Map<String, Object> getLocalizacao() {
-        Map<String, Object> viagemMap = new HashMap<>();
-        viagemMap.put("latitude", getLatitude());
-        viagemMap.put("longitude", getLongitude());
-        return viagemMap;
-    }
-
     public double getLongitudeInicial() {
         return longitudeInicial;
     }
@@ -101,4 +83,22 @@ public class Viagem implements Serializable {
     }
 
 
+    public Map<String, Object> getLocalizacao() {
+        Map<String, Object> viagemMap = new HashMap<>();
+        viagemMap.put("latitude", getLatitude());
+        viagemMap.put("longitude", getLongitude());
+        return viagemMap;
+    }
+
+
+    public Map<String, Object> getInicialMap() {
+        Map<String, Object> map = getLocalizacao();
+        map.put("idUsuario", getIdUsuario());
+        map.put("latitude", getLatitude());
+        map.put("longitude", getLatitude());
+        map.put("nome", getNome());
+        map.put("latitudeInicial", getLatitude());
+        map.put("longitudeInicial", getLongitude());
+        return map;
+    }
 }

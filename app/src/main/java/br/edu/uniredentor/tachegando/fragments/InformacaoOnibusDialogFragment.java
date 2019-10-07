@@ -82,12 +82,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
+        /*
         passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
                 new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
                 new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
                 new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos", "Matheus") ));
         adapter.atualiza(passageiros);
+        */
         getToolbar(view);
+
 
 
         Location origem = new Location("");

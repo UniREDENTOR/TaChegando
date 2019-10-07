@@ -60,6 +60,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         buttonSalvarRotaManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String nome = editTextRotaManual.getText().toString();
                 if(ehValido(nome)){
                     Viagem viagem = new Viagem();
@@ -67,7 +68,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
                     viagem.setIdUsuario("1");
-                    String id = FirebaseUtils.salva(viagem);
+                    String id = FirebaseUtils.salvaViagem(viagem);
                     viagem.setId(id);
                     FirebaseUtils.atualizaId(viagem);
                     GeralUtils.show("Id " + id);
