@@ -10,11 +10,9 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,24 +26,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
-import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -79,7 +72,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        criaToolbar();
+        createToolbar();
         criaDemo();
         iniciaMapa();
     }
@@ -90,7 +83,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapeiaViagens();
     }
 
-    private void criaToolbar() {
+    private void createToolbar() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);

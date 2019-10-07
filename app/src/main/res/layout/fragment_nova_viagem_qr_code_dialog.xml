@@ -8,30 +8,34 @@
     android:layout_height="wrap_content"
     tools:context=".fragments.NovaViagemQrCodeDialogFragment">
 
-<me.dm7.barcodescanner.zxing.ZXingScannerView
-    android:id="@+id/qr_code_scan"
-    android:layout_above="@+id/layout_resultado"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar_principal" />
 
-<LinearLayout
-    android:id="@+id/layout_resultado"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:background="@color/colorPrimary"
-    android:orientation="horizontal"
-    android:layout_alignParentBottom="true">
+    <me.dm7.barcodescanner.zxing.ZXingScannerView
+        android:id="@+id/qr_code_scan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout_resultado"
+        android:layout_below="@+id/toolbar_principal" />
 
-
-    <Button
-        android:id="@+id/button_salvar_rota_qrcode"
+    <LinearLayout
+        android:id="@+id/layout_resultado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/salvar" />
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
 
+        <Button
+            android:id="@+id/button_salvar_rota_qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/salvar" />
 
-</LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
