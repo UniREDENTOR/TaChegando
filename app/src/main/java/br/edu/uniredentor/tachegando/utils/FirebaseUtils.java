@@ -1,4 +1,6 @@
 package br.edu.uniredentor.tachegando.utils;
+
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -30,12 +32,12 @@ public class FirebaseUtils extends AppCompatActivity {
     public static String salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
                 .document(viagem.getIdUsuario());
-        if(viagem.getId().isEmpty()){
-            String id= getBanco().collection("viagens")
+        if (viagem.getId().isEmpty()) {
+            String id = getBanco().collection("viagens")
                     .document().getId();
-             viagem.setId(id);
-             reference.set(viagem.getInicialMap());
-        }else{
+            viagem.setId(id);
+            reference.set(viagem.getInicialMap());
+        } else {
             reference.set(viagem.getLocalizacao());
         }
 
@@ -46,7 +48,7 @@ public class FirebaseUtils extends AppCompatActivity {
         getBanco().collection("historico").document(viagem.getId()).collection(viagem.getIdUsuario()).add(viagem.getLocalizacao());
     }
 
-    public static void getViagem(String id){
+    public static void getViagem(String id) {
         getBanco().collection("viagens").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -70,6 +72,7 @@ public class FirebaseUtils extends AppCompatActivity {
             }
         });
     }
+
     public static void denuncia(Passageiro passageiroCriador, String idUsuario) {
         HashMap<String, Object> map = passageiroCriador.getMap();
         map.put("idDenuncia", idUsuario);
@@ -97,12 +100,11 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
 
-
     public static FirebaseFirestore getBanco() {
         return FirebaseFirestore.getInstance();
     }
 
-    public static FirebaseAuth getAuth(){
+    public static FirebaseAuth getAuth() {
         if (auth == null) {
             auth = FirebaseAuth.getInstance();
         }
@@ -127,7 +129,9 @@ public class FirebaseUtils extends AppCompatActivity {
 
             }
         });
+    }
 
-
+    public static boolean usuarioCadastrado() {
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 }

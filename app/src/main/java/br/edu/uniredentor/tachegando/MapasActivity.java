@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -44,6 +43,7 @@ import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
@@ -78,21 +78,27 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void iniciaMapa() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
+        toolbarPrincipal.setTitle(getString(R.string.app_name));
         mostraMapa();
         buscarViagens();
+
+        toolbarPrincipal.inflateMenu(R.menu.menu_principal);
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nova_viagem:
-                        NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        }
                         break;
                     case R.id.pesquisar_onibus:
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
                         break;
                     case R.id.perfil:
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
-                        startActivity(i);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
+                        }
 
                 }
                 return false;
@@ -169,7 +175,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                Log.d("locais", listaViagens.toString());
             }
         });
     }
@@ -228,8 +233,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful() && localizacao != null) {
                         Location localizacaoAtual = (Location) task.getResult();
-                       //latitude = localizacaoAtual.getLatitude();
-                        //longitude = localizacaoAtual.getLongitude();
+                       latitude = localizacaoAtual.getLatitude();
+                       longitude = localizacaoAtual.getLongitude();
                     }
                 }
             });

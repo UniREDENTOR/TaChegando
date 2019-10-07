@@ -1,10 +1,15 @@
 package br.edu.uniredentor.tachegando.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.bumptech.glide.Glide;
 
@@ -13,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 
 public class GeralUtils {
     public static void show(String s) {
@@ -43,6 +50,19 @@ public class GeralUtils {
     public static String getData(Calendar calendar) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
         return format.format(calendar.getTime());
+    }
+
+    public static void mostraMensagem(FragmentActivity activity, String mensagem) {
+        Toast.makeText(activity, mensagem, Toast.LENGTH_LONG).show();
+    }
+
+    public static boolean ehUsuario(Activity activity) {
+        boolean user = FirebaseUtils.usuarioCadastrado();
+        if(!user){
+            activity.startActivity(new Intent(activity, LoginPassageiroActivity.class));
+            return false;
+        }
+        return true;
     }
 
     public String getLocalizacaoPeloEndereco(Context context, String strAddress) {
