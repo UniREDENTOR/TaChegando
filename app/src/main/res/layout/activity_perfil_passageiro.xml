@@ -18,15 +18,15 @@
         <LinearLayout
             android:id="@+id/card_linear"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:background="#6A5ACD"
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView_foto_passageiro"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
+                android:layout_width="116dp"
+                android:layout_height="116dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/ic_person"
@@ -56,18 +56,6 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-            <ProgressBar
-                android:id="@+id/progressBar_reputacao_perfil"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:indeterminate="false"
-                android:max="100"
-                android:progress="0"
-                android:progressBackgroundTint="@color/cardview_light_background" />
 
         </LinearLayout>
 
