@@ -116,7 +116,7 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
 
     private void createToolbar(View view) {
         Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
-        toolbarNovaViagem.setTitle("Nova Viagem QRCode");
+        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_qr_code));
     }
 
     @Override

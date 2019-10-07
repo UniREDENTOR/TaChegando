@@ -86,17 +86,17 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
     private void createToolbar(View view) {
         Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
-        toolbarNovaViagem.setTitle("Nova Viagem Manual");
+        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_manual));
     }
 
     private boolean ehValido(String nome) {
         if(nome.isEmpty()){
-            editTextRotaManual.setError("Campo em branco!");
+            editTextRotaManual.setError(getString(R.string.campo_em_branco));
             return false;
         }
 
         if(latitude == 0 || longitude == 0){
-            GeralUtils.mostraMensagem(getActivity(), "Localização não encontrada!");
+            GeralUtils.mostraMensagem(getActivity(), getString(R.string.localizacao_nao_encontrada));
             return false;
         }
         return true;
