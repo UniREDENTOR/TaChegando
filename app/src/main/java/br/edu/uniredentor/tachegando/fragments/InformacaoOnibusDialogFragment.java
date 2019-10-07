@@ -110,34 +110,44 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private Toolbar getToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar_informacao);
+        Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(getString(R.string.onibus) + " 1");
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
                 switch (item.getItemId()){
                     case R.id.item_entrar:
-                        alerta.setTitle(getString(R.string.onibus)).setMessage(getString(R.string.deseja_entrar_no_onibus)).setNegativeButton(getString(R.string.nao), null).setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        if(GeralUtils.ehUsuario(getActivity())){
+                            alerta.setTitle(getString(R.string.onibus))
+                                    .setMessage(getString(R.string.deseja_entrar_no_onibus))
+                                    .setNegativeButton(getString(R.string.nao), null)
+                                    .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {}
+                                    });
+                            alerta.show();
+                        }
 
-
-                            }
-                        });
-                        alerta.show();
                         break;
 
                     case R.id.item_denunciar:
-                        alerta.setTitle(getString(R.string.onibus)).setMessage(getString(R.string.deseja_denunciar_o_passageiro)).setNegativeButton(getString(R.string.nao), null).setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Passageiro passageiroCriador = new Passageiro();
-                                String idUsuario = "";
-                                FirebaseUtils.denuncia(passageiroCriador, idUsuario);
-                            }
-                        });
-                        alerta.show();
+                        if(GeralUtils.ehUsuario(getActivity())){
+                            alerta.setTitle(getString(R.string.onibus))
+                                    .setMessage(getString(R.string.deseja_denunciar_o_passageiro))
+                                    .setNegativeButton(getString(R.string.nao), null)
+                                    .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Passageiro passageiroCriador = new Passageiro();
+                                    String idUsuario = "";
+                                    FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                                }
+                            });
+                            alerta.show();
+                        }
+
                         break;
 
                     case R.id.item_sair:

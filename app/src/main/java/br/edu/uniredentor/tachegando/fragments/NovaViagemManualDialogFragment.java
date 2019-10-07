@@ -35,6 +35,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
     private double latitude;
     private double longitude;
+    private TextInputEditText editTextRotaManual;
 
     public static NovaViagemManualDialogFragment novaInstancia(double latitude, double longitude) {
         NovaViagemManualDialogFragment fragment = new NovaViagemManualDialogFragment();
@@ -49,7 +50,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_manual_dialog, container, false);
 
-        final TextInputEditText editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
+        editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
         Button buttonSalvarRotaManual = view.findViewById(R.id.button_salvar_rota_manual);
         TextView textViewEndereco = view.findViewById(R.id.textView_endereco_atual);
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
@@ -59,16 +60,21 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         buttonSalvarRotaManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Viagem viagem = new Viagem();
-                viagem.setNome(editTextRotaManual.getText().toString());
-                viagem.setLatitude(latitude);
-                viagem.setLongitude(longitude);
-                viagem.setIdUsuario("1");
-                String id = FirebaseUtils.salvaViagem(viagem);
-                viagem.setId(id);
-                FirebaseUtils.atualizaId(viagem);
-                GeralUtils.show("Id " + id);
-                Singleton.getInstance().setIdViagem(viagem.getId());
+
+                String nome = editTextRotaManual.getText().toString();
+                if(ehValido(nome)){
+                    Viagem viagem = new Viagem();
+                    viagem.setNome(nome);
+                    viagem.setLatitude(latitude);
+                    viagem.setLongitude(longitude);
+                    viagem.setIdUsuario("1");
+                    String id = FirebaseUtils.salvaViagem(viagem);
+                    viagem.setId(id);
+                    FirebaseUtils.atualizaId(viagem);
+                    GeralUtils.show("Id " + id);
+                    Singleton.getInstance().setIdViagem(viagem.getId());
+
+                }
                 dismiss();
             }
         });
@@ -76,6 +82,18 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         return view;
     }
 
+    private boolean ehValido(String nome) {
+        if(nome.isEmpty()){
+            editTextRotaManual.setError("Campo em branco!");
+            return false;
+        }
+
+        if(latitude == 0 || longitude == 0){
+            GeralUtils.mostraMensagem(getActivity(), "Localização não encontrada!");
+            return false;
+        }
+        return true;
+    }
 
 
     @Override
