@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -50,6 +51,8 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_manual_dialog, container, false);
 
+        createToolbar(view);
+
         editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
         Button buttonSalvarRotaManual = view.findViewById(R.id.button_salvar_rota_manual);
         TextView textViewEndereco = view.findViewById(R.id.textView_endereco_atual);
@@ -82,14 +85,19 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         return view;
     }
 
+    private void createToolbar(View view) {
+        Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
+        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_manual));
+    }
+
     private boolean ehValido(String nome) {
         if(nome.isEmpty()){
-            editTextRotaManual.setError("Campo em branco!");
+            editTextRotaManual.setError(getString(R.string.campo_em_branco));
             return false;
         }
 
         if(latitude == 0 || longitude == 0){
-            GeralUtils.mostraMensagem(getActivity(), "Localização não encontrada!");
+            GeralUtils.mostraMensagem(getActivity(), getString(R.string.localizacao_nao_encontrada));
             return false;
         }
         return true;

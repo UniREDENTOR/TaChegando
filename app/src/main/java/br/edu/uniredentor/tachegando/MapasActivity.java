@@ -36,7 +36,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
@@ -73,7 +72,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        criaToolbar();
+        createToolbar();
         criaDemo();
         iniciaMapa();
     }
@@ -84,7 +83,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapeiaViagens();
     }
 
-    private void criaToolbar() {
+    private void createToolbar() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);

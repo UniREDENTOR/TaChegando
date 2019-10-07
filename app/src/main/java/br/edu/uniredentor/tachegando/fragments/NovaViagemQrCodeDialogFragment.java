@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -56,6 +57,9 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_qr_code_dialog, container, false);
+
+        createToolbar(view);
+
         final ZXingScannerView qrCodeScanner = view.findViewById(R.id.qr_code_scan);
         Button buttonSalvarRotaQrCode = view.findViewById(R.id.button_salvar_rota_qrcode);
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
@@ -110,6 +114,11 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
 
     }
 
+    private void createToolbar(View view) {
+        Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
+        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_qr_code));
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -125,6 +134,6 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
     public void handleResult(Result rawResult) {
 
         rota = rawResult.getText();
-        
+
     }
 }

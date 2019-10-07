@@ -4,36 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar_principal" />
 
-    <TextView
-        android:textStyle="bold"
-        android:id="@+id/textView_endereco_atual"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:hint="@string/nome_da_rota"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText_rota_manual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:layout_marginTop="20dp"
-        android:layout_margin="10dp"
-        android:id="@+id/button_salvar_rota_manual"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/salvar" />
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView_endereco_atual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"></TextView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nome_da_rota">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_rota_manual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_salvar_rota_manual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/salvar" />
+    </LinearLayout>
 
 
 </LinearLayout>
