@@ -39,8 +39,6 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
     private EditText editTextCodigo;
 
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,11 +144,12 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             String nome = "";
             String foto = "";
             String tempo = "";
+            String tituloReputacao = "Iniciante";
+            int qtdViagem = 0;
             int reputacao = 0;
-            String tituloReputacao = "";
             Double credito = 0.0;
 
-            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, tituloReputacao, credito);
+            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, tituloReputacao, credito, qtdViagem);
             FirebaseUtils.salvaUsuario(passageiro);
 
         } else {
@@ -163,14 +162,16 @@ public class VerificarLoginPassageiroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
-                    if (task.isSuccessful()) {  //Verificação realizada
+                    if (task.isSuccessful()) {
+                        //Verificação realizada
                         verificaUsuario();
                         Toast toast = Toast.makeText(getApplicationContext(), "Verificação realizada", Toast.LENGTH_SHORT);toast.show();
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
 
                     }
-                } catch (Exception e) {     //Verificação não foi realizada
+                } catch (Exception e) {
+                    //Verificação não foi realizada
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Verificação não realizada",
                             Toast.LENGTH_SHORT);
