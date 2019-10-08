@@ -18,6 +18,11 @@ public class Passageiro {
     public Passageiro() {}
 
 
+    public Passageiro(String id, String foto) {
+        this.id = id;
+        this.foto = foto;
+    }
+
     public Passageiro(String id, String telefone, String nome, String foto, String tempo, int reputacao, String titulo, double credito, int viagem) {
         this.id = id;
         this.telefone = telefone;

@@ -18,20 +18,20 @@
         <LinearLayout
             android:id="@+id/card_linear"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             android:background="#6A5ACD"
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView_foto_passageiro"
-                android:layout_width="116dp"
-                android:layout_height="116dp"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/ic_person"
                 app:civ_border_color="#FFFFFF"
-                app:civ_border_width="2dp">
+                app:civ_border_width="3dp">
 
             </de.hdodenhof.circleimageview.CircleImageView>
 
@@ -40,8 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:text="Nome"
+                android:layout_marginTop="5dp"
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />

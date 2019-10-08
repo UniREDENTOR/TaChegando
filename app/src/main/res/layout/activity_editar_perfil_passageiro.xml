@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="200dp"
         android:id="@+id/linear_1"
         android:background="@color/lightPurple"
         android:orientation="vertical">
@@ -25,9 +25,11 @@
 
            <de.hdodenhof.circleimageview.CircleImageView
                android:id="@+id/imageView_foto_passsageiro_editar_perfil"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
+               android:layout_width="160dp"
+               android:layout_height="160dp"
                android:layout_gravity="center"
+               app:civ_border_color="@android:color/white"
+               app:civ_border_width="3dp"
                android:src="@drawable/ic_person">
 
            </de.hdodenhof.circleimageview.CircleImageView>
@@ -59,21 +61,31 @@
                 android:layout_marginLeft="20dp"
                 android:id="@+id/imageView_nome_editar_perfil"
                 android:src="@drawable/ic_person"
+                android:background="@color/colorPrimary"
                 app:civ_border_width="3dp"
                 app:civ_border_color="@color/colorPrimaryDark"
                 android:layout_gravity="center_vertical">
 
             </de.hdodenhof.circleimageview.CircleImageView>
 
-        <TextView
+        <EditText
+            android:id="@+id/editText_editar_nome_perfil"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            android:textSize="16sp"
+            android:layout_gravity="center">
+        </EditText>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton_editar_perfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nome"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_gravity="center">
-        </TextView>
-        </androidx.cardview.widget.CardView>
+            android:layout_marginTop="170dp"
+            android:backgroundTint="@color/lightPurple"
+            android:layout_marginLeft="260dp"
+            android:src="@drawable/ic_check"/>
     </LinearLayout>
 
 </LinearLayout>
