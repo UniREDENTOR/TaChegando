@@ -36,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.activity.EditarPerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
@@ -97,7 +98,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         break;
                     case R.id.perfil:
                         if(GeralUtils.ehUsuario(MapasActivity.this)){
-                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
+                            startActivity(new Intent(getApplicationContext(), EditarPerfilPassageiroActivity.class));
                         }
 
                 }
@@ -233,8 +234,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful() && localizacao != null) {
                         Location localizacaoAtual = (Location) task.getResult();
-                       latitude = localizacaoAtual.getLatitude();
-                       longitude = localizacaoAtual.getLongitude();
+                       //latitude = localizacaoAtual.getLatitude();
+                       //longitude = localizacaoAtual.getLongitude();
                     }
                 }
             });

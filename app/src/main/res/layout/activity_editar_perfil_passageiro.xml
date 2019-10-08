@@ -5,91 +5,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/toolbar_principal"
+        layout="@layout/toolbar_principal" />
 
-        <LinearLayout
-            android:id="@+id/card_linear_editar_perfil"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:id="@+id/linear_1"
+        android:background="@color/lightPurple"
+        android:orientation="vertical">
+
+       <FrameLayout
+           android:layout_width="126dp"
+           android:layout_height="126dp"
+           android:id="@+id/frame_layout"
+           android:layout_gravity="center"
+           android:layout_marginTop="15dp">
+
+           <de.hdodenhof.circleimageview.CircleImageView
+               android:id="@+id/imageView_foto_passsageiro_editar_perfil"
+               android:layout_width="126dp"
+               android:layout_height="126dp"
+               android:layout_gravity="center"
+               android:layout_marginTop="15dp"
+               android:src="@drawable/ic_person">
+
+           </de.hdodenhof.circleimageview.CircleImageView>
+
+           <ImageView
+               android:id="@+id/imageView_edit_foto_perfil_passageiro"
+               android:layout_width="wrap_content"
+               android:src="@android:drawable/ic_menu_edit"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center">
+           </ImageView>
+
+       </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/linear2">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView1"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="#6A5ACD"
-            android:orientation="vertical">
-            <FrameLayout
-                android:id="@+id/frame_layout"
-                android:layout_width="130dp"
-                android:layout_height="140dp"
-                android:layout_gravity="center">
+            android:layout_height="100dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/imageView_nome_editar_perfil"
+                android:src="@drawable/ic_person"
+                android:background="@color/colorPrimaryDark"
+                android:layout_gravity="center_vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imageView_foto_passageiro_editar_perfil"
-                    android:layout_width="116dp"
-                    android:layout_height="116dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_person"
-                    app:civ_border_color="#FFFFFF"
-                    app:civ_border_width="2dp">
-
-                </de.hdodenhof.circleimageview.CircleImageView>
-
-                <ImageView
-                    android:id="@+id/imageView_foto_editar_passageiro"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:onClick="click"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp">
-                </ImageView>
-            </FrameLayout>
-        </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView1"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#F0F8FF"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView_nome_editarPerfil"
-            android:layout_width="56dp"
-            android:layout_height="50dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_build" />
+            </de.hdodenhof.circleimageview.CircleImageView>
 
         <TextView
-            android:id="@+id/textView_nome_passageiro_editar_perfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="35dp"
-            android:text="Editar Nome"
+            android:text="Nome"
             android:textSize="16sp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#F0F8FF"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageView_telefone_editar_perfil"
-            android:layout_width="56dp"
-            android:layout_height="50dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_phone" />
-
-        <TextView
-            android:id="@+id/textView_telefone_passageiro_editar_perfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="35dp"
-            android:text="Editar Telefone"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
+            android:textStyle="bold"
+            android:layout_gravity="center">
+        </TextView>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 </LinearLayout>
