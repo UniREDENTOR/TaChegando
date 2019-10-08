@@ -17,27 +17,26 @@
         android:orientation="vertical">
 
        <FrameLayout
-           android:layout_width="126dp"
-           android:layout_height="126dp"
+           android:layout_width="160dp"
+           android:layout_height="160dp"
            android:id="@+id/frame_layout"
            android:layout_gravity="center"
-           android:layout_marginTop="15dp">
+           android:layout_marginTop="10dp">
 
            <de.hdodenhof.circleimageview.CircleImageView
                android:id="@+id/imageView_foto_passsageiro_editar_perfil"
-               android:layout_width="126dp"
-               android:layout_height="126dp"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
                android:layout_gravity="center"
-               android:layout_marginTop="15dp"
                android:src="@drawable/ic_person">
 
            </de.hdodenhof.circleimageview.CircleImageView>
 
            <ImageView
                android:id="@+id/imageView_edit_foto_perfil_passageiro"
-               android:layout_width="wrap_content"
-               android:src="@android:drawable/ic_menu_edit"
-               android:layout_height="wrap_content"
+               android:layout_width="30dp"
+               android:src="@drawable/ic_edit"
+               android:layout_height="30dp"
                android:layout_gravity="center">
            </ImageView>
 
@@ -60,7 +59,8 @@
                 android:layout_marginLeft="20dp"
                 android:id="@+id/imageView_nome_editar_perfil"
                 android:src="@drawable/ic_person"
-                android:background="@color/colorPrimaryDark"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/colorPrimaryDark"
                 android:layout_gravity="center_vertical">
 
             </de.hdodenhof.circleimageview.CircleImageView>
