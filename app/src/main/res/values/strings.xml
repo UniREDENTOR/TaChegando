@@ -9,7 +9,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- nova viagem manual -->
     <string name="sua_localizacao_atual_e">Sua localização atual é:</string>
+    <string name="nova_viagem_manual">Nova Viagem Manual</string>
+    <string name="novo_ponto_manual">Novo Ponto</string>
+    <string name="campo_em_branco">Campo em branco!</string>
+    <string name="localizacao_nao_encontrada">Localização não encontrada!</string>
 
     <!-- menu principal xml -->
     <string name="nova_viagem">Nova viagem</string>
@@ -40,6 +46,7 @@
     <!-- nova viagem qrCode dialog fragment -->
     <string name="e_necessario_aceitar_a_permissao_para_utilizar_o_qrCode">É necessario aceitar a permissão para utilizar o QRCODE</string>
     <string name="tente_scannear_novamente">Tente scannear novamente</string>
+    <string name="nova_viagem_qr_code">Nova Viagem QRCode</string>
 
     <!-- fragment buscar onibus dialog xml -->
     <string name="onibus_encontrado">Onibus encontrado</string>
@@ -77,6 +84,7 @@
 
     <!-- fragment nova viagem manual dialog xml -->
     <string name="nome_da_rota">Nome da rota</string>
+    <string name="nome_do_ponto">Nome do Ponto</string>
 
     <!-- menu informacao dialog xml -->
     <string name="denunciar">Denunciar</string>
@@ -103,5 +111,6 @@
           }
         ]
     </string>
+
 
 </resources>
