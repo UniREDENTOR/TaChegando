@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.fragments.TelefoneDialogFragment;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
@@ -60,7 +61,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
         inicializandoComponente();
         recuperaEditarPerfilPassageiro();
-
+        abrirDialogTelefone();
 
         imageViewEditNomePerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,13 +105,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
         });
 
-        cardViewSolicitarTrocaTelefone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Abrir dialog", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+
 
         editTextNomeEditarPerfil.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,7 +128,15 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         });
     }
 
-
+    private void abrirDialogTelefone() {
+        cardViewSolicitarTrocaTelefone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TelefoneDialogFragment dialogFragment = new TelefoneDialogFragment();
+                dialogFragment.show(getSupportFragmentManager(), "Dialog Telefone");
+            }
+        });
+    }
 
     private void verificaCampo() {
         editTextNomeEditarPerfil.setError("Digite um nome");
@@ -163,6 +166,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
 
     private void recuperaEditarPerfilPassageiro() {
+        //remover esse user e add metodo cadastrado
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
