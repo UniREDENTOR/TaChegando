@@ -38,17 +38,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="@string/telefone"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-            android:textColor="#6A5ACD"
-            android:textStyle="bold"/>
-
         <EditText
             android:id="@+id/editTextMobile"
             android:layout_width="wrap_content"

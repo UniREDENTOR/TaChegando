@@ -37,7 +37,7 @@
            <ImageView
                android:id="@+id/imageView_edit_foto_perfil_passageiro"
                android:layout_width="30dp"
-               android:src="@drawable/ic_edit"
+               android:src="@drawable/ic_edit_preto"
                android:layout_height="30dp"
                android:layout_gravity="center">
            </ImageView>
@@ -54,7 +54,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView1"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="80dp">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -72,17 +72,60 @@
             android:id="@+id/editText_editar_nome_perfil"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:hint="Nome"
+            android:hint="Seu Nome"
+            android:textStyle="bold"
             android:textSize="16sp"
             android:layout_gravity="center">
         </EditText>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/cardview_telefone_editar_perfil">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/imageView_editar_telefone"
+                android:src="@drawable/ic_phone_white"
+                android:background="@color/colorPrimary"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/colorPrimaryDark"
+                android:layout_gravity="center_vertical">
+
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Telefone"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:id="@+id/textView_telefone_editar_perfil"
+                android:layout_gravity="center">
+
+            </TextView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="Solicitar Troca"
+                android:textStyle="bold"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="170dp"
+                android:layout_marginBottom="5dp"
+                android:textAlignment="center">
+
+            </TextView>
+
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton_editar_perfil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="170dp"
+            android:layout_marginTop="70dp"
             android:backgroundTint="@color/lightPurple"
             android:layout_marginLeft="260dp"
             android:src="@drawable/ic_check"/>
