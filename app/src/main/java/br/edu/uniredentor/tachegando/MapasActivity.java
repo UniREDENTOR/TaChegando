@@ -36,9 +36,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
-import br.edu.uniredentor.tachegando.controller.CriarPontoController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -72,21 +72,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-
-        createToolbar();
         criaDemo();
         iniciaMapa();
     }
 
     private void iniciaMapa() {
-        mostraMapa();
-        buscarViagens();
-        mapeiaViagens();
-    }
-
-    private void createToolbar() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
+        mostraMapa();
+        buscarViagens();
+
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -109,6 +104,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+        mapeiaViagens();
     }
 
     private void mostraMapa() {
@@ -299,14 +295,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         LatLng latLng = new LatLng(-21.209075, -41.886608);
         MapaUtils.moveCamera(mMap, latLng);
 
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                if(GeralUtils.ehUsuario(MapasActivity.this)){
-                   CriarPontoController.alertaDeNovoPonto(MapasActivity.this, latitude, longitude);
-                }
-            }
-        });
 
     }
 

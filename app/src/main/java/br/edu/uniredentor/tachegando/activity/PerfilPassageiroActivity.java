@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 
 public class PerfilPassageiroActivity extends FragmentActivity {
@@ -78,12 +79,11 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                     } else {
                         Log.d("", "Não existe");
                     }
-
                 }
             });
         }
         else {
-            //Usuario não logado
+
         }
     }
 
@@ -97,6 +97,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
     private void alteraInformacaoPerfil(Passageiro passageiro) {
         textViewTiuloPassageiro.setText(passageiro.getTitulo());
         textViewNomePassageiro.setText(passageiro.getNome());
+        GeralUtils.mostraImagemCircular(getApplicationContext(), imagemPassageiro, passageiro.getFoto());
         textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
         textViewTelefonePassageiro.setText(passageiro.getTelefone());

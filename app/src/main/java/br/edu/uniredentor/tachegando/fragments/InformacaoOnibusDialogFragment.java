@@ -4,11 +4,9 @@ package br.edu.uniredentor.tachegando.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -18,20 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -54,6 +51,7 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private PassageiroAdapter adapter = new PassageiroAdapter();
@@ -89,9 +87,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                 new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos", "Matheus") ));
         adapter.atualiza(passageiros);
         */
+
         getToolbar(view);
-
-
 
         Location origem = new Location("");
         origem.setLatitude(-21.209075);
@@ -143,6 +140,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     Passageiro passageiroCriador = new Passageiro();
                                     String idUsuario = "";
                                     FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                                    //refatorar aqui
                                 }
                             });
                             alerta.show();
@@ -167,7 +165,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         break;
 
                     case R.id.item_trajeto:
-                        FirebaseUtils.getBanco().collection("historico").document("pzmQpv1jXVSUrfWAUSvZ").collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        //Mudei aqui
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        FirebaseUtils.getBanco().collection("historico").document(user.getUid()).collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 

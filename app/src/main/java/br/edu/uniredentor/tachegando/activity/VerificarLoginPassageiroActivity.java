@@ -3,6 +3,7 @@ package br.edu.uniredentor.tachegando.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -18,9 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.concurrent.TimeUnit;
 
@@ -97,7 +101,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
 
     private void enviarVerificacaoCodigo(String mobile) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+55" + mobile, //Código do pais
+                "+55" + mobile,
                 60,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
@@ -132,25 +136,34 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
         }
     };
 
-    //Mudar esse método para só salvar se nao existir usuario cadastrado; fazer depois..
     private void verificaPassageiro() {
-        FirebaseUser user = getAuth().getCurrentUser();
-        if (user != null) {
-            String id = user.getUid();
-            String telefone = user.getPhoneNumber();
-            String nome = "user";
-            String foto = "";
-            String tempo = "0"; //reformular var para date time
-            String titulo = "Iniciante";
-            int viagem = 0;
-            int reputacao = 0;
-            double credito = 0.0;
-            Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, titulo, credito, viagem);
-            FirebaseUtils.salvaUsuario(passageiro);
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final DocumentReference getId = FirebaseUtils.getBanco().collection("users").document(user.getUid());
+        getId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()) {
+                                Log.i("tag", "Usuario existe no firestore");
+                            } else {
+                                Log.i("tag", "Usuario nao existe");
+                                String id = user.getUid();
+                                String telefone = user.getPhoneNumber();
+                                String nome = "user";
+                                String foto = "";
+                                String tempo = "0"; //reformular var para date time
+                                String titulo = "Iniciante";
+                                int viagem = 0;
+                                int reputacao = 0;
+                                double credito = 0.0;
+                                Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, titulo, credito, viagem);
+                                FirebaseUtils.salvaUsuario(passageiro);
+                            }
 
-        } else {
-
-        }
+                }
+            }
+        });
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -159,25 +172,21 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 try {
                     if (task.isSuccessful()) {
+
                         verificaPassageiro();
                         Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificado), Toast.LENGTH_SHORT);
                         toast.show();
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                        Intent i = new Intent(getApplicationContext(), EditarPerfilPassageiroActivity.class);
                         startActivity(i);
+                        finishAffinity();
 
                     }
                 } catch (Exception e) {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            getString(R.string.verificacao_nao_realizada),
-                            Toast.LENGTH_SHORT);
-
+                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificacao_nao_realizada), Toast.LENGTH_SHORT);
                     toast.show();
                 }
 
             }
         });
     }
-
-
-
 }
