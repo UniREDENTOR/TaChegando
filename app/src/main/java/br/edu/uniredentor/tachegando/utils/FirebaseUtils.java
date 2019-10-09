@@ -134,4 +134,8 @@ public class FirebaseUtils extends AppCompatActivity {
     public static boolean usuarioCadastrado() {
         return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
+
+    public static String getIdUsuario() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
 }

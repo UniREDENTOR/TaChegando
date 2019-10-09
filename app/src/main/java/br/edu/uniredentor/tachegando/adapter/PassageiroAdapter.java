@@ -17,7 +17,7 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.ViewHolder>{
 
-    private ArrayList<Passageiro> passageiros;
+    private ArrayList<Passageiro> passageiros = new ArrayList<>();
 
     @NonNull
     @Override

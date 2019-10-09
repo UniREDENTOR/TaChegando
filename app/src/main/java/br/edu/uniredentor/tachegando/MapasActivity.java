@@ -73,7 +73,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
 
         createToolbar();
-        criaDemo();
         iniciaMapa();
     }
 
