@@ -8,17 +8,21 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -27,15 +31,17 @@ import java.io.IOException;
 import java.util.UUID;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
-import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
-    private ImageView imageViewBtnEditarFotoPerfil, imageViewFotoPerfil, imageViewTelefone, imageViewNome;
-    private TextView textViewNomeEditarPerfil, textViewTelefoneEditarPerfil;
-    private Uri fotoSelecionada;
+    private ImageView imageViewBtnEditarFotoPerfil, imageViewFotoPerfil;
+    private EditText editTextNomeEditarPerfil;
+    private CardView cardViewSolicitarTrocaTelefone;
+    private FloatingActionButton floatingActionButtonEditarPerfil;
 
+    private Uri fotoSelecionada;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +51,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         Toolbar toolbarEditarPerfil = findViewById(R.id.toolbar_principal);
         toolbarEditarPerfil.setTitle(R.string.editar);
 
-        imageViewFotoPerfil = findViewById(R.id.imageView_foto_passsageiro_editar_perfil);
-        imageViewBtnEditarFotoPerfil = findViewById(R.id.imageView_edit_foto_perfil_passageiro);
+        inicializandoComponente();
 
         imageViewBtnEditarFotoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +60,31 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
             }
         });
+
+        floatingActionButtonEditarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                startActivity(i);
+            }
+        });
+
+        cardViewSolicitarTrocaTelefone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Abrir dialog", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
+    }
+
+    private void inicializandoComponente() {
+        cardViewSolicitarTrocaTelefone = findViewById(R.id.cardview_telefone_editar_perfil);
+        editTextNomeEditarPerfil = findViewById(R.id.editText_editar_nome_perfil);
+        floatingActionButtonEditarPerfil = findViewById(R.id.floatingActionButton_editar_perfil);
+        imageViewFotoPerfil = findViewById(R.id.imageView_foto_passsageiro_editar_perfil);
+        imageViewBtnEditarFotoPerfil = findViewById(R.id.imageView_edit_foto_perfil_passageiro);
 
     }
 
@@ -71,17 +101,17 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         if (requestCode == 0) {
             fotoSelecionada = data.getData();
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoSelecionada);
-                imageViewFotoPerfil.setImageDrawable(new BitmapDrawable(bitmap));
-                imageViewBtnEditarFotoPerfil.setAlpha(0);
-                salvaEditarPerfil();
-            } catch (IOException e) {
-                e.printStackTrace();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoSelecionada);
+                    imageViewFotoPerfil.setImageDrawable(new BitmapDrawable(bitmap));
+                    imageViewBtnEditarFotoPerfil.setAlpha(0);
+                    salvaEditarPerfil();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-    }
 
     private void salvaEditarPerfil() {
         FirebaseUtils.usuarioCadastrado();
@@ -93,7 +123,20 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.i("Teste", uri.toString());
+                        String id = FirebaseAuth.getInstance().getUid();
+                        String foto = uri.toString();
+
+                        Passageiro passageiro = new Passageiro(id, foto);
+
+                        FirebaseUtils.getBanco().collection("users").document(passageiro.getId()).update(
+                                "nome", passageiro.getNome(),
+                                "foto", passageiro.getFoto()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                            }
+                        });
+
                     }
                 });
             }
