@@ -146,7 +146,6 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                             if(documentSnapshot.exists()) {
                                 Log.i("tag", "Usuario existe no firestore");
-
                             } else {
                                 Log.i("tag", "Usuario nao existe");
                                 String id = user.getUid();
@@ -165,9 +164,6 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                 }
             }
         });
-
-
-
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -193,7 +189,4 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
             }
         });
     }
-
-
-
 }

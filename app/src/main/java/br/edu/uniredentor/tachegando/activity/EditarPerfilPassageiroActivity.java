@@ -46,7 +46,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
     private CardView cardViewSolicitarTrocaTelefone;
     private FloatingActionButton floatingActionButtonEditarPerfil;
 
-    private Uri fotoSelecionada;
+    private String fotoSelecionada = "";
     private String nome = "";
 
     @Override
@@ -77,21 +77,29 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 selecionarFoto();
-
             }
         });
 
         floatingActionButtonEditarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!nome.isEmpty()) {
-                    Intent i = new Intent(getApplicationContext(), MapasActivity.class);
-                    startActivity(i);
-                    finishAffinity();
-                } else {
-                    verificaCampo();
+                try {
+                    if (!nome.isEmpty() && !fotoSelecionada.isEmpty()) {
+                            FirebaseUtils.salvaEditarPerfil(Uri.parse(fotoSelecionada), nome);
+                            Intent i = new Intent(getApplicationContext(), MapasActivity.class);
+                            startActivity(i);
+                            finishAffinity();
+                } else if (nome.isEmpty()) {
+                        verificaCampo();
+                    } else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "Selecione uma foto" ,Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                } catch (Exception e) {
+                    Log.w("tag", "Excessão");
                 }
-                }
+            }
 
         });
 
@@ -118,11 +126,16 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 imageViewEditNomePerfil.setImageResource(R.drawable.ic_check_preto);
+
             }
 
         });
     }
-
+    public static void editTexPermission(EditText editText, Boolean enabled) {
+        editText.setFocusable(enabled);
+        if (!enabled)
+            editText.setKeyListener(null);
+    }
 
     private void esconderTeclado() {
         InputMethodManager inputManager = (InputMethodManager) EditarPerfilPassageiroActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -155,11 +168,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
     }
 
-    public static void editTextPermissao(EditText editText, Boolean habilitar) {
-        editText.setFocusable(habilitar);
-        if (!habilitar)
-            editText.setKeyListener(null);
-    }
 
     private void recuperaEditarPerfilPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -190,13 +198,12 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 0) {
-            fotoSelecionada = data.getData();
+           fotoSelecionada = String.valueOf(data.getData());
                 Bitmap bitmap = null;
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoSelecionada);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(fotoSelecionada));
                     imageViewFotoPerfil.setImageDrawable(new BitmapDrawable(bitmap));
                     imageViewBtnEditarFotoPerfil.setAlpha(0);
-                    FirebaseUtils.salvaEditarPerfil(fotoSelecionada, nome);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

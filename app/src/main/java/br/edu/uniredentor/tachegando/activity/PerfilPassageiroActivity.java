@@ -76,16 +76,14 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         alteraInformacaoPerfil(passageiro);
-
                     } else {
                         Log.d("", "Não existe");
                     }
-
                 }
             });
         }
         else {
-            //Usuario não logado
+
         }
     }
 

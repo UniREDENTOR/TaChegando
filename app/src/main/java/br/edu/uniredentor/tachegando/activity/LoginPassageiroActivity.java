@@ -15,7 +15,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
 
     private EditText editTextNumero;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +47,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
     @SuppressLint("NewApi")
     private void createToolbar() {
         Toolbar toolbarLoginPassageiro = findViewById(R.id.toolbar_principal);
-
         toolbarLoginPassageiro.setTitle(R.string.login);
         toolbarLoginPassageiro.setElevation(0);
     }
