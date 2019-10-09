@@ -1,10 +1,8 @@
 package br.edu.uniredentor.tachegando.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,7 +10,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +56,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         Toolbar toolbarEditarPerfil = findViewById(R.id.toolbar_principal);
         toolbarEditarPerfil.setTitle(R.string.editar);
 
+
         inicializandoComponente();
         recuperaEditarPerfilPassageiro();
         abrirDialogTelefone();
@@ -71,7 +69,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), nome, Toast.LENGTH_SHORT);
                 toast.show();
                 imageViewEditNomePerfil.setImageResource(R.drawable.ic_edit_preto);
-
             }
         });
 
@@ -124,7 +121,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
                 imageViewEditNomePerfil.setImageResource(R.drawable.ic_check_preto);
 
             }
-
         });
     }
 
@@ -166,7 +162,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
 
     private void recuperaEditarPerfilPassageiro() {
-        //remover esse user e add metodo cadastrado
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -187,6 +182,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
     private void alteraInformacaoEditarPerfil(Passageiro passageiro){
         textViewTelefoneEditarPerfil.setText(passageiro.getTelefone());
+        GeralUtils.mostraImagemCircular(getApplicationContext(), imageViewFotoPerfil, passageiro.getFoto());
     }
 
 
@@ -205,6 +201,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
+
         }
 
 

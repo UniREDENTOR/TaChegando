@@ -37,7 +37,7 @@
            <ImageView
                android:id="@+id/imageView_edit_foto_perfil_passageiro"
                android:layout_width="30dp"
-               android:src="@drawable/ic_edit_preto"
+               android:src="@drawable/ic_edit"
                android:layout_height="30dp"
                android:layout_gravity="center">
            </ImageView>
@@ -120,10 +120,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
-                android:text="Solicitar Troca"
+                android:text="Solicitar mudança"
                 android:textStyle="bold"
                 android:layout_gravity="bottom"
-                android:layout_marginLeft="170dp"
+                android:layout_marginLeft="160dp"
                 android:layout_marginBottom="5dp"
                 android:textAlignment="center">
 

@@ -98,7 +98,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         break;
                     case R.id.perfil:
                         if(GeralUtils.ehUsuario(MapasActivity.this)){
-                            startActivity(new Intent(getApplicationContext(), EditarPerfilPassageiroActivity.class));
+                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
                         }
 
                 }

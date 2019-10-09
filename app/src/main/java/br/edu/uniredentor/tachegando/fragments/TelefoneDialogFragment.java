@@ -55,7 +55,15 @@ public class TelefoneDialogFragment extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 telefone = editTextNovoTelefone.getText().toString().trim();
-                salvarNovoTelefone();
+                Log.d("telefone", telefone);
+                if (!telefone.isEmpty()) {
+                    salvarNovoTelefone();
+                    return;
+                } else {
+                    editTextNovoTelefone.setText("Digite o telefone");
+                    editTextNovoTelefone.requestFocus();
+                }
+
             }
         });
         return builder.create();
@@ -85,7 +93,7 @@ public class TelefoneDialogFragment extends AppCompatDialogFragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Passageiro passageiro = new Passageiro(telefone);
         FirebaseUtils.getBanco().collection("users").document(user.getUid()).update(
-                "telefone", passageiro.getTelefone()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                "telefone", "+55" + passageiro.getTelefone()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.w("TAG", telefone );
