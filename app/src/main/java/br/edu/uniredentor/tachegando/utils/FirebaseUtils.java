@@ -1,12 +1,14 @@
 package br.edu.uniredentor.tachegando.utils;
 
-import android.app.Activity;
+import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,9 +18,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
@@ -134,4 +140,41 @@ public class FirebaseUtils extends AppCompatActivity {
     public static boolean usuarioCadastrado() {
         return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
+
+    public static void salvaEditarPerfil(Uri fotoSelecionada, final String nome) {
+        FirebaseUtils.usuarioCadastrado();
+        String filename = UUID.randomUUID().toString();
+        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images" + filename);
+        ref.putFile(fotoSelecionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String id = FirebaseAuth.getInstance().getUid();
+                        String foto = uri.toString();
+
+                        Passageiro passageiro = new Passageiro(id, foto, nome);
+                        FirebaseUtils.getBanco().collection("users").document(passageiro.getId()).update(
+                                "nome", passageiro.getNome(),
+                                "foto", passageiro.getFoto()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                            }
+                        });
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Teste", e.getMessage(), e);
+            }
+        });
+        return;
+    }
+
+
 }

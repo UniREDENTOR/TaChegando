@@ -143,6 +143,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     Passageiro passageiroCriador = new Passageiro();
                                     String idUsuario = "";
                                     FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                                    //refatorar aqui
                                 }
                             });
                             alerta.show();
