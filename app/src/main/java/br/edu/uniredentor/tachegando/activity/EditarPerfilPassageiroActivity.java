@@ -131,11 +131,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
         });
     }
-    public static void editTexPermission(EditText editText, Boolean enabled) {
-        editText.setFocusable(enabled);
-        if (!enabled)
-            editText.setKeyListener(null);
-    }
 
     private void esconderTeclado() {
         InputMethodManager inputManager = (InputMethodManager) EditarPerfilPassageiroActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
