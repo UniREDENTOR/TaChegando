@@ -37,6 +37,7 @@ import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
@@ -65,7 +66,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 nome = editTextNomeEditarPerfil.getText().toString().trim();
-                esconderTeclado();
+                GeralUtils.esconderTeclado(imageViewEditNomePerfil, getApplicationContext());
                 Toast toast = Toast.makeText(getApplicationContext(), nome, Toast.LENGTH_SHORT);
                 toast.show();
                 imageViewEditNomePerfil.setImageResource(R.drawable.ic_edit_preto);
@@ -132,10 +133,7 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         });
     }
 
-    private void esconderTeclado() {
-        InputMethodManager inputManager = (InputMethodManager) EditarPerfilPassageiroActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(imageViewEditNomePerfil.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
+
 
     private void verificaCampo() {
         editTextNomeEditarPerfil.setError("Digite um nome");
