@@ -1,47 +1,53 @@
 package br.edu.uniredentor.tachegando.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
-import java.util.UUID;
 
+import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
-    private ImageView imageViewBtnEditarFotoPerfil, imageViewFotoPerfil;
+    private ImageView imageViewBtnEditarFotoPerfil, imageViewFotoPerfil, imageViewEditNomePerfil;
     private EditText editTextNomeEditarPerfil;
+    private TextView textViewTelefoneEditarPerfil;
     private CardView cardViewSolicitarTrocaTelefone;
     private FloatingActionButton floatingActionButtonEditarPerfil;
 
     private Uri fotoSelecionada;
+    private String nome = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +58,20 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         toolbarEditarPerfil.setTitle(R.string.editar);
 
         inicializandoComponente();
+        recuperaEditarPerfilPassageiro();
+
+
+        imageViewEditNomePerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nome = editTextNomeEditarPerfil.getText().toString().trim();
+                esconderTeclado();
+                Toast toast = Toast.makeText(getApplicationContext(), nome, Toast.LENGTH_SHORT);
+                toast.show();
+                imageViewEditNomePerfil.setImageResource(R.drawable.ic_edit_preto);
+
+            }
+        });
 
         imageViewBtnEditarFotoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +84,15 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         floatingActionButtonEditarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
-                startActivity(i);
-            }
+                if(!nome.isEmpty()) {
+                    Intent i = new Intent(getApplicationContext(), MapasActivity.class);
+                    startActivity(i);
+                    finishAffinity();
+                } else {
+                    verificaCampo();
+                }
+                }
+
         });
 
         cardViewSolicitarTrocaTelefone.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +103,45 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
             }
         });
 
+        editTextNomeEditarPerfil.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                imageViewEditNomePerfil.setImageResource(R.drawable.ic_edit_preto);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                imageViewEditNomePerfil.setImageResource(R.drawable.ic_check_preto);
+            }
+
+        });
     }
 
+
+    private void esconderTeclado() {
+        InputMethodManager inputManager = (InputMethodManager) EditarPerfilPassageiroActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(imageViewEditNomePerfil.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private void verificaCampo() {
+        editTextNomeEditarPerfil.setError("Digite um nome");
+        editTextNomeEditarPerfil.requestFocus();
+        return;
+    }
     private void inicializandoComponente() {
         cardViewSolicitarTrocaTelefone = findViewById(R.id.cardview_telefone_editar_perfil);
         editTextNomeEditarPerfil = findViewById(R.id.editText_editar_nome_perfil);
         floatingActionButtonEditarPerfil = findViewById(R.id.floatingActionButton_editar_perfil);
         imageViewFotoPerfil = findViewById(R.id.imageView_foto_passsageiro_editar_perfil);
         imageViewBtnEditarFotoPerfil = findViewById(R.id.imageView_edit_foto_perfil_passageiro);
-
+        imageViewEditNomePerfil = findViewById(R.id.imageView_edit_nome_perfil);
+        textViewTelefoneEditarPerfil = findViewById(R.id.textView_telefone_editar_perfil);
     }
 
     private void selecionarFoto() {
@@ -95,56 +151,57 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
     }
 
     @Override
+    public void onBackPressed() {
+
+    }
+
+    public static void editTextPermissao(EditText editText, Boolean habilitar) {
+        editText.setFocusable(habilitar);
+        if (!habilitar)
+            editText.setKeyListener(null);
+    }
+
+    private void recuperaEditarPerfilPassageiro() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                        alteraInformacaoEditarPerfil(passageiro);
+                    } else {
+                        Log.d("", "Não existe");
+                    }
+                }
+            });
+        } else {
+
+        }
+    }
+
+    private void alteraInformacaoEditarPerfil(Passageiro passageiro){
+        textViewTelefoneEditarPerfil.setText(passageiro.getTelefone());
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 0) {
             fotoSelecionada = data.getData();
-
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fotoSelecionada);
                     imageViewFotoPerfil.setImageDrawable(new BitmapDrawable(bitmap));
                     imageViewBtnEditarFotoPerfil.setAlpha(0);
-                    salvaEditarPerfil();
+                    FirebaseUtils.salvaEditarPerfil(fotoSelecionada, nome);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-    private void salvaEditarPerfil() {
-        FirebaseUtils.usuarioCadastrado();
-        String filename = UUID.randomUUID().toString();
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images" + filename);
-        ref.putFile(fotoSelecionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String id = FirebaseAuth.getInstance().getUid();
-                        String foto = uri.toString();
 
-                        Passageiro passageiro = new Passageiro(id, foto);
-
-                        FirebaseUtils.getBanco().collection("users").document(passageiro.getId()).update(
-                                "nome", passageiro.getNome(),
-                                "foto", passageiro.getFoto()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                            }
-                        });
-
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                    Log.e("Teste", e.getMessage(), e);
-            }
-        });
-    }
 }
