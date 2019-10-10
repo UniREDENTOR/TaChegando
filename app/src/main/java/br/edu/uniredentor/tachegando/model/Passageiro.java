@@ -14,9 +14,7 @@ public class Passageiro {
     private int reputacao;
     private int viagem;
 
-
     public Passageiro() {}
-
 
     public Passageiro(String telefone) {
         this.telefone = telefone;

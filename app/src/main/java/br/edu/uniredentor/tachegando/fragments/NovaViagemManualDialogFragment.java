@@ -22,10 +22,12 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -66,6 +68,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
                 String nome = editTextRotaManual.getText().toString();
                 if(ehValido(nome)){
+                    ArrayList<String> ids = new ArrayList<>();
                     Viagem viagem = new Viagem();
                     viagem.setNome(nome);
                     viagem.setLatitude(latitude);
@@ -73,6 +76,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setIdUsuario("1");
                     String id = FirebaseUtils.salvaViagem(viagem);
                     viagem.setId(id);
+                    viagem.setIdPassageiros(ids);
                     FirebaseUtils.atualizaId(viagem);
                     GeralUtils.show("Id " + id);
                     Singleton.getInstance().setIdViagem(viagem.getId());

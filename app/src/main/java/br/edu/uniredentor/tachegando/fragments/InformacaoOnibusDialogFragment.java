@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
@@ -59,13 +61,11 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
-    private ArrayList<Passageiro> passageiros;
-
+    private ArrayList<Passageiro> passageiros = new ArrayList<>();
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +73,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         mostraChat();
+        recuperaPassageiros();
 
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
         textViewNomeDaRota.setText(viagem.getNome());
@@ -80,13 +81,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        /*
-        passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
-                new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
-                new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
-                new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos", "Matheus") ));
+
+        /*passageiros = new ArrayList<>(Arrays.asList(new Passageiro("1", "https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
+                new Passageiro("2", "https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
+                new Passageiro("3", "https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
+                new Passageiro("4", "https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos") ));*/
+
         adapter.atualiza(passageiros);
-        */
 
         getToolbar(view);
 
@@ -122,7 +123,14 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     .setNegativeButton(getString(R.string.nao), null)
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {}
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            FirebaseUtils.getBanco().collection("viagens").document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                                                }
+                                            });
+                                        }
                                     });
                             alerta.show();
                         }
@@ -193,6 +201,19 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         });
         toolbar.inflateMenu(R.menu.menu_informacao_dialog);
         return toolbar;
+    }
+
+    private void recuperaPassageiros(){
+        ArrayList<String> idPassageiros = viagem.getIdPassageiros();
+
+        for (String id : idPassageiros) {
+            Passageiro passageiro = new Passageiro();
+            passageiro.setId(id);
+            passageiro.setFoto("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
+            passageiro.setTempo("20 minutos");
+
+            passageiros.add(passageiro);
+        }
     }
 
     private void mostraChat() {

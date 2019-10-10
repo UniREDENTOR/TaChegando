@@ -3,18 +3,28 @@ package br.edu.uniredentor.tachegando.model;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Viagem implements Serializable {
 
     private String id = "", nome, idUsuario;
+    private ArrayList<String> idPassageiros;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
     public Map<String, Object> getIdMap(){
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         return map;
+    }
+
+    public ArrayList<String> getIdPassageiros() {
+        return idPassageiros;
+    }
+
+    public void setIdPassageiros(ArrayList<String> idPassageiros) {
+        this.idPassageiros = idPassageiros;
     }
 
     public String getId() {
@@ -99,6 +109,7 @@ public class Viagem implements Serializable {
         map.put("nome", getNome());
         map.put("latitudeInicial", getLatitude());
         map.put("longitudeInicial", getLongitude());
+        map.put("idPassageiros", getIdPassageiros());
         return map;
     }
 }
