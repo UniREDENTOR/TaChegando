@@ -262,13 +262,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void alertaGpsDesligado() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setMessage("Parece que seu GPS está desligado.\nÉ necessario ligar ele!").setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
+        alertDialog.setMessage(getString(R.string.seu_gps_esta_desligado)).setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(intent, REQUEST_CODE);
             }
-        }).setNegativeButton("Não Ativar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -289,14 +289,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 gpsUtils.checkLocalizacao(this);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Parece que seu GPS ainda está desativado!")
-                        .setPositiveButton("Ativar", new DialogInterface.OnClickListener() {
+                builder.setMessage(getString(R.string.gps_ainda_desativado))
+                        .setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                                 startActivityForResult(intent, REQUEST_CODE);
                             }
-                        }).setNegativeButton("Não Ativar", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

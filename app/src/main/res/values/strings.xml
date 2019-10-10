@@ -10,6 +10,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- mapas activity -->
+    <string name="seu_gps_esta_desligado">Parece que seu GPS está desligado. É necessario ligar ele!</string>
+    <string name="ativar">Ativar</string>
+    <string name="nao_ativar">Não Ativar</string>
+    <string name="gps_ainda_desativado">Parece que seu GPS ainda está desativado!</string>
+
     <!-- nova viagem manual -->
     <string name="sua_localizacao_atual_e">Sua localização atual é:</string>
     <string name="nova_viagem_manual">Nova Viagem Manual</string>
@@ -111,6 +117,5 @@
           }
         ]
     </string>
-
 
 </resources>
