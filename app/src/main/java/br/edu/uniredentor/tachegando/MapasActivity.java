@@ -2,17 +2,24 @@ package br.edu.uniredentor.tachegando;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,13 +43,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
@@ -57,13 +64,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private LocationCallback locationCallback;
     private ArrayList<LatLng> locais;
     private int contador = 0;
-    private double latitude, longitude;
+    protected double latitude, longitude;
     private ArrayList<LatLng> locais2;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
     private List<Viagem> viagens;
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
+
+    private int REQUEST_CODE = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,26 +235,75 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
-
-        try {
-            final Task localizacao = fusedLocation.getLastLocation();
-            localizacao.addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful() && localizacao != null) {
-                        Location localizacaoAtual = (Location) task.getResult();
-                       latitude = localizacaoAtual.getLatitude();
-                       longitude = localizacaoAtual.getLongitude();
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            alertaGpsDesligado();
+        } else {
+            try {
+                final Task localizacao = fusedLocation.getLastLocation();
+                localizacao.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful() && localizacao != null) {
+                            Location localizacaoAtual = (Location) task.getResult();
+                            latitude = localizacaoAtual.getLatitude();
+                            longitude = localizacaoAtual.getLongitude();
+                        }
                     }
-                }
-            });
+                });
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            iniciaAtualizacaoDaLocalizacao();
         }
+    }
 
+    private void alertaGpsDesligado() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setMessage(getString(R.string.seu_gps_esta_desligado)).setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+    }
 
-        iniciaAtualizacaoDaLocalizacao();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == 0) {
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                // gps ligado. Refatorar a sincronização do GPS
+                GPSUtils gpsUtils = new GPSUtils();
+                gpsUtils.checkLocalizacao(this);
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getString(R.string.gps_ainda_desativado))
+                        .setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(intent, REQUEST_CODE);
+                            }
+                        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+        }
     }
 
     private boolean possuiPermissao() {
