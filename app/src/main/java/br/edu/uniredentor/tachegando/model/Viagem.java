@@ -110,6 +110,7 @@ public class Viagem implements Serializable {
         map.put("latitudeInicial", getLatitude());
         map.put("longitudeInicial", getLongitude());
         map.put("idPassageiros", getIdPassageiros());
+        map.put("id", getId());
         return map;
     }
 }

@@ -37,7 +37,7 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static String salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
-                .document(viagem.getIdUsuario());
+                .document(UUID.randomUUID().toString());
         if (viagem.getId().isEmpty()) {
             String id = getBanco().collection("viagens")
                     .document().getId();
@@ -97,7 +97,7 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void atualizaLocalizacao(Viagem viagem) {
         getBanco().collection("viagens")
-                .document(viagem.getIdUsuario()).update(viagem.getLocalizacao());
+                .document(viagem.getId()).update(viagem.getLocalizacao());
         salvaHistorico(viagem);
     }
 

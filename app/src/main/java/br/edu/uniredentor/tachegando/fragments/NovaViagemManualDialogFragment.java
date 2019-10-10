@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     private double latitude;
     private double longitude;
     private TextInputEditText editTextRotaManual;
+    private FirebaseUser user;
 
     public static NovaViagemManualDialogFragment novaInstancia(double latitude, double longitude) {
         NovaViagemManualDialogFragment fragment = new NovaViagemManualDialogFragment();
@@ -54,6 +56,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_manual_dialog, container, false);
 
         createToolbar(view);
+        user = FirebaseUtils.getAuth().getCurrentUser();
 
         editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
         Button buttonSalvarRotaManual = view.findViewById(R.id.button_salvar_rota_manual);
@@ -73,7 +76,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setNome(nome);
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
-                    viagem.setIdUsuario("1");
+                    viagem.setIdUsuario(user.getUid());
                     String id = FirebaseUtils.salvaViagem(viagem);
                     viagem.setId(id);
                     viagem.setIdPassageiros(ids);
