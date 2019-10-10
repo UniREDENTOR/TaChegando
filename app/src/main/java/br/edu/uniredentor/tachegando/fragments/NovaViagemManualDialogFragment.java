@@ -76,12 +76,10 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setNome(nome);
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
-                    viagem.setIdUsuario(user.getUid());
-                    String id = FirebaseUtils.salvaViagem(viagem);
-                    viagem.setId(id);
+                    viagem.setId(user.getUid());
                     viagem.setIdPassageiros(ids);
-                    FirebaseUtils.atualizaId(viagem);
-                    GeralUtils.show("Id " + id);
+                    FirebaseUtils.salvaViagem(viagem);
+                    //GeralUtils.show("Id " + id);
                     Singleton.getInstance().setIdViagem(viagem.getId());
 
                 }

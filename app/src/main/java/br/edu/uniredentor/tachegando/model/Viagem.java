@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Viagem implements Serializable {
 
-    private String id = "", nome, idUsuario;
+    private String id = "", nome;
     private ArrayList<String> idPassageiros;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
@@ -59,14 +59,6 @@ public class Viagem implements Serializable {
         this.longitude = longitude;
     }
 
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
     public void setLatLng(LatLng latLng) {
         setLatitude(latLng.latitude);
         setLongitude(latLng.longitude);
@@ -103,7 +95,6 @@ public class Viagem implements Serializable {
 
     public Map<String, Object> getInicialMap() {
         Map<String, Object> map = getLocalizacao();
-        map.put("idUsuario", getIdUsuario());
         map.put("latitude", getLatitude());
         map.put("longitude", getLatitude());
         map.put("nome", getNome());
