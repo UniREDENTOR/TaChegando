@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -127,9 +128,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            viagemRef.update("idPassageiros", FieldValue.arrayUnion(user.getUid()));
-                                            //passageiros.add();
-                                            //adapter.atualiza(passageiros);
+                                            entraOnibus(user.getUid());
                                         }
                                     });
                             alerta.show();
@@ -163,9 +162,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        viagemRef.update("idPassageiros", FieldValue.arrayRemove(user.getUid()));
-                                        //passageiros.remove();
-                                        //adapter.atualiza(passageiros);
+                                        saiOnibus(user.getUid());
                                     }
                                 });
                         alerta.show();
@@ -202,15 +199,49 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return toolbar;
     }
 
+    private void saiOnibus(String id) {
+        viagemRef.update("idPassageiros", FieldValue.arrayRemove(id));
+        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                int position = passageiros.indexOf(passageiro);
+                passageiros.remove(passageiro);
+                adapter.notifyItemRemoved(position); //não está removendo certo no adapter
+            }
+        });
+    }
+
+    private void entraOnibus(String id) {
+        viagemRef.update("idPassageiros", FieldValue.arrayUnion(id));
+
+        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                passageiros.add(passageiro);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     private void recuperaPassageiros() {
-        ArrayList<String> idPassageiros = viagem.getIdPassageiros();
+        ArrayList<String> idPassageiros;
+
+        if (viagem.getIdPassageiros() != null) {
+            idPassageiros = viagem.getIdPassageiros();
+        } else {
+            idPassageiros = new ArrayList<>();
+        }
 
         for (String id : idPassageiros) {
-            Passageiro passageiro = new Passageiro();
-            passageiro.setFoto("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
-            passageiro.setTempo(id);
-
-            passageiros.add(passageiro);
+            FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                    passageiros.add(passageiro);
+                }
+            });
         }
     }
 
