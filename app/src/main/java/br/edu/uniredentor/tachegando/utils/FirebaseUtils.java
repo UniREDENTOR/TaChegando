@@ -35,23 +35,18 @@ public class FirebaseUtils extends AppCompatActivity {
 
     private static FirebaseAuth auth;
 
-    public static String salvaViagem(Viagem viagem) {
+    public static void salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
-                .document(viagem.getIdUsuario());
-        if (viagem.getId().isEmpty()) {
-            String id = getBanco().collection("viagens")
-                    .document().getId();
-            viagem.setId(id);
+                .document(auth.getCurrentUser().getUid());
+        if (!viagem.getId().isEmpty()) {
             reference.set(viagem.getInicialMap());
         } else {
             reference.set(viagem.getLocalizacao());
         }
-
-        return viagem.getId();
     }
 
     private static void salvaHistorico(Viagem viagem) {
-        getBanco().collection("historico").document(viagem.getId()).collection(viagem.getIdUsuario()).add(viagem.getLocalizacao());
+        getBanco().collection("historico").document(viagem.getId()).collection(viagem.getId()).add(viagem.getLocalizacao());
     }
 
     public static void getViagem(String id) {
@@ -90,14 +85,9 @@ public class FirebaseUtils extends AppCompatActivity {
         reference.set(locais);
     }
 
-    public static void atualizaId(Viagem viagem) {
-        getBanco().collection("viagens")
-                .document(viagem.getIdUsuario()).update(viagem.getIdMap());
-    }
-
     public static void atualizaLocalizacao(Viagem viagem) {
         getBanco().collection("viagens")
-                .document(viagem.getIdUsuario()).update(viagem.getLocalizacao());
+                .document(viagem.getId()).update(viagem.getLocalizacao());
         salvaHistorico(viagem);
     }
 

@@ -20,12 +20,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -37,6 +40,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     private double latitude;
     private double longitude;
     private TextInputEditText editTextRotaManual;
+    private FirebaseUser user;
 
     public static NovaViagemManualDialogFragment novaInstancia(double latitude, double longitude) {
         NovaViagemManualDialogFragment fragment = new NovaViagemManualDialogFragment();
@@ -52,6 +56,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_manual_dialog, container, false);
 
         createToolbar(view);
+        user = FirebaseUtils.getAuth().getCurrentUser();
 
         editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
         Button buttonSalvarRotaManual = view.findViewById(R.id.button_salvar_rota_manual);
@@ -66,15 +71,15 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
                 String nome = editTextRotaManual.getText().toString();
                 if(ehValido(nome)){
+                    ArrayList<String> ids = new ArrayList<>();
                     Viagem viagem = new Viagem();
                     viagem.setNome(nome);
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
-                    viagem.setIdUsuario("1");
-                    String id = FirebaseUtils.salvaViagem(viagem);
-                    viagem.setId(id);
-                    FirebaseUtils.atualizaId(viagem);
-                    GeralUtils.show("Id " + id);
+                    viagem.setId(user.getUid());
+                    viagem.setIdPassageiros(ids);
+                    FirebaseUtils.salvaViagem(viagem);
+                    //GeralUtils.show("Id " + id);
                     Singleton.getInstance().setIdViagem(viagem.getId());
 
                 }
