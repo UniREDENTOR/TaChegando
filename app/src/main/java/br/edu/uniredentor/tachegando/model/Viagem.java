@@ -9,19 +9,31 @@ import java.util.Map;
 
 public class Viagem implements Serializable {
 
-    private String id = "", nome;
+    private String id = "";
+
+    private String idUsuario;
+
+    private String nome;
+
     private ArrayList<String> idPassageiros;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
-
     public Map<String, Object> getIdMap(){
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         return map;
     }
-
     public ArrayList<String> getIdPassageiros() {
         return idPassageiros;
     }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
 
     public void setIdPassageiros(ArrayList<String> idPassageiros) {
         this.idPassageiros = idPassageiros;
