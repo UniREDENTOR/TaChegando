@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,8 +46,10 @@ import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
+import br.edu.uniredentor.tachegando.controller.CriarPontoController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
+import br.edu.uniredentor.tachegando.model.Ponto;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GPSUtils;
@@ -71,7 +74,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
-
     private int REQUEST_CODE = 0;
 
 
@@ -115,6 +117,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
         mapeiaViagens();
+
     }
 
     private void mostraMapa() {
@@ -179,6 +182,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
     }
+
 
     private void buscarViagens() {
         FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -350,6 +354,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                CriarPontoController.alertaDeNovoPonto(MapasActivity.this,latitude, longitude);
+
+            }
+        });
+
         getMinhaLocalizacao();
         LatLng latLng = new LatLng(-21.209075, -41.886608);
         MapaUtils.moveCamera(mMap, latLng);
@@ -372,6 +384,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }
         return new Viagem();
     }
+
 
     private void iniciaAtualizacaoDaLocalizacao() {
         locationRequest = new LocationRequest();

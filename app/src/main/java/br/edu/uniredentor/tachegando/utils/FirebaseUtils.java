@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
+import br.edu.uniredentor.tachegando.model.Ponto;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
 
@@ -164,6 +165,13 @@ public class FirebaseUtils extends AppCompatActivity {
             }
         });
         return;
+    }
+
+    public static void salvaPonto(Ponto ponto) {
+        DocumentReference reference = getBanco().collection("pontos").document(auth.getCurrentUser().getUid());
+        if (!ponto.getId().isEmpty()) {
+            reference.set(ponto.getInicialPonto());
+        }
     }
 
 

@@ -15,11 +15,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Ponto;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
+import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.Singleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +32,7 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
     private double latitude;
     private double longitude;
     private TextInputEditText editTextPontoManual;
+    private FirebaseUser user;
 
 
     public static NovoPontoManualDialogFragment novaInstancia(double latitude, double longitude) {
@@ -47,6 +51,7 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_novo_ponto_manual_dialog, container,false);
         createToolbar(view);
+        user = FirebaseUtils.getAuth().getCurrentUser();
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
         editTextPontoManual = view.findViewById(R.id.editText_ponto);
@@ -58,13 +63,13 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
         buttonPontoManual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nomePonto = editTextPontoManual.getText().toString();
                 Ponto ponto = new Ponto();
-                ponto.setNome(nomePonto);
-                ponto.setId("1231");
-                ponto.setIdUsuario("2");
+                ponto.setNome(editTextPontoManual.getText().toString());
+                ponto.setId(user.getUid());
+                ponto.setIdUsuario(user.getUid());
                 ponto.setLatitude(latitude);
                 ponto.setLongitude(longitude);
+                FirebaseUtils.salvaPonto(ponto);
 
                 dismiss();
             }

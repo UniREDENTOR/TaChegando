@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 
+import br.edu.uniredentor.tachegando.model.Ponto;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
 public class MapaUtils {

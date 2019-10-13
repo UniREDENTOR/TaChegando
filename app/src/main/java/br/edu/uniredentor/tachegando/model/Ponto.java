@@ -3,6 +3,8 @@ package br.edu.uniredentor.tachegando.model;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Ponto implements Serializable {
 
@@ -52,6 +54,17 @@ public class Ponto implements Serializable {
 
     public LatLng getLatLng() {
         return new LatLng(latitude, longitude);
+    }
+
+
+    public Map<String, Object> getInicialPonto() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("latitude", getLatitude());
+        map.put("longitude", getLatitude());
+        map.put("nome", getNome());
+        map.put("IdUsuario", getIdUsuario());
+        map.put("id", getId());
+        return map;
     }
 
 
