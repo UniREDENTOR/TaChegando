@@ -82,16 +82,20 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        criaToolBar();
         criaDemo();
         iniciaMapa();
     }
 
     private void iniciaMapa() {
+        buscarViagens();
+        mostraMapa();
+        mapeiaViagens();
+    }
+
+    private void criaToolBar() {
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
-        mostraMapa();
-        buscarViagens();
-
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -114,7 +118,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 return false;
             }
         });
-        mapeiaViagens();
     }
 
     private void mostraMapa() {
