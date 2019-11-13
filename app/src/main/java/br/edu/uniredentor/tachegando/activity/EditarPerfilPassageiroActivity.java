@@ -191,7 +191,8 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 0) {
-           fotoSelecionada = String.valueOf(data.getData());
+            if (data != null) {
+                fotoSelecionada = String.valueOf(data.getData());
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(fotoSelecionada));
@@ -201,8 +202,9 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
-
         }
+
+    }
 
 
 }
