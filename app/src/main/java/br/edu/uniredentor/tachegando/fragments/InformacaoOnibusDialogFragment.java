@@ -4,11 +4,9 @@ package br.edu.uniredentor.tachegando.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -17,9 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +29,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
@@ -54,6 +56,7 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private PassageiroAdapter adapter = new PassageiroAdapter();
@@ -61,37 +64,36 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
-    private ArrayList<Passageiro> passageiros;
-
+    private ArrayList<Passageiro> passageiros = new ArrayList<>();
+    private DocumentReference viagemRef;
+    private FirebaseUser user;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        viagemRef = FirebaseUtils.getBanco().collection("viagens").document(viagem.getId());
+        user = FirebaseUtils.getAuth().getCurrentUser();
+
         mostraChat();
+        recuperaPassageiros();
 
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
-        textViewNomeDaRota.setText(viagem.getNome());
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
+
+        textViewNomeDaRota.setText(viagem.getNome());
+
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        /*
-        passageiros = new ArrayList<>(Arrays.asList(new Passageiro("https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/09/gabigol-540x338.jpg", "10 minutos"),
-                new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg", "20 minutos"),
-                new Passageiro("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg", "25 minutos"),
-                new Passageiro("https://www.hojeemdia.com.br/polopoly_fs/1.688211.1566479020!/image/image.jpg_gen/derivatives/landscape_653/image.jpg", "5 minutos", "Matheus") ));
         adapter.atualiza(passageiros);
-        */
+
         getToolbar(view);
-
-
 
         Location origem = new Location("");
         origem.setLatitude(-21.209075);
@@ -117,15 +119,17 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.item_entrar:
-                        if(GeralUtils.ehUsuario(getActivity())){
+                        if (GeralUtils.ehUsuario(getActivity())) {
                             alerta.setTitle(getString(R.string.onibus))
                                     .setMessage(getString(R.string.deseja_entrar_no_onibus))
                                     .setNegativeButton(getString(R.string.nao), null)
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {}
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            entraOnibus(user.getUid());
+                                        }
                                     });
                             alerta.show();
                         }
@@ -133,50 +137,50 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         break;
 
                     case R.id.item_denunciar:
-                        if(GeralUtils.ehUsuario(getActivity())){
+                        if (GeralUtils.ehUsuario(getActivity())) {
                             alerta.setTitle(getString(R.string.onibus))
                                     .setMessage(getString(R.string.deseja_denunciar_o_passageiro))
                                     .setNegativeButton(getString(R.string.nao), null)
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Passageiro passageiroCriador = new Passageiro();
-                                    String idUsuario = "";
-                                    FirebaseUtils.denuncia(passageiroCriador, idUsuario);
-                                }
-                            });
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Passageiro passageiroCriador = new Passageiro();
+                                            String idUsuario = "";
+                                            FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                                            //refatorar aqui
+                                        }
+                                    });
                             alerta.show();
                         }
 
                         break;
 
                     case R.id.item_sair:
-                        alerta.setTitle("Ônibus").setMessage("Deseja sair do onibus?").setNegativeButton("Não", null).setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                for(Passageiro passageiro : passageiros) {
-                                        if(passageiro.getNome().equals("Matheus")) {
-                                            passageiros.remove(passageiro);
-                                            adapter.atualiza(passageiros);
-                                        }
-                                }
-
-                            }
-                        });
+                        alerta.setTitle("Ônibus")
+                                .setMessage("Deseja sair do onibus?")
+                                .setNegativeButton("Não", null)
+                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        saiOnibus(user.getUid());
+                                    }
+                                });
                         alerta.show();
                         break;
 
                     case R.id.item_trajeto:
-                        FirebaseUtils.getBanco().collection("historico").document("pzmQpv1jXVSUrfWAUSvZ").collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        //Mudei aqui
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        FirebaseUtils.getBanco().collection("historico").document(user.getUid()).collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                                 ArrayList<LatLng> locais = new ArrayList<>();
-                                for(DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
-                                    try{
+                                for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                                    try {
                                         LatLng latLng = new LatLng((Double) snapshot.get(getString(R.string.latitude)), (Double) snapshot.get(getString(R.string.longitude)));
                                         locais.add(latLng);
-                                    }catch (Exception ex){
+                                    } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }
                                 }
@@ -195,11 +199,57 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return toolbar;
     }
 
+    private void saiOnibus(String id) {
+        viagemRef.update("idPassageiros", FieldValue.arrayRemove(id));
+        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                int position = passageiros.indexOf(passageiro);
+                passageiros.remove(passageiro);
+                adapter.notifyItemRemoved(position); //não está removendo certo no adapter
+            }
+        });
+    }
+
+    private void entraOnibus(String id) {
+        viagemRef.update("idPassageiros", FieldValue.arrayUnion(id));
+
+        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                passageiros.add(passageiro);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void recuperaPassageiros() {
+        ArrayList<String> idPassageiros;
+
+        if (viagem.getIdPassageiros() != null) {
+            idPassageiros = viagem.getIdPassageiros();
+        } else {
+            idPassageiros = new ArrayList<>();
+        }
+
+        for (String id : idPassageiros) {
+            FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                    passageiros.add(passageiro);
+                }
+            });
+        }
+    }
+
     private void mostraChat() {
         getChildFragmentManager().beginTransaction().replace(R.id.linearLayout_chat, new ChatFragment(), "").commit();
     }
 
-    public InformacaoOnibusDialogFragment setMapa(GoogleMap mapa){
+    public InformacaoOnibusDialogFragment setMapa(GoogleMap mapa) {
         this.mapa = mapa;
         return this;
     }
@@ -225,7 +275,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     }
 
-    public interface MarcacaoUpdate{
+    public interface MarcacaoUpdate {
         void limpar(Polyline pontos);
     }
 

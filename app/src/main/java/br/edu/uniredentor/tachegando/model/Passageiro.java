@@ -14,9 +14,16 @@ public class Passageiro {
     private int reputacao;
     private int viagem;
 
-
     public Passageiro() {}
 
+    public Passageiro(String telefone) {
+        this.telefone = telefone;
+    }
+    public Passageiro(String id, String foto, String nome) {
+        this.id = id;
+        this.foto = foto;
+        this.nome = nome;
+    }
 
     public Passageiro(String id, String telefone, String nome, String foto, String tempo, int reputacao, String titulo, double credito, int viagem) {
         this.id = id;

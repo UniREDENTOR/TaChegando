@@ -6,13 +6,22 @@
     <string name="chave_matheus">AIzaSyCbGmJFxVYWBpy51UF7khZWPrMRZ6vt0y0</string>
     <string name="chave_rodrigo">AIzaSyAvI1Xwfvx9ZfY1oj2G4o6mMrMv8eAeYz0</string>
     <string name="chave_gustavo">AIzaSyAq-TF61G2jutp1sFIRq2Vh8Hk4OEE_-Xg</string>
+    <string name="chave_ivan">AIzaSyC6ozGoe7gDRYGLTGPIGNry2GF_QMtH_ZY</string>
+    <string name="chave_maps">@string/chave_desktop</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- mapas activity -->
+    <string name="seu_gps_esta_desligado">Parece que seu GPS está desligado. É necessario ligar ele!</string>
+    <string name="ativar">Ativar</string>
+    <string name="nao_ativar">Não Ativar</string>
+    <string name="gps_ainda_desativado">Parece que seu GPS ainda está desativado!</string>
+
     <!-- nova viagem manual -->
     <string name="sua_localizacao_atual_e">Sua localização atual é:</string>
     <string name="nova_viagem_manual">Nova Viagem Manual</string>
+    <string name="novo_ponto_manual">Novo Ponto</string>
     <string name="campo_em_branco">Campo em branco!</string>
     <string name="localizacao_nao_encontrada">Localização não encontrada!</string>
 
@@ -83,6 +92,7 @@
 
     <!-- fragment nova viagem manual dialog xml -->
     <string name="nome_da_rota">Nome da rota</string>
+    <string name="nome_do_ponto">Nome do Ponto</string>
 
     <!-- menu informacao dialog xml -->
     <string name="denunciar">Denunciar</string>
@@ -109,6 +119,5 @@
           }
         ]
     </string>
-
 
 </resources>

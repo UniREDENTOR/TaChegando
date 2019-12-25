@@ -3,18 +3,40 @@ package br.edu.uniredentor.tachegando.model;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Viagem implements Serializable {
 
-    private String id = "", nome, idUsuario;
-    private double latitude, longitude, latitudeInicial, longitudeInicial;
+    private String id = "";
 
+    private String idUsuario;
+
+    private String nome;
+
+    private ArrayList<String> idPassageiros;
+    private double latitude, longitude, latitudeInicial, longitudeInicial;
     public Map<String, Object> getIdMap(){
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         return map;
+    }
+    public ArrayList<String> getIdPassageiros() {
+        return idPassageiros;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+
+    public void setIdPassageiros(ArrayList<String> idPassageiros) {
+        this.idPassageiros = idPassageiros;
     }
 
     public String getId() {
@@ -47,14 +69,6 @@ public class Viagem implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public void setLatLng(LatLng latLng) {
@@ -93,12 +107,13 @@ public class Viagem implements Serializable {
 
     public Map<String, Object> getInicialMap() {
         Map<String, Object> map = getLocalizacao();
-        map.put("idUsuario", getIdUsuario());
         map.put("latitude", getLatitude());
         map.put("longitude", getLatitude());
         map.put("nome", getNome());
         map.put("latitudeInicial", getLatitude());
         map.put("longitudeInicial", getLongitude());
+        map.put("idPassageiros", getIdPassageiros());
+        map.put("id", getId());
         return map;
     }
 }
