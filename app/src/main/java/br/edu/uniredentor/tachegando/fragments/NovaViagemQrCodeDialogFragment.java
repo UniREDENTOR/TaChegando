@@ -96,7 +96,7 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
                     viagem.setLongitude(longitude);
                     viagem.setLatitude(latitude);
                     viagem.setNome(rota);
-                    viagem.setIdUsuario("4");
+                    viagem.setId("4");
                     viagem.setId("4");
                     FirebaseUtils.salvaViagem(viagem);
                     dismiss();

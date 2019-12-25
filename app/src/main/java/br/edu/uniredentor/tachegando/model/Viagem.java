@@ -11,8 +11,6 @@ public class Viagem implements Serializable {
 
     private String id = "";
 
-    private String idUsuario;
-
     private String nome;
 
     private ArrayList<String> idPassageiros;
@@ -25,15 +23,6 @@ public class Viagem implements Serializable {
     public ArrayList<String> getIdPassageiros() {
         return idPassageiros;
     }
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
 
     public void setIdPassageiros(ArrayList<String> idPassageiros) {
         this.idPassageiros = idPassageiros;
@@ -115,5 +104,13 @@ public class Viagem implements Serializable {
         map.put("idPassageiros", getIdPassageiros());
         map.put("id", getId());
         return map;
+    }
+
+    public void addPassageiro(String uid) {
+
+        if(idPassageiros == null){
+            idPassageiros = new ArrayList<>();
+        }
+        idPassageiros.add(uid);
     }
 }

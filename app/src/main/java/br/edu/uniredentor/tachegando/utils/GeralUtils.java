@@ -1,7 +1,9 @@
 package br.edu.uniredentor.tachegando.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -64,6 +66,16 @@ public class GeralUtils {
             return false;
         }
         return true;
+    }
+
+    public static void mostraAlerta(String titulo, String mensagem, Context context) {
+        AlertDialog.Builder alerta = new AlertDialog.Builder(context);
+        alerta.setTitle(titulo).setMessage(mensagem).setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        }).show();
     }
 
     public String getLocalizacaoPeloEndereco(Context context, String strAddress) {

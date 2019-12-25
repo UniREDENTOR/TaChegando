@@ -71,14 +71,12 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
                 String nome = editTextRotaManual.getText().toString();
                 if(ehValido(nome)){
-                    ArrayList<String> ids = new ArrayList<>();
                     Viagem viagem = new Viagem();
                     viagem.setNome(nome);
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
-
                     viagem.setId(user.getUid());
-                    viagem.setIdPassageiros(ids);
+                    viagem.addPassageiro(user.getUid());
                     FirebaseUtils.salvaViagem(viagem);
                     Singleton.getInstance().setIdViagem(viagem.getId());
 

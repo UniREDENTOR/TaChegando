@@ -134,7 +134,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             LatLng latLng = locais.get(contador);
                             Viagem viagem = new Viagem();
                             viagem.setId(Singleton.getInstance().getIdViagem());
-                            viagem.setIdUsuario("1");
+                            viagem.setId("1");
                             viagem.setLatLng(latLng);
                             FirebaseUtils.atualizaLocalizacao(viagem);
                             if (contador == locais.size() - 1) {
@@ -145,7 +145,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                             latLng = locais2.get(contador);
                             viagem = new Viagem();
-                            viagem.setIdUsuario("2");
+                            viagem.setId("2");
                             viagem.setNome("Teste 2");
                             viagem.setLatLng(latLng);
                             //FirebaseUtils.salva(viagem);
@@ -200,7 +200,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         for (Marker marker : listaDeOnibus) {
             try {
-                if (marker.getTag().toString().equalsIgnoreCase(viagem.getIdUsuario())) {
+                if (marker.getTag().toString().equalsIgnoreCase(viagem.getId())) {
                     return marker;
                 }
             } catch (Exception e) {
@@ -331,9 +331,15 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                removePolyline();
-                Viagem viagem = getViagem(marker.getTag().toString());
-                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).show(getSupportFragmentManager(), "informacao");
+                try{
+                    removePolyline();
+                    Viagem viagem = getViagem(marker.getTag().toString());
+                    new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).show(getSupportFragmentManager(), "informacao");
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    GeralUtils.mostraAlerta("Atenção", "Algum erro aconteceu com esta viagem. Estamos tentando identificar o problema.", getApplicationContext());
+                }
 
             }
         });
@@ -369,7 +375,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private Viagem getViagem(String id) {
         for (Viagem viagem : viagens) {
-            if (viagem.getIdUsuario().equalsIgnoreCase(id)) {
+            if (viagem.getId().equalsIgnoreCase(id)) {
                 return viagem;
             }
         }
