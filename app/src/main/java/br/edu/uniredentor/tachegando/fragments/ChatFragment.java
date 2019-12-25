@@ -46,6 +46,7 @@ public class ChatFragment extends Fragment {
     private Viagem viagem;
     private ChatAdapter adapter;
     private List<MensagemChat> mensagens;
+    private RecyclerView recyclerViewChat;
 
     public ChatFragment() {}
 
@@ -55,8 +56,7 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         mensagens = new ArrayList<>();
 
-        RecyclerView recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
-
+        recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
@@ -79,7 +79,10 @@ public class ChatFragment extends Fragment {
                         mensagens.add(document.toObject(MensagemChat.class));
                     }
                 }
-                adapter.atualiza(mensagens);
+                if(mensagens.size() > 0) {
+                    adapter.atualiza(mensagens);
+                    recyclerViewChat.smoothScrollToPosition(mensagens.size() - 1);
+                }
             }
         });
 
@@ -88,9 +91,9 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 String mensagem = editTextMensagem.getText().toString();
                 final MensagemChat mensagemChat = new MensagemChat();
-                mensagemChat.setNomeUsuario("Bruno Henrique");
+                mensagemChat.setNomeUsuario("Arrascaeta");
                 mensagemChat.setFotoUsuario("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
-                mensagemChat.setIdUsuario("123");
+                mensagemChat.setIdUsuario("1234");
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
                 FirebaseUtils.getConversas("").add(mensagemChat.getMap());
