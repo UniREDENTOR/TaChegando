@@ -45,17 +45,14 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView textViewTempo;
         private ImageView imageViewFoto;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTempo = itemView.findViewById(R.id.textView_tempo);
             imageViewFoto = itemView.findViewById(R.id.imageView_foto);
         }
 
         public void set(Passageiro passageiro) {
-            textViewTempo.setText(passageiro.getTempo());
             GeralUtils.mostraImagemCircular(itemView.getContext(), imageViewFoto, passageiro.getFoto());
         }
     }

@@ -105,7 +105,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(GeralUtils.ehUsuario(MapasActivity.this) && possuiLocalizacao()){
                             NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
                         }else{
-                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", getApplicationContext());
+                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
                         }
                         break;
                     case R.id.pesquisar_onibus:
@@ -194,8 +194,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                //Remover após os testes. Pois a tela inicial é onde o usuário estiver
+                LatLng latLng = new LatLng(listaViagens.get(0).getLatitude(), listaViagens.get(0).getLongitude());
+                MapaUtils.moveCamera(mMap, latLng);
+
             }
         });
+
+
     }
 
     private boolean existe(Viagem viagem) {
@@ -366,8 +372,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         });
 
         getMinhaLocalizacao();
-        LatLng latLng = new LatLng(-21.209075, -41.886608);
-        MapaUtils.moveCamera(mMap, latLng);
+     //   LatLng latLng = new LatLng(-21.209075, -41.886608);
+     //   MapaUtils.moveCamera(mMap, latLng);
 
 
     }

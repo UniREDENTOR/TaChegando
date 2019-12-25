@@ -69,14 +69,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_passageiros"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="50dp" />
 
-    <View
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
 
     <LinearLayout
         android:id="@+id/linearLayout_chat"

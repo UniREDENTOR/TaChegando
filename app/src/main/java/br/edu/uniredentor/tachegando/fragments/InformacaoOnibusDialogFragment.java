@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +39,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,10 +88,10 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
         encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
-        recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-        adapter.atualiza(passageiros);
+
 
         getToolbar(view);
         setTextos();
@@ -244,14 +247,22 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         }
 
         for (String id : idPassageiros) {
-            FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            FirebaseUtils.getBanco().collection("users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                    passageiros.add(passageiro);
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                        passageiros.add(passageiro);
+                        passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);
+
+
+                    }
+                    adapter.atualiza(passageiros);adapter.atualiza(passageiros);
                 }
             });
+
         }
+
     }
 
     private void mostraChat() {
