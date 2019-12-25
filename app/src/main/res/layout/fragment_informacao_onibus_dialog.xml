@@ -11,27 +11,72 @@
 
     <TextView
         android:id="@+id/textView_nome_rota"
-        android:gravity="center_horizontal"
-        android:text="Vinhosa - Centro"
-        android:textStyle="bold"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="2dp"
+        android:text="Vinhosa - Centro"
+        android:textStyle="bold"></TextView>
 
     <TextView
         android:id="@+id/textView_endereco"
-        android:text="Rua Coronel Pimenta"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="Rua Coronel Pimenta"></TextView>
 
     <TextView
         android:id="@+id/textView_distancia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></TextView>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"></TextView>
+
+    <View
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView_quantidade_denuncias"
+            android:layout_marginLeft="5dp"
+            android:text="0 denúncias"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"></TextView>
+
+        <Button
+            android:id="@+id/button_denunciar"
+            android:layout_marginLeft="5dp"
+            android:text="@string/denunciar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Button>
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_passageiros"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
+
+    <View
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"></View>
 
     <LinearLayout
         android:id="@+id/linearLayout_chat"

@@ -102,8 +102,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nova_viagem:
-                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                        if(GeralUtils.ehUsuario(MapasActivity.this) && possuiLocalizacao()){
                             NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        }else{
+                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", getApplicationContext());
                         }
                         break;
                     case R.id.pesquisar_onibus:
@@ -118,6 +120,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+    }
+
+    private boolean possuiLocalizacao() {
+        return latitude > 0 & longitude > 0;
     }
 
     private void mostraMapa() {

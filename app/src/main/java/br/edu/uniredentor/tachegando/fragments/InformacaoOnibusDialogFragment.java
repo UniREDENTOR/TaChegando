@@ -65,6 +65,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
+    private TextView textViewQuantidadeDeDenuncias;
     private ArrayList<Passageiro> passageiros = new ArrayList<>();
     private DocumentReference viagemRef;
 
@@ -82,17 +83,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         mostraChat();
         recuperaPassageiros();
 
-        textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
+        encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
-
-        textViewNomeDaRota.setText(viagem.getNome());
-
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
         adapter.atualiza(passageiros);
 
         getToolbar(view);
+        setTextos();
 
         Location origem = new Location("");
         origem.setLatitude(-21.209075);
@@ -103,16 +102,26 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         destino.setLongitude(-41.867111);
 
         float distancia = origem.distanceTo(destino);
-        String resultado = String.format("%.2f", distancia);
+        String resultado = String.format("%.1f", distancia);
         TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
-        textViewDistancia.setText(getString(R.string.distancia) + resultado + " m");
+        textViewDistancia.setText(getString(R.string.distancia) + " " + resultado + " m");
 
         return view;
     }
 
+    private void setTextos() {
+        textViewNomeDaRota.setText(viagem.getNome());
+        textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
+    }
+
+    private void encontraViews(View view) {
+        textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
+        textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
+    }
+
     private Toolbar getToolbar(View view) {
         Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
-        toolbar.setTitle(getString(R.string.onibus) + " 1");
+        toolbar.setTitle(viagem.getNome());
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
