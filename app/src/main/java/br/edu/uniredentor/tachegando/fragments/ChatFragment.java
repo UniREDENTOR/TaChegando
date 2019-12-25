@@ -58,8 +58,6 @@ public class ChatFragment extends Fragment {
         RecyclerView recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setAdapter(adapter);
@@ -70,11 +68,9 @@ public class ChatFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
         final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
-        FirebaseUtils.getConversas("").limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getConversas("").orderBy("dataCriacao").limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 mensagens.clear();
@@ -98,11 +94,8 @@ public class ChatFragment extends Fragment {
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
                 FirebaseUtils.getConversas("").add(mensagemChat.getMap());
-
             }
         });
-
-
     }
 
     public void setViagem(Viagem viagem) {

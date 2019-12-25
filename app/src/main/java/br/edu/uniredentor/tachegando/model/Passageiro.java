@@ -6,7 +6,6 @@ public class Passageiro {
 
     private String foto;
     private String nome;
-    private String tempo;
     private String id;
     private String telefone;
     private String titulo;
@@ -30,21 +29,12 @@ public class Passageiro {
         this.telefone = telefone;
         this.nome = nome;
         this.foto = foto;
-        this.tempo = tempo;
         this.reputacao = reputacao;
         this.titulo = titulo;
         this.credito = credito;
         this.viagem = viagem;
     }
 
-
-    public String getTempo() {
-        return tempo;
-    }
-
-    public void setTempo(String tempo) {
-        this.tempo = tempo;
-    }
 
     public int getViagem() {
         return viagem;
@@ -124,7 +114,6 @@ public class Passageiro {
         HashMap<String, Object> map = new HashMap<>();
         map.put("foto", getFoto());
         map.put("nome", getNome());
-        map.put("tempo", getTempo());
         map.put("id", getId());
         map.put("telefone", getTelefone());
         return map;
@@ -134,7 +123,6 @@ public class Passageiro {
         HashMap<String, Object> usuario = new HashMap<>();
         usuario.put("foto", getFoto());
         usuario.put("nome", getNome());
-        usuario.put("tempo", getTempo());
         usuario.put("id", getId());
         usuario.put("telefone", getTelefone());
         usuario.put("credito", getCredito());

@@ -14,9 +14,11 @@ public class MensagemChat {
     private String fotoUsuario;
     private String texto;
     private String diaEHora;
+    private Long dataDeCriacao;
 
     public MensagemChat(){
         setDiaEHora(GeralUtils.getData(Calendar.getInstance()));
+        setDataDeCriacao(Calendar.getInstance().getTimeInMillis());
     }
 
     public String getTexto() {
@@ -68,6 +70,7 @@ public class MensagemChat {
         map.put("fotoUsuario", getFotoUsuario());
         map.put("texto", getTexto());
         map.put("diaEHora", getDiaEHora());
+        map.put("dataCriacao", getDataDeCriacao());
         return map;
     }
 
@@ -75,5 +78,13 @@ public class MensagemChat {
     @Override
     public String toString() {
         return nomeUsuario;
+    }
+
+    public Long getDataDeCriacao() {
+        return dataDeCriacao;
+    }
+
+    public void setDataDeCriacao(Long dataDeCriacao) {
+        this.dataDeCriacao = dataDeCriacao;
     }
 }
