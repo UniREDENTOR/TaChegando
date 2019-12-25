@@ -9,9 +9,7 @@
     <item android:title="@string/trajeto" app:showAsAction="always" android:id="@+id/item_trajeto"
         android:icon="@drawable/ic_action_trajeto"
         ></item>
-    <item android:title="@string/denunciar" app:showAsAction="always" android:id="@+id/item_denunciar"
-        android:icon="@drawable/ic_action_denuncia"
-        ></item>
+
     <item android:title="@string/sair" app:showAsAction="always" android:id="@+id/item_sair"
         android:icon="@drawable/ic_action_sair"
         ></item>

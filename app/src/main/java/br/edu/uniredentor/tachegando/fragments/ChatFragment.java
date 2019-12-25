@@ -30,6 +30,7 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.ChatAdapter;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
+import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
@@ -38,6 +39,7 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
  */
 public class ChatFragment extends Fragment {
 
+    private Viagem viagem;
 
     public ChatFragment() {}
 
@@ -92,5 +94,9 @@ public class ChatFragment extends Fragment {
         });
 
 
+    }
+
+    public void setViagem(Viagem viagem) {
+        this.viagem = viagem;
     }
 }

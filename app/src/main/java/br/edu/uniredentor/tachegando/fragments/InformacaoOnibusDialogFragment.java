@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +72,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private TextView textViewQuantidadeDeDenuncias;
     private ArrayList<Passageiro> passageiros = new ArrayList<>();
     private DocumentReference viagemRef;
+    private Button buttonDenuncia;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -95,7 +97,29 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
         getToolbar(view);
         setTextos();
+        buttonDenuncia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+                if (GeralUtils.ehUsuario(getActivity())) {
+                    alerta.setTitle(getString(R.string.onibus))
+                            .setMessage(getString(R.string.denunciar_viagem))
+                            .setNegativeButton(getString(R.string.nao), null)
+                            .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Denuncia denuncia = new Denuncia();
+                                    denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
+                                    viagem.addDenuncia(denuncia);
+                                    FirebaseUtils.salvaViagem(viagem);
+                                }
+                            });
+                    alerta.show();
+                }
+            }
+        });
 
+        //Apagar depois
         Location origem = new Location("");
         origem.setLatitude(-21.209075);
         origem.setLongitude(-41.886608);
@@ -120,6 +144,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private void encontraViews(View view) {
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
         textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
+        buttonDenuncia = view.findViewById(R.id.button_denunciar);
     }
 
     private Toolbar getToolbar(View view) {
@@ -140,26 +165,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
-                                        }
-                                    });
-                            alerta.show();
-                        }
-
-                        break;
-
-                    case R.id.item_denunciar:
-                        if (GeralUtils.ehUsuario(getActivity())) {
-                            alerta.setTitle(getString(R.string.onibus))
-                                    .setMessage(getString(R.string.denunciar_viagem))
-                                    .setNegativeButton(getString(R.string.nao), null)
-                                    .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Denuncia denuncia = new Denuncia();
-                                            denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
-                                            viagem.addDenuncia(denuncia);
-                                            FirebaseUtils.salvaViagem(viagem);
-                                            //refatorar aqui
                                         }
                                     });
                             alerta.show();
@@ -266,7 +271,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void mostraChat() {
-        getChildFragmentManager().beginTransaction().replace(R.id.linearLayout_chat, new ChatFragment(), "").commit();
+        ChatFragment chat = new ChatFragment();
+        chat.setViagem(viagem);
+        getChildFragmentManager().beginTransaction().replace(R.id.linearLayout_chat, chat, "chat").commit();
     }
 
     public InformacaoOnibusDialogFragment setMapa(GoogleMap mapa) {
