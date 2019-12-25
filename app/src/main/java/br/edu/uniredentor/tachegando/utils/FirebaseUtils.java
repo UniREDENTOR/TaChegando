@@ -12,8 +12,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -23,10 +23,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
-import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -38,7 +36,8 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
-                .document(auth.getCurrentUser().getUid());
+              //  .document(GeralUtils.getIdDoUsuario());
+        .document("IhVmsdUbBKSAPORPJkstLkf7qiu2");
         if (!viagem.getId().isEmpty()) {
             reference.set(viagem.getInicialMap());
         } else {
@@ -56,8 +55,6 @@ public class FirebaseUtils extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 GeralUtils.show("" + queryDocumentSnapshots.getDocuments());
-
-
             }
         });
     }
@@ -83,6 +80,10 @@ public class FirebaseUtils extends AppCompatActivity {
         return FirebaseFirestore.getInstance();
     }
 
+    public static CollectionReference getConversas(String idViagem) {
+        return FirebaseFirestore.getInstance().collection("viagens").document("IhVmsdUbBKSAPORPJkstLkf7qiu2").collection("conversas");
+    }
+
     public static FirebaseAuth getAuth() {
         if (auth == null) {
             auth = FirebaseAuth.getInstance();
@@ -93,7 +94,6 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static FirebaseAuth signOut() {
         FirebaseAuth.getInstance().signOut();
-        Log.w("SAIR", "Usuário saiu da Sessão");
         return auth;
     }
 

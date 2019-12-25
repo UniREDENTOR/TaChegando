@@ -16,11 +16,8 @@ public class Viagem implements Serializable {
     private ArrayList<String> idPassageiros;
     private ArrayList<Denuncia> denuncias;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
-    public Map<String, Object> getIdMap(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", getId());
-        return map;
-    }
+    private ArrayList<MensagemChat> mensagens;
+
     public ArrayList<String> getIdPassageiros() {
         return idPassageiros;
     }
@@ -105,6 +102,7 @@ public class Viagem implements Serializable {
         map.put("idPassageiros", getIdPassageiros());
         map.put("id", getId());
         map.put("denuncias", getDenuncias());
+        map.put("conversas", getMensagens());
         return map;
     }
 
@@ -129,5 +127,21 @@ public class Viagem implements Serializable {
 
     public void setDenuncias(ArrayList<Denuncia> denuncias) {
         this.denuncias = denuncias;
+    }
+
+    public void addMensagem(MensagemChat mensagemChat) {
+        if(mensagens == null){
+            this.mensagens = new ArrayList<>();
+        }
+
+        this.mensagens.add(mensagemChat);
+    }
+
+    public ArrayList<MensagemChat> getMensagens() {
+        return mensagens;
+    }
+
+    public void setMensagens(ArrayList<MensagemChat> mensagens) {
+        this.mensagens = mensagens;
     }
 }

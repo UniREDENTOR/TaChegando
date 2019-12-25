@@ -1,5 +1,7 @@
 package br.edu.uniredentor.tachegando.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -58,13 +60,20 @@ public class MensagemChat {
         this.idUsuario = idUsuario;
     }
 
+
     public HashMap<String, Object> getMap() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("texto", texto);
-        map.put("diaEHora", diaEHora);
-        map.put("nomeUsuario", nomeUsuario);
-        map.put("fotoUsuario", fotoUsuario);
-        map.put("idUsuario", idUsuario);
+        map.put("idUsuario", getIdUsuario());
+        map.put("nomeUsuario", getNomeUsuario());
+        map.put("fotoUsuario", getFotoUsuario());
+        map.put("texto", getTexto());
+        map.put("diaEHora", getDiaEHora());
         return map;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nomeUsuario;
     }
 }

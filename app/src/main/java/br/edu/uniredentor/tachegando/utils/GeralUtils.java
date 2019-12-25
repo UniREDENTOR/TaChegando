@@ -114,6 +114,11 @@ public class GeralUtils {
     }
 
     public static String getIdDoUsuario(){
-        return FirebaseUtils.getAuth().getCurrentUser().getUid();
+        try{
+            return FirebaseUtils.getAuth().getCurrentUser().getUid();
+        }catch (Exception e){
+            return "1";
+        }
+
     }
 }
