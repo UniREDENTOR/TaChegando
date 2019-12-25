@@ -12,18 +12,10 @@ public class MensagemChat {
     private String fotoUsuario;
     private String texto;
     private String diaEHora;
-    private String idViagem;
 
-    public MensagemChat(){}
-
-    public MensagemChat(Passageiro passageiro, String mensagem, Calendar calendar) {
-        setDiaEHora(GeralUtils.getData(calendar));
-        setIdUsuario(passageiro.getId());
-        setFotoUsuario(passageiro.getFoto());
-        setNomeUsuario(passageiro.getNome());
-        setTexto(mensagem);
+    public MensagemChat(){
+        setDiaEHora(GeralUtils.getData(Calendar.getInstance()));
     }
-
 
     public String getTexto() {
         return texto;
@@ -41,13 +33,6 @@ public class MensagemChat {
         this.diaEHora = diaEHora;
     }
 
-    public String getIdViagem() {
-        return idViagem;
-    }
-
-    public void setIdViagem(String idViagem) {
-        this.idViagem = idViagem;
-    }
 
     public String getNomeUsuario() {
         return nomeUsuario;

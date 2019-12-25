@@ -21,6 +21,8 @@
             android:orientation="horizontal">
 
             <TextView
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:id="@+id/textView_nome_chat"
                 android:text="Raphael Ramos"
                 android:layout_weight="1"
@@ -28,6 +30,9 @@
                 android:layout_height="wrap_content"></TextView>
 
             <TextView
+                android:layout_marginRight="2dp"
+                android:textStyle="italic"
+                android:textSize="10sp"
                 android:id="@+id/textView_data_chat"
                 android:text="02/10/10 - 12:00"
                 android:layout_width="wrap_content"
@@ -35,6 +40,7 @@
         </LinearLayout>
 
         <TextView
+            android:textSize="12sp"
             android:id="@+id/textView_mensagem"
             android:text="Oiiii"
             android:layout_width="wrap_content"

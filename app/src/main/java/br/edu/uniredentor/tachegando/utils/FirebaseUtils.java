@@ -75,7 +75,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static void salvaMensagem(MensagemChat mensagemChat) {
-        getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
+       // getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
     }
 
 
