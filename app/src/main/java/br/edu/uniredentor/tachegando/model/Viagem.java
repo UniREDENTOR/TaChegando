@@ -14,6 +14,7 @@ public class Viagem implements Serializable {
     private String nome;
 
     private ArrayList<String> idPassageiros;
+    private ArrayList<Denuncia> denuncias;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
     public Map<String, Object> getIdMap(){
         Map<String, Object> map = new HashMap<>();
@@ -103,6 +104,7 @@ public class Viagem implements Serializable {
         map.put("longitudeInicial", getLongitude());
         map.put("idPassageiros", getIdPassageiros());
         map.put("id", getId());
+        map.put("denuncias", getDenuncias());
         return map;
     }
 
@@ -112,5 +114,20 @@ public class Viagem implements Serializable {
             idPassageiros = new ArrayList<>();
         }
         idPassageiros.add(uid);
+    }
+
+    public void addDenuncia(Denuncia denuncia) {
+        if(denuncias == null){
+            denuncias = new ArrayList<>();
+        }
+        this.denuncias.add(denuncia);
+    }
+
+    public ArrayList<Denuncia> getDenuncias() {
+        return denuncias;
+    }
+
+    public void setDenuncias(ArrayList<Denuncia> denuncias) {
+        this.denuncias = denuncias;
     }
 }

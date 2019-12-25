@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -49,19 +50,6 @@ public class FirebaseUtils extends AppCompatActivity {
         getBanco().collection("historico").document(viagem.getId()).collection(viagem.getId()).add(viagem.getLocalizacao());
     }
 
-    public static void getViagem(String id) {
-        getBanco().collection("viagens").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("", "Current data: " + snapshot);
-                    GeralUtils.show("" + snapshot);
-                } else {
-                    Log.d("", "Current data: null");
-                }
-            }
-        });
-    }
 
     public static void getViagens() {
         getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -74,11 +62,6 @@ public class FirebaseUtils extends AppCompatActivity {
         });
     }
 
-    public static void denuncia(Passageiro passageiroCriador, String idUsuario) {
-        HashMap<String, Object> map = passageiroCriador.getMap();
-        map.put("idDenuncia", idUsuario);
-        getBanco().collection("denuncias").document().set(map);
-    }
 
     public static void salvaLocal(ArrayList<LatLng> locais) {
         DocumentReference reference = getBanco().collection("historico").document();

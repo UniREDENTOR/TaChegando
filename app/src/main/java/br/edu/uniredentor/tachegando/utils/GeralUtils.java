@@ -55,6 +55,16 @@ public class GeralUtils {
         return format.format(calendar.getTime());
     }
 
+    public static String getDataFirebase(Calendar calendar) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM");
+        return format.format(calendar.getTime());
+    }
+
+    public static String getHorario(Calendar calendar) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        return format.format(calendar.getTime());
+    }
+
     public static void mostraMensagem(FragmentActivity activity, String mensagem) {
         Toast.makeText(activity, mensagem, Toast.LENGTH_LONG).show();
     }
@@ -101,5 +111,9 @@ public class GeralUtils {
         InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(imageView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         return true;
+    }
+
+    public static String getIdDoUsuario(){
+        return FirebaseUtils.getAuth().getCurrentUser().getUid();
     }
 }

@@ -45,6 +45,7 @@ import java.util.List;
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
+import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -66,7 +67,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private TextView textViewNomeDaRota;
     private ArrayList<Passageiro> passageiros = new ArrayList<>();
     private DocumentReference viagemRef;
-    private FirebaseUser user;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -78,7 +78,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         viagemRef = FirebaseUtils.getBanco().collection("viagens").document(viagem.getId());
-        user = FirebaseUtils.getAuth().getCurrentUser();
 
         mostraChat();
         recuperaPassageiros();
@@ -128,7 +127,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            entraOnibus(user.getUid());
+                                            entraOnibus(GeralUtils.getIdDoUsuario());
                                         }
                                     });
                             alerta.show();
@@ -139,14 +138,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                     case R.id.item_denunciar:
                         if (GeralUtils.ehUsuario(getActivity())) {
                             alerta.setTitle(getString(R.string.onibus))
-                                    .setMessage(getString(R.string.deseja_denunciar_o_passageiro))
+                                    .setMessage(getString(R.string.denunciar_viagem))
                                     .setNegativeButton(getString(R.string.nao), null)
                                     .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Passageiro passageiroCriador = new Passageiro();
-                                            String idUsuario = "";
-                                            FirebaseUtils.denuncia(passageiroCriador, idUsuario);
+                                            Denuncia denuncia = new Denuncia();
+                                            denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
+                                            viagem.addDenuncia(denuncia);
+                                            FirebaseUtils.salvaViagem(viagem);
                                             //refatorar aqui
                                         }
                                     });
@@ -162,7 +162,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        saiOnibus(user.getUid());
+                                        saiOnibus(GeralUtils.getIdDoUsuario());
                                     }
                                 });
                         alerta.show();
