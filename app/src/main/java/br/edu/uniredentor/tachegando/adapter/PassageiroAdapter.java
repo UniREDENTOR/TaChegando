@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
@@ -17,7 +18,11 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.ViewHolder>{
 
-    private ArrayList<Passageiro> passageiros = new ArrayList<>();
+    private List<Passageiro> passageiros = new ArrayList<>();
+
+    public PassageiroAdapter(List<Passageiro> passageiros) {
+        this.passageiros = passageiros;
+    }
 
     @NonNull
     @Override

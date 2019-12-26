@@ -87,7 +87,7 @@ public class Viagem implements Serializable {
     public Map<String, Object> getInicialMap() {
         Map<String, Object> map = getLocalizacao();
         map.put("latitude", getLatitude());
-        map.put("longitude", getLatitude());
+        map.put("longitude", getLongitude());
         map.put("nome", getNome());
         map.put("latitudeInicial", getLatitude());
         map.put("longitudeInicial", getLongitude());

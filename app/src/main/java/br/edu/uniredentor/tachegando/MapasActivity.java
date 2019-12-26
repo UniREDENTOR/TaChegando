@@ -177,6 +177,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         }
                     }
                 }
+
+                try {
+                    //Apagar depois
+                    LatLng latLng = new LatLng(viagens.get(0).getLatitude(), viagens.get(0).getLongitude());
+                    MapaUtils.moveCamera(mMap, latLng);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         });
     }
@@ -228,7 +236,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
                             LatLng latLng = new LatLng(latitude, longitude);
-                            MapaUtils.moveCamera(mMap, latLng);
+                            //Comentado para teste
+                          //  MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
                 });
@@ -336,8 +345,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         });
 
         getMinhaLocalizacao();
-     //   LatLng latLng = new LatLng(-21.209075, -41.886608);
-     //   MapaUtils.moveCamera(mMap, latLng);
 
 
     }

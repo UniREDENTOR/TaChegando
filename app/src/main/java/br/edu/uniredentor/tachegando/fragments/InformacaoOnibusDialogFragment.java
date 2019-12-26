@@ -55,7 +55,7 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
-    private PassageiroAdapter adapter = new PassageiroAdapter();
+    private PassageiroAdapter adapter;
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
@@ -81,12 +81,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewPassageiros.setAdapter(adapter);
+        recyclerViewPassageiros.setAdapter(new PassageiroAdapter(viagem.getPassageiros()));
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
 
         getToolbar(view);
         setTextos();
+
         buttonDenuncia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,8 +141,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private Toolbar getToolbar(final View view) {
         final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(viagem.getNome());
-
-
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
