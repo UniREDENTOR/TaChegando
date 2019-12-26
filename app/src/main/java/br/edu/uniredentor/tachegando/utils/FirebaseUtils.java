@@ -99,7 +99,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
 
-    public static void salvaUsuario(Passageiro passageiro) {
+    public static void salvaUsuario(final Passageiro passageiro) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = user.getUid();
 

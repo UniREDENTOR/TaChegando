@@ -1,6 +1,7 @@
 package br.edu.uniredentor.tachegando.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.signOut;
 
 
 public class PerfilPassageiroActivity extends FragmentActivity {
@@ -54,8 +57,9 @@ public class PerfilPassageiroActivity extends FragmentActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.item_sair_app:
-                        FirebaseUtils.signOut();
-                        finish();
+                        signOut();
+                        Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
+                        startActivity(i);
                         break;
                 }
                 return true;
@@ -73,7 +77,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         alteraInformacaoPerfil(passageiro);
                     } else {
-                        Log.d("", "Não existe");
+                        Log.d("Usuário: ", "Não existe");
                     }
                 }
             });
@@ -81,12 +85,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         else {
 
         }
-    }
-
-    private void exibeInfoPassageiro(Passageiro passageiro) {
-        String id = passageiro.getId();
-        Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private void alteraInformacaoPerfil(Passageiro passageiro) {
@@ -99,8 +97,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
     }
 
 
-
-
     private void inicializaComponentePerfil() {
         textViewTiuloPassageiro = findViewById(R.id.textView_titulo_perfil_passageiro);
         textViewNomePassageiro = findViewById(R.id.textView_nome_perfil_passageiro);
@@ -110,6 +106,12 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         imagemReputacao = findViewById(R.id.imageView_reputacao);
         imagemViagem = findViewById(R.id.imageView_qtd_corrida);
 
+    }
+
+    private void exibeInfoPassageiro(Passageiro passageiro) {
+        String id = passageiro.getId();
+        Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

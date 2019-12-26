@@ -43,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
@@ -85,7 +86,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         criaToolBar();
         criaDemo();
         iniciaMapa();
-        FirebaseUtils.deletaTudo();
+
+        //QUERY FDP QUE COMEU HORAS DE DEV
+        //FirebaseUtils.deletaTudo();
     }
 
     private void iniciaMapa() {
@@ -116,7 +119,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         break;
                     case R.id.perfil:
                         if(GeralUtils.ehUsuario(MapasActivity.this)){
-                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
+                            startActivity(new Intent(getApplicationContext(), LoginPassageiroActivity.class));
                         }
 
                 }
