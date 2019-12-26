@@ -1,6 +1,8 @@
 package br.edu.uniredentor.tachegando.utils;
 
 
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +43,7 @@ public class FirebaseUtils extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot.exists()) {
                     viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
+                    Singleton.getInstance().setIdViagem(viagem.getId());
                     reference.set(viagem.getInicialMap());
                 }
             }
@@ -72,19 +75,10 @@ public class FirebaseUtils extends AppCompatActivity {
         return FirebaseFirestore.getInstance().collection("viagens").document(idViagem).collection("conversas");
     }
 
-    public static FirebaseAuth getAuth() {
-        if (auth == null) {
-            auth = FirebaseAuth.getInstance();
-        }
-        return auth;
-    }
-
-
     public static FirebaseAuth signOut() {
         FirebaseAuth.getInstance().signOut();
         return auth;
     }
-
 
     public static void salvaUsuario(final Passageiro passageiro) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -119,10 +113,18 @@ public class FirebaseUtils extends AppCompatActivity {
             getViagemRealizadas().add(viagem);
             getViagem(viagem.getId()).delete();
         } else {
+            atualizaLocalizador(viagem);
             map.put("passageiros", passageiros);
             getViagem(viagem.getId()).update(map);
         }
 
+    }
+
+    private static void atualizaLocalizador(Viagem viagem) {
+        String id = viagem.getPassageiros().get(0).getId();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("idLocalizador", id);
+        getViagem(viagem.getId()).update(map);
     }
 
     public static void deletaTudo() {
@@ -180,10 +182,19 @@ public class FirebaseUtils extends AppCompatActivity {
                         passageiros.add(passageiro);
                         map.put("passageiros", passageiros);
                         getViagem(viagem.getId()).update(map);
+                        Singleton.getInstance().setIdViagem(viagem.getId());
                     }
 
                 }
             }
+
         });
+    }
+
+    public static void atualizaLocalizacao(Location location) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("latitude", location.getLatitude());
+        map.put("longitude", location.getLongitude());
+        getViagem(Singleton.getInstance().getIdViagem()).update(map);
     }
 }

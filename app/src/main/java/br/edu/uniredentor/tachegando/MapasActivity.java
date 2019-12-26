@@ -61,7 +61,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 60000, FASTEST_INTERVAL = 60000; // = 5 seconds
+    private static final long UPDATE_INTERVAL = 6000, FASTEST_INTERVAL = 6000; // = 5 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -69,6 +69,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
+    private boolean souLocalizador = true;
 
     private int REQUEST_CODE = 0;
 
@@ -140,7 +141,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-
+                        if(souLocalizador){
+                            FirebaseUtils.atualizaLocalizacao(location);
+                        }
                     }
 
 
