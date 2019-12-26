@@ -49,6 +49,7 @@ public class ChatFragment extends Fragment {
     private ChatAdapter adapter;
     private List<MensagemChat> mensagens;
     private RecyclerView recyclerViewChat;
+    private FirebaseUser user;
 
     public ChatFragment() {}
 
@@ -64,6 +65,7 @@ public class ChatFragment extends Fragment {
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setAdapter(adapter);
         recyclerViewChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        user = FirebaseUtils.getUser();
         return view;
     }
 
@@ -83,7 +85,6 @@ public class ChatFragment extends Fragment {
                 }
                 if(mensagens.size() > 0) {
                     adapter.atualiza(mensagens);
-                    recyclerViewChat.smoothScrollToPosition(mensagens.size() - 1);
                 }
             }
         });
@@ -92,7 +93,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String mensagem = editTextMensagem.getText().toString();
-                FirebaseUser user = FirebaseUtils.getUser();
+
                 final MensagemChat mensagemChat = new MensagemChat();
                 mensagemChat.setNomeUsuario(user.getDisplayName());
                 mensagemChat.setFotoUsuario(user.getPhotoUrl().getPath());

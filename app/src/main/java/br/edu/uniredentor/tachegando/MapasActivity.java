@@ -195,8 +195,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
                 //Remover após os testes. Pois a tela inicial é onde o usuário estiver
-                LatLng latLng = new LatLng(listaViagens.get(0).getLatitude(), listaViagens.get(0).getLongitude());
-                MapaUtils.moveCamera(mMap, latLng);
+                try{
+                    LatLng latLng = new LatLng(listaViagens.get(0).getLatitude(), listaViagens.get(0).getLongitude());
+                    MapaUtils.moveCamera(mMap, latLng);
+                }catch (Exception ex){
+                    ex.printStackTrace();}
+
 
             }
         });

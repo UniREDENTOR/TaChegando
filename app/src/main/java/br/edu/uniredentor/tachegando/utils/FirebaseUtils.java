@@ -154,5 +154,10 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
+
+    }
+
+    public static void removePassageiro(Viagem viagem) {
+
     }
 }
