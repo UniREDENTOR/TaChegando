@@ -46,11 +46,10 @@ public class PerfilPassageiroActivity extends FragmentActivity {
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
     private void createToolbar() {
-        Toolbar toolbarPerfilActivity = findViewById(R.id.toolbar_principal);
+        final Toolbar toolbarPerfilActivity = findViewById(R.id.toolbar_principal);
 
         toolbarPerfilActivity.setTitle(R.string.perfil);
         toolbarPerfilActivity.setElevation(0);
-
         //infla menu do perfil na toolbar
         toolbarPerfilActivity.inflateMenu(R.menu.menu_perfil_passageiro);
         toolbarPerfilActivity.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -66,6 +65,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                         Intent intent = new Intent(getApplicationContext(), MapasActivity.class);
                         startActivity(intent);
                         break;
+
                 }
                 return true;
             }
