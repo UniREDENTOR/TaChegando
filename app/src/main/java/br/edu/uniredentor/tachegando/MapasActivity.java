@@ -123,7 +123,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private boolean possuiLocalizacao() {
-        return latitude > 0 & longitude > 0;
+        return (latitude != 0 && longitude != 0);
     }
 
     private void mostraMapa() {
