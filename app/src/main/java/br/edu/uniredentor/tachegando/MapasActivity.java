@@ -85,6 +85,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         criaToolBar();
         criaDemo();
         iniciaMapa();
+        FirebaseUtils.deletaTudo();
     }
 
     private void iniciaMapa() {
@@ -123,7 +124,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private boolean possuiLocalizacao() {
-        return latitude > 0 & longitude > 0;
+        return (latitude != 0 && longitude != 0);
     }
 
     private void mostraMapa() {
@@ -163,7 +164,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                 }
             };
+        }else{
+            chamaPermissoes();
         }
+    }
+
+    private void chamaPermissoes() {
+        String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
     private void mapeiaViagens() {
@@ -194,10 +202,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                //Remover após os testes. Pois a tela inicial é onde o usuário estiver
-                LatLng latLng = new LatLng(listaViagens.get(0).getLatitude(), listaViagens.get(0).getLongitude());
-                MapaUtils.moveCamera(mMap, latLng);
-
             }
         });
 
@@ -263,6 +267,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             Location localizacaoAtual = (Location) task.getResult();
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
                 });
@@ -325,8 +331,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
             return false;
         }
         return true;

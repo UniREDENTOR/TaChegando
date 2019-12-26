@@ -88,6 +88,10 @@ public class GeralUtils {
         }).show();
     }
 
+    public static void mostraLog(String text) {
+        Log.v("tachegando", text);
+    }
+
     public String getLocalizacaoPeloEndereco(Context context, String strAddress) {
 
         Geocoder coder = new Geocoder(context);
@@ -115,7 +119,7 @@ public class GeralUtils {
 
     public static String getIdDoUsuario(){
         try{
-            return FirebaseUtils.getAuth().getCurrentUser().getUid();
+            return FirebaseUtils.getIdUsuario();
         }catch (Exception e){
             return "1";
         }
