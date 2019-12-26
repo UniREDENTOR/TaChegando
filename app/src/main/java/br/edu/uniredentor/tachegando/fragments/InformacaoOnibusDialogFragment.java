@@ -156,7 +156,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
-                                            adapter.notifyDataSetChanged();
+
 
                                         }
                                     });
@@ -213,16 +213,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void entraOnibus(String id) {
-        viagemRef.update("passageiros", FieldValue.arrayUnion(id));
+        FirebaseUtils.adicionaPassageiro(id, viagem);
 
-        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                passageiros.add(passageiro);
-                adapter.notifyDataSetChanged();
-            }
-        });
     }
 
 
