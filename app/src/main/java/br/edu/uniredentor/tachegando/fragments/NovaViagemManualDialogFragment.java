@@ -56,7 +56,8 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_manual_dialog, container, false);
 
         createToolbar(view);
-        user = FirebaseUtils.getAuth().getCurrentUser();
+        user = FirebaseUtils.getUser();
+        
 
         editTextRotaManual = view.findViewById(R.id.editText_rota_manual);
         Button buttonSalvarRotaManual = view.findViewById(R.id.button_salvar_rota_manual);

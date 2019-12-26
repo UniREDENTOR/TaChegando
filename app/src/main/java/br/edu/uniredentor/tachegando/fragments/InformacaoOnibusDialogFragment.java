@@ -159,7 +159,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
-                                            Log.v("user", (GeralUtils.getIdDoUsuario()));
                                             adapter.notifyDataSetChanged();
 
                                         }
