@@ -71,7 +71,7 @@ public class ChatFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
         final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
-        FirebaseUtils.getConversas("").orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 mensagens.clear();

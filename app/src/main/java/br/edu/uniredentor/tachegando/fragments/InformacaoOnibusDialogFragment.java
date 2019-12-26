@@ -206,8 +206,12 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        viagemRef.update("idPassageiros", FieldValue.arrayRemove(id));
-        recuperaPassageiros();
+        id = "LnPiTCT7kDTsicuY4iUiUo9MfYP2";
+        GeralUtils.mostraLog(viagem.getIdPassageiros() + "");
+        viagem.getIdPassageiros().remove(id);
+        GeralUtils.mostraLog(viagem.getIdPassageiros() + "");
+        FirebaseUtils.removePassageiro(viagem);
+     //   recuperaPassageiros();
     }
 
     private void entraOnibus(String id) {
@@ -240,7 +244,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         passageiros.add(passageiro);
                     }
-                    adapter.atualiza(passageiros);adapter.atualiza(passageiros);
+                    adapter.atualiza(passageiros);
                 }
             });
 

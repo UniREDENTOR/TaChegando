@@ -10,10 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -23,6 +25,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import br.edu.uniredentor.tachegando.model.MensagemChat;
@@ -81,7 +84,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static CollectionReference getConversas(String idViagem) {
-        return FirebaseFirestore.getInstance().collection("viagens").document("IhVmsdUbBKSAPORPJkstLkf7qiu2").collection("conversas");
+        return FirebaseFirestore.getInstance().collection("viagens").document(idViagem).collection("conversas");
     }
 
     public static FirebaseAuth getAuth() {
@@ -153,4 +156,11 @@ public class FirebaseUtils extends AppCompatActivity {
         return;
     }
 
+    public static void removePassageiro(Viagem viagem) {
+
+        getBanco().collection("viagens")
+                //  .document(GeralUtils.getIdDoUsuario());
+                .document("IhVmsdUbBKSAPORPJkstLkf7qiu2").set(viagem.getInicialMap());
+
+    }
 }
