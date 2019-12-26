@@ -96,7 +96,7 @@ public class ChatFragment extends Fragment {
 
                 final MensagemChat mensagemChat = new MensagemChat();
                 mensagemChat.setNomeUsuario(user.getDisplayName());
-                mensagemChat.setFotoUsuario(user.getPhotoUrl().getPath());
+                mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
                 mensagemChat.setIdUsuario(user.getUid());
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
