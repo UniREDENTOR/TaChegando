@@ -58,9 +58,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                         FirebaseUtils.signOut();
                         finishAffinity();
                         break;
-                    case R.id.editar_perfil:
-                        Intent i = new Intent(PerfilPassageiroActivity.this, EditarPerfilPassageiroActivity.class);
-                        startActivity(i);
                 }
                 return true;
             }

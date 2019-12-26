@@ -52,8 +52,6 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
 
-        enviarVerificacaoCodigo(mobile);
-
 
         findViewById(R.id.buttonEntrar).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,18 +62,6 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                     editTextCodigo.requestFocus();
                     return;
                 }
-                try {
-                    verificacaoCodigoEnviado(codigo);
-                } catch (Exception e) {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Código expirado",
-                            Toast.LENGTH_SHORT);
-
-                    toast.show();
-                }
-
-            }
-        });
     }
 
     @SuppressLint("NewApi")
@@ -99,42 +85,7 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
         });
     }
 
-    private void enviarVerificacaoCodigo(String mobile) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+55" + mobile,
-                60,
-                TimeUnit.SECONDS,
-                TaskExecutors.MAIN_THREAD,
-                mCallBacks);
-    }
 
-    private void verificacaoCodigoEnviado(String codigo) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificacaoId, codigo);
-        signInWithPhoneAuthCredential(credential);
-    }
-
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-            String codigo = phoneAuthCredential.getSmsCode();
-
-            if (codigo != null) {
-                editTextCodigo.setText(codigo);
-                verificacaoCodigoEnviado(codigo);
-            }
-        }
-
-        @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-            mVerificacaoId = s;
-        }
-    };
 
     private void verificaPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -166,27 +117,3 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
         });
     }
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        getAuth().signInWithCredential(credential).addOnCompleteListener(VerificarLoginPassageiroActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                try {
-                    if (task.isSuccessful()) {
-
-                        verificaPassageiro();
-                        Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificado), Toast.LENGTH_SHORT);
-                        toast.show();
-                        Intent i = new Intent(getApplicationContext(), EditarPerfilPassageiroActivity.class);
-                        startActivity(i);
-                        finishAffinity();
-
-                    }
-                } catch (Exception e) {
-                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.verificacao_nao_realizada), Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-
-            }
-        });
-    }
-}
