@@ -76,7 +76,7 @@ public class FirebaseUtils extends AppCompatActivity {
     public static void atualizaLocalizacao(Viagem viagem) {
         getBanco().collection("viagens")
                 .document(viagem.getId()).update(viagem.getLocalizacao());
-        salvaHistorico(viagem);
+      //  salvaHistorico(viagem);
     }
 
     public static void salvaMensagem(MensagemChat mensagemChat) {

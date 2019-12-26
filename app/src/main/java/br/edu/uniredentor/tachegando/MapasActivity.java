@@ -103,11 +103,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nova_viagem:
-                        if(GeralUtils.ehUsuario(MapasActivity.this) && possuiLocalizacao()){
-                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
-                        }else{
-                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            if(possuiLocalizacao()){
+                                NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                            }else{
+                                GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
+                            }
                         }
+
                         break;
                     case R.id.pesquisar_onibus:
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
