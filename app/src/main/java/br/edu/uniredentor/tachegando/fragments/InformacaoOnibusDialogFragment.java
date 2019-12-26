@@ -152,6 +152,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(viagem.getNome());
 
+
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
@@ -166,16 +168,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
-                                            item.setVisible(false);
+                                            Log.v("user", (GeralUtils.getIdDoUsuario()));
                                             adapter.notifyDataSetChanged();
 
                                         }
                                     });
                             alerta.show();
-                        }
-
-                        break;
-
+                        }                        break;
                     case R.id.item_sair:
                         alerta.setTitle("Ônibus")
                                 .setMessage("Deseja sair do onibus?")
