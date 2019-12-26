@@ -1,8 +1,9 @@
 package br.edu.uniredentor.tachegando.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Passageiro {
+public class Passageiro implements Serializable {
 
     private String foto;
     private String nome;
@@ -19,8 +20,6 @@ public class Passageiro {
         this.foto = foto;
         this.nome = nome;
     }
-
-
 
     public Passageiro(String id, String nome, String foto, int reputacao, String titulo, double credito, int viagem) {
         this.id = id;
@@ -99,7 +98,7 @@ public class Passageiro {
         this.viagem = qtdViagem;
     }
 
-    public HashMap<String, Object> getMap() {
+    public HashMap<String, Object> retornaMap() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("foto", getFoto());
         map.put("nome", getNome());
@@ -107,7 +106,7 @@ public class Passageiro {
         return map;
     }
 
-    public HashMap<String, Object> getUser() {
+    public HashMap<String, Object> retornaUser() {
         HashMap<String, Object> usuario = new HashMap<>();
         usuario.put("foto", getFoto());
         usuario.put("nome", getNome());

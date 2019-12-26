@@ -30,11 +30,23 @@ public class FirebaseUtils extends AppCompatActivity {
 
     private static FirebaseAuth auth;
 
-    public static void salvaViagem(Viagem viagem) {
-        DocumentReference reference = getBanco().collection("viagens")
+    public static void salvaViagem(final Viagem viagem) {
+        final DocumentReference reference = getBanco().collection("viagens")
                 .document(GeralUtils.getIdDoUsuario());
-        if (!viagem.getId().isEmpty()) {
-            reference.set(viagem.getInicialMap());
+        if (viagem.getId() == null || viagem.getId().isEmpty()) {
+            viagem.setId(GeralUtils.getIdDoUsuario());
+            getBanco().collection("users").document(GeralUtils.getIdDoUsuario()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if(documentSnapshot.exists()){
+                        GeralUtils.mostraLog("Teste " + documentSnapshot.toObject(Passageiro.class));
+                        viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
+                        reference.set(viagem.getInicialMap());
+                    }
+
+                }
+            });
+
         } else {
             reference.set(viagem.getLocalizacao());
         }
@@ -103,7 +115,7 @@ public class FirebaseUtils extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = user.getUid();
 
-        FirebaseUtils.getBanco().collection("users").document(id).set(passageiro.getUser()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseUtils.getBanco().collection("users").document(id).set(passageiro.retornaUser()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 

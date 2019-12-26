@@ -84,11 +84,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         criaToolBar();
-        criaDemo();
         iniciaMapa();
 
-        //QUERY FDP QUE COMEU HORAS DE DEV
-        //FirebaseUtils.deletaTudo();
+        if(possuiPermissao()){
+            iniciaMapa();
+        }else{
+            chamaPermissoes();
+        }
     }
 
     private void iniciaMapa() {
@@ -142,35 +144,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
 
-                        try {
-                            LatLng latLng = locais.get(contador);
-                            Viagem viagem = new Viagem();
-                            viagem.setId(Singleton.getInstance().getIdViagem());
-                            viagem.setId("1");
-                            viagem.setLatLng(latLng);
-                            FirebaseUtils.atualizaLocalizacao(viagem);
-                            if (contador == locais.size() - 1) {
-                                contador = 0;
-                            } else {
-                                contador++;
-                            }
 
-                            latLng = locais2.get(contador);
-                            viagem = new Viagem();
-                            viagem.setId("2");
-                            viagem.setNome("Teste 2");
-                            viagem.setLatLng(latLng);
-                            //FirebaseUtils.salva(viagem);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                     }
 
 
                 }
             };
-        }else{
-            chamaPermissoes();
         }
     }
 
@@ -232,30 +211,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         return null;
     }
 
-    private void criaDemo() {
-        locais = new ArrayList<>();
-        locais2 = new ArrayList<>();
-        locais.add(new LatLng(-21.209075, -41.886608));
-        locais.add(new LatLng(-21.208900, -41.886715));
-        locais.add(new LatLng(-21.208635, -41.886994));
-        locais.add(new LatLng(-21.208345, -41.887273));
-        locais.add(new LatLng(-21.208000, -41.887552));
-        locais.add(new LatLng(-21.207686, -41.887865));
-        locais.add(new LatLng(-21.207448, -41.888050));
-        locais.add(new LatLng(-21.207245, -41.888222));
-
-
-        locais2.add(new LatLng(-21.207454, -41.888480));
-        locais2.add(new LatLng(-21.207982, -41.888006));
-        locais2.add(new LatLng(-21.208655, -41.887408));
-        locais2.add(new LatLng(-21.209291, -41.886664));
-        locais2.add(new LatLng(-21.207454, -41.888480));
-        locais2.add(new LatLng(-21.207982, -41.888006));
-        locais2.add(new LatLng(-21.208655, -41.887408));
-        locais2.add(new LatLng(-21.209291, -41.886664));
-
-
-    }
 
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
