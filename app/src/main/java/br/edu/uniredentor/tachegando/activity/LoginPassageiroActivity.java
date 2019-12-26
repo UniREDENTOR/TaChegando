@@ -126,7 +126,7 @@ public class LoginPassageiroActivity extends FragmentActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if(documentSnapshot.exists()) {
-                        Log.i("tag", "Usuario existe no firestore");
+                        Log.i("tag", "Usuário existe no firestore");
                         Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
                         startActivity(i);
                     } else {
@@ -152,7 +152,8 @@ public class LoginPassageiroActivity extends FragmentActivity {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if (account != null) {
-
+            Intent i = new Intent(this, MapasActivity.class);
+            startActivity(i);
         }
 
     }
