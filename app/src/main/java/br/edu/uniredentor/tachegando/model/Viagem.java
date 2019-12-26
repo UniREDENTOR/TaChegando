@@ -85,7 +85,7 @@ public class Viagem implements Serializable {
 
 
     public Map<String, Object> getInicialMap() {
-        Map<String, Object> map = getLocalizacao();
+        Map<String, Object> map = new HashMap<>();
         map.put("latitude", getLatitude());
         map.put("longitude", getLongitude());
         map.put("nome", getNome());
@@ -129,4 +129,11 @@ public class Viagem implements Serializable {
     }
 
 
+    public void removePassageiro(String id) {
+        for(Passageiro passageiro : passageiros){
+            if(passageiro.getId().equalsIgnoreCase(id)){
+                passageiros.remove(passageiro);
+            }
+        }
+    }
 }

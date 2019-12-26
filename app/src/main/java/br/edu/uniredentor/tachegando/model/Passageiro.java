@@ -2,6 +2,7 @@ package br.edu.uniredentor.tachegando.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Passageiro implements Serializable {
 
@@ -116,5 +117,19 @@ public class Passageiro implements Serializable {
         usuario.put("titulo", getTitulo());
         usuario.put("viagem", getQtdViagem());
         return usuario;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Passageiro that = (Passageiro) o;
+        return nome.equals(that.nome) &&
+                id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, id);
     }
 }

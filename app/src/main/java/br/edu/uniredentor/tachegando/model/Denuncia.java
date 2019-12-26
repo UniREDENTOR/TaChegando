@@ -1,11 +1,12 @@
 package br.edu.uniredentor.tachegando.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
-public class Denuncia {
+public class Denuncia implements Serializable {
 
     private String idDenunciante;
     private String data;
@@ -40,4 +41,5 @@ public class Denuncia {
     public void setHorario(String horario) {
         this.horario = horario;
     }
+
 }

@@ -74,6 +74,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                 if(ehValido(nome)){
                     Viagem viagem = new Viagem();
                     viagem.setNome(nome);
+                    viagem.setId(GeralUtils.getIdDoUsuario());
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
                     FirebaseUtils.salvaViagem(viagem);
