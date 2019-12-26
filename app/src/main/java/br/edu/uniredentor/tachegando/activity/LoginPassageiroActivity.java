@@ -35,7 +35,6 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 
 public class LoginPassageiroActivity extends FragmentActivity {
 
-    private EditText editTextNumero;
     private  GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
     private TextView textViewNomeTeste, textViewEmailTeste;
@@ -134,7 +133,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
                     if(documentSnapshot.exists()) {
                         Log.i("tag", "Usuario existe no firestore");
                     } else {
-                        int tempo = 0; //reformular var para date time
                         String titulo = "Iniciante";
                         int viagem = 0;
                         int reputacao = 0;
@@ -143,6 +141,22 @@ public class LoginPassageiroActivity extends FragmentActivity {
                         String fotoPerfil = String.valueOf(account.getPhotoUrl());
                         Passageiro passageiro = new Passageiro(id,account.getDisplayName(), fotoPerfil,reputacao,titulo,credito, viagem);
                         FirebaseUtils.salvaUsuario(passageiro);
+
+                        /*
+                        Log.i("tag", "Usuario nao existe");
+                        String id = user.getUid();
+                        String telefone = user.getPhoneNumber();
+                        String nome = "user";
+                        String foto = "";
+                        int tempo = 0;//reformular var para date time
+                        String titulo = "Iniciante";
+                        int viagem = 0;
+                        int reputacao = 0;
+                        double credito = 0.0;
+                        Passageiro passageiro = new Passageiro(id, nome, foto, reputacao, titulo, credito, viagem);
+                        FirebaseUtils.salvaUsuario(passageiro);
+                        */
+
                     }
 
                 }

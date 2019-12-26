@@ -110,7 +110,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                                 GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
                             }
                         }
-
                         break;
                     case R.id.pesquisar_onibus:
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
