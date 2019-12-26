@@ -164,7 +164,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                 }
             };
+        }else{
+            chamaPermissoes();
         }
+    }
+
+    private void chamaPermissoes() {
+        String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
     private void mapeiaViagens() {
@@ -324,8 +331,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
             return false;
         }
         return true;
