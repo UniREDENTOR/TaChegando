@@ -8,12 +8,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -49,15 +52,21 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
 
-    public static void getViagens() {
-        getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                GeralUtils.show("" + queryDocumentSnapshots.getDocuments());
-            }
-        });
+    public static CollectionReference getViagens() {
+        return getBanco().collection("viagens");
     }
 
+    public static CollectionReference getUsers() {
+        return getBanco().collection("users");
+    }
+
+    public static CollectionReference getHistorico() {
+        return getBanco().collection("historico");
+    }
+
+    public static CollectionReference getPontos() {
+        return getBanco().collection("pontos");
+    }
 
     public static void salvaLocal(ArrayList<LatLng> locais) {
         DocumentReference reference = getBanco().collection("historico").document();
@@ -161,4 +170,65 @@ public class FirebaseUtils extends AppCompatActivity {
 
     }
 
+    public static void deletaTudo() {
+        final CollectionReference ref = getViagens();
+        ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
+                    ref.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            GeralUtils.mostraLog("Deu certo " + task);
+                        }
+                    });
+                }
+            }
+        });
+
+        final CollectionReference refUsers = getUsers();
+        refUsers.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
+                    refUsers.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            GeralUtils.mostraLog("Deu certo " + task);
+                        }
+                    });
+                }
+            }
+        });
+
+        final CollectionReference refHistorico = getHistorico();
+        refHistorico.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
+                    refHistorico.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            GeralUtils.mostraLog("Deu certo " + task);
+                        }
+                    });
+                }
+            }
+        });
+
+        final CollectionReference refPontos = getPontos();
+        refPontos.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
+                    refPontos.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            GeralUtils.mostraLog("Deu certo " + task);
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

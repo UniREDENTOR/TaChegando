@@ -85,6 +85,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         criaToolBar();
         criaDemo();
         iniciaMapa();
+        FirebaseUtils.deletaTudo();
     }
 
     private void iniciaMapa() {
@@ -194,14 +195,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                //Remover após os testes. Pois a tela inicial é onde o usuário estiver
-                try{
-                    LatLng latLng = new LatLng(listaViagens.get(0).getLatitude(), listaViagens.get(0).getLongitude());
-                    MapaUtils.moveCamera(mMap, latLng);
-                }catch (Exception ex){
-                    ex.printStackTrace();}
-
-
             }
         });
 
@@ -267,6 +260,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             Location localizacaoAtual = (Location) task.getResult();
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
                 });
