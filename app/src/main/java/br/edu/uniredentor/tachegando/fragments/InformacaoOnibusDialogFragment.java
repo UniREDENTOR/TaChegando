@@ -3,6 +3,7 @@ package br.edu.uniredentor.tachegando.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
@@ -137,13 +138,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         buttonDenuncia = view.findViewById(R.id.button_denunciar);
     }
 
-    private Toolbar getToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
+    private Toolbar getToolbar(final View view) {
+        final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(viagem.getNome());
+
+
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onMenuItemClick(final MenuItem item) {
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
                 switch (item.getItemId()) {
                     case R.id.item_entrar:
@@ -155,13 +158,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
+                                            Log.v("user", (GeralUtils.getIdDoUsuario()));
+                                            adapter.notifyDataSetChanged();
+
                                         }
                                     });
                             alerta.show();
-                        }
-
-                        break;
-
+                        }                        break;
                     case R.id.item_sair:
                         alerta.setTitle("Ônibus")
                                 .setMessage("Deseja sair do onibus?")
@@ -170,6 +173,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         saiDoOnibus(GeralUtils.getIdDoUsuario());
+                                        item.setVisible(false);
+                                        adapter.notifyDataSetChanged();
+
                                     }
                                 });
                         alerta.show();
@@ -237,7 +243,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             FirebaseUtils.getBanco().collection("users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
+                    if(documentSnapshot.exists()) {
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         passageiros.add(passageiro);
                     }
