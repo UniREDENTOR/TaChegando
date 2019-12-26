@@ -177,7 +177,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         }
                     }
                 }
-                
+
             }
         });
     }
@@ -230,7 +230,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             longitude = localizacaoAtual.getLongitude();
                             LatLng latLng = new LatLng(latitude, longitude);
                             //Comentado para teste
-                          //  MapaUtils.moveCamera(mMap, latLng);
+                            MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
                 });
