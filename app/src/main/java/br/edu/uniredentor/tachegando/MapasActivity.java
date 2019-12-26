@@ -63,10 +63,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private LocationRequest locationRequest;
     private static final long UPDATE_INTERVAL = 60000, FASTEST_INTERVAL = 60000; // = 5 seconds
     private LocationCallback locationCallback;
-    private ArrayList<LatLng> locais;
-    private int contador = 0;
     protected double latitude, longitude;
-    private ArrayList<LatLng> locais2;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
     private List<Viagem> viagens;
     private SupportMapFragment mapFragment;
@@ -143,7 +140,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-
 
                     }
 
@@ -229,7 +225,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
                             LatLng latLng = new LatLng(latitude, longitude);
-                            //Comentado para teste
                             MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
@@ -316,7 +311,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                 }catch (Exception e){
                     e.printStackTrace();
-                    GeralUtils.mostraAlerta("Atenção", "Algum erro aconteceu com esta viagem. Estamos tentando identificar o problema.", getApplicationContext());
+                    GeralUtils.mostraAlerta("Atenção", "Algum erro aconteceu com esta viagem. Estamos tentando identificar o problema.", MapasActivity.this);
                 }
 
             }

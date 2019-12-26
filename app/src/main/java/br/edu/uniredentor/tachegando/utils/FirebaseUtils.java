@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -33,23 +34,20 @@ public class FirebaseUtils extends AppCompatActivity {
     public static void salvaViagem(final Viagem viagem) {
         final DocumentReference reference = getBanco().collection("viagens")
                 .document(GeralUtils.getIdDoUsuario());
-        if (viagem.getId() == null || viagem.getId().isEmpty()) {
-            viagem.setId(GeralUtils.getIdDoUsuario());
-            getBanco().collection("users").document(GeralUtils.getIdDoUsuario()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    if(documentSnapshot.exists()){
-                        GeralUtils.mostraLog("Teste " + documentSnapshot.toObject(Passageiro.class));
-                        viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
-                        reference.set(viagem.getInicialMap());
-                    }
-
+        getBanco().collection("users").document(GeralUtils.getIdDoUsuario()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot.exists()){
+                    viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
+                    reference.set(viagem.getInicialMap());
                 }
-            });
+            }
+        });
+    }
 
-        } else {
-            reference.set(viagem.getLocalizacao());
-        }
+    public static DocumentReference getViagem(String id){
+        return getBanco().collection("viagens")
+                .document(id);
     }
 
     private static void salvaHistorico(Viagem viagem) {
@@ -149,7 +147,7 @@ public class FirebaseUtils extends AppCompatActivity {
                     ref.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            GeralUtils.mostraLog("Deu certo " + task);
+
                         }
                     });
                 }
@@ -164,7 +162,7 @@ public class FirebaseUtils extends AppCompatActivity {
                     refUsers.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            GeralUtils.mostraLog("Deu certo " + task);
+
                         }
                     });
                 }
@@ -179,7 +177,7 @@ public class FirebaseUtils extends AppCompatActivity {
                     refHistorico.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            GeralUtils.mostraLog("Deu certo " + task);
+
                         }
                     });
                 }
@@ -194,11 +192,15 @@ public class FirebaseUtils extends AppCompatActivity {
                     refPontos.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            GeralUtils.mostraLog("Deu certo " + task);
+
                         }
                     });
                 }
             }
         });
+    }
+
+    public static void denuncia(String id, Denuncia denuncia) {
+        getViagem(id).set(denuncia.createMap());
     }
 }

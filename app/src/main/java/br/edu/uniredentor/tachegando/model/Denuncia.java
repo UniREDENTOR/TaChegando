@@ -40,4 +40,12 @@ public class Denuncia {
     public void setHorario(String horario) {
         this.horario = horario;
     }
+
+    public HashMap<String, String> createMap() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("data", getData());
+        map.put("horario", getHorario());
+        map.put("idDenunciante", getIdDenunciante());
+        return map;
+    }
 }

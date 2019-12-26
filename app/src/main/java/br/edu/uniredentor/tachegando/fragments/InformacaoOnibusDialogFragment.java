@@ -101,8 +101,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Denuncia denuncia = new Denuncia();
                                     denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
-                                    viagem.addDenuncia(denuncia);
-                                    FirebaseUtils.salvaViagem(viagem);
+                                    FirebaseUtils.denuncia(viagem.getId(), denuncia);
                                 }
                             });
                     alerta.show();
