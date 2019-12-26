@@ -21,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.model.Document;
@@ -70,7 +71,7 @@ public class ChatFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
         final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
-        FirebaseUtils.getConversas("").orderBy("dataCriacao").limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getConversas("").orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 mensagens.clear();
@@ -91,9 +92,9 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 String mensagem = editTextMensagem.getText().toString();
                 final MensagemChat mensagemChat = new MensagemChat();
-                mensagemChat.setNomeUsuario("Arrascaeta");
+                mensagemChat.setNomeUsuario("Gabigol");
                 mensagemChat.setFotoUsuario("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
-                mensagemChat.setIdUsuario("1234");
+                mensagemChat.setIdUsuario("12345");
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
                 FirebaseUtils.getConversas("").add(mensagemChat.getMap());
