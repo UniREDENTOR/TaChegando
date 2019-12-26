@@ -41,7 +41,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         inicializaComponentePerfil();
         createToolbar();
 
-      recuperaPerfilPassageiro();
+        recuperaPerfilPassageiro();
     }
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
