@@ -1,11 +1,12 @@
 package br.edu.uniredentor.tachegando.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
-public class Denuncia {
+public class Denuncia implements Serializable {
 
     private String idDenunciante;
     private String data;
@@ -41,11 +42,4 @@ public class Denuncia {
         this.horario = horario;
     }
 
-    public HashMap<String, String> createMap() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("data", getData());
-        map.put("horario", getHorario());
-        map.put("idDenunciante", getIdDenunciante());
-        return map;
-    }
 }

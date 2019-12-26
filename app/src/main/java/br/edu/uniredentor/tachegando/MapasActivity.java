@@ -182,7 +182,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                try{
+                    listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                }
+
             }
         });
 

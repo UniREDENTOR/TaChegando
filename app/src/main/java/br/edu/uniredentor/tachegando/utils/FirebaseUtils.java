@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
@@ -200,7 +202,11 @@ public class FirebaseUtils extends AppCompatActivity {
         });
     }
 
-    public static void denuncia(String id, Denuncia denuncia) {
-        getViagem(id).set(denuncia.createMap());
+    public static void denuncia(Viagem viagem, Denuncia denuncia) {
+        HashMap<String, Object> map = new HashMap<>();
+        List<Denuncia> denuncias = viagem.getDenuncias();
+        denuncias.add(denuncia);
+        map.put("denuncias", denuncias);
+        getViagem(viagem.getId()).update(map);
     }
 }
