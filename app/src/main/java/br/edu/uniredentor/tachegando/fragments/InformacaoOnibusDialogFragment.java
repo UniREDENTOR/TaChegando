@@ -207,8 +207,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private void saiDoOnibus(String id) {
         viagemRef.update("idPassageiros", FieldValue.arrayRemove(id));
-        viagem.getIdPassageiros().remove(id);
-
+        recuperaPassageiros();
     }
 
     private void entraOnibus(String id) {
@@ -240,7 +239,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                     if(documentSnapshot.exists()){
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         passageiros.add(passageiro);
-                        passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);
                     }
                     adapter.atualiza(passageiros);adapter.atualiza(passageiros);
                 }

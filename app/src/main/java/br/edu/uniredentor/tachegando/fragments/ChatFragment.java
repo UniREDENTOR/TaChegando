@@ -96,7 +96,7 @@ public class ChatFragment extends Fragment {
                 mensagemChat.setIdUsuario("12345");
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
-                FirebaseUtils.getConversas("").add(mensagemChat.getMap());
+                FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
             }
         });
     }
