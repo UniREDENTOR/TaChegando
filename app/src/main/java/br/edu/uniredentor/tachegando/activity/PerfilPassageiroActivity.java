@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -30,7 +31,7 @@ import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.signOut;
 public class PerfilPassageiroActivity extends FragmentActivity {
 
     private TextView textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewReputacaoPassageiro;
-    private ImageView imagemPassageiro, imagemViagem, imagemReputacao, imagemTituloPassageiro;
+    private ImageView imagemPassageiro;
 
 
     @Override
@@ -60,6 +61,10 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                         signOut();
                         Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
                         startActivity(i);
+                        break;
+                    case R.id.item_mapa_app:
+                        Intent intent = new Intent(getApplicationContext(), MapasActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return true;
@@ -103,8 +108,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagens_passageiro);
         textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
         imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
-        imagemReputacao = findViewById(R.id.imageView_reputacao);
-        imagemViagem = findViewById(R.id.imageView_qtd_corrida);
 
     }
 

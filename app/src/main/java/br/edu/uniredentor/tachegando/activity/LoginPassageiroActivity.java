@@ -28,6 +28,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Map;
+
+import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -106,13 +109,13 @@ public class LoginPassageiroActivity extends FragmentActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    Log.v("usuario", mAuth.getCurrentUser().getUid());
+                    verificaPassageiro();
+                    Log.v("ID USUÁRIO", mAuth.getCurrentUser().getUid());
                 }
             }
         });
 
     }
-
 
     private void verificaPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
