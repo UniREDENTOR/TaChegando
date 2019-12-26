@@ -178,9 +178,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     }
                 }
 
-                //Apagar depois
-                LatLng latLng = new LatLng(viagens.get(0).getLatitude(), viagens.get(0).getLongitude());
-                MapaUtils.moveCamera(mMap, latLng);
+                try {
+                    //Apagar depois
+                    LatLng latLng = new LatLng(viagens.get(0).getLatitude(), viagens.get(0).getLongitude());
+                    MapaUtils.moveCamera(mMap, latLng);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         });
     }
