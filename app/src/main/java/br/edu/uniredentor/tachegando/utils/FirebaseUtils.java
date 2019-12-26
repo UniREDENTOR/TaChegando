@@ -36,8 +36,7 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void salvaViagem(Viagem viagem) {
         DocumentReference reference = getBanco().collection("viagens")
-              //  .document(GeralUtils.getIdDoUsuario());
-        .document("IhVmsdUbBKSAPORPJkstLkf7qiu2");
+                .document(GeralUtils.getIdDoUsuario());
         if (!viagem.getId().isEmpty()) {
             reference.set(viagem.getInicialMap());
         } else {
@@ -81,7 +80,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static CollectionReference getConversas(String idViagem) {
-        return FirebaseFirestore.getInstance().collection("viagens").document("IhVmsdUbBKSAPORPJkstLkf7qiu2").collection("conversas");
+        return FirebaseFirestore.getInstance().collection("viagens").document(idViagem).collection("conversas");
     }
 
     public static FirebaseAuth getAuth() {
@@ -153,4 +152,7 @@ public class FirebaseUtils extends AppCompatActivity {
         return;
     }
 
+    public static FirebaseUser getUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 }

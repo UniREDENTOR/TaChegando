@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -71,7 +72,7 @@ public class ChatFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
         final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
-        FirebaseUtils.getConversas("").orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 mensagens.clear();
@@ -91,13 +92,14 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String mensagem = editTextMensagem.getText().toString();
+                FirebaseUser user = FirebaseUtils.getUser();
                 final MensagemChat mensagemChat = new MensagemChat();
-                mensagemChat.setNomeUsuario("Gabigol");
-                mensagemChat.setFotoUsuario("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
-                mensagemChat.setIdUsuario("12345");
+                mensagemChat.setNomeUsuario(user.getDisplayName());
+                mensagemChat.setFotoUsuario(user.getPhotoUrl().getPath());
+                mensagemChat.setIdUsuario(user.getUid());
                 mensagemChat.setTexto(mensagem);
                 editTextMensagem.setText("");
-                FirebaseUtils.getConversas("").add(mensagemChat.getMap());
+                FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
             }
         });
     }
