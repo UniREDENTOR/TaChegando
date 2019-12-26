@@ -126,41 +126,6 @@ public class FirebaseUtils extends AppCompatActivity {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-    public static void salvaEditarPerfil(Uri fotoSelecionada, final String nome) {
-        FirebaseUtils.usuarioCadastrado();
-        String filename = UUID.randomUUID().toString();
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images" + filename);
-        ref.putFile(fotoSelecionada).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String id = FirebaseAuth.getInstance().getUid();
-                        String foto = uri.toString();
-
-                        Passageiro passageiro = new Passageiro(id, foto, nome);
-                        FirebaseUtils.getBanco().collection("users").document(passageiro.getId()).update(
-                                "nome", passageiro.getNome(),
-                                "foto", passageiro.getFoto()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                            }
-                        });
-
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("Teste", e.getMessage(), e);
-            }
-        });
-        return;
-    }
-
     public static FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
 
