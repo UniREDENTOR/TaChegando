@@ -28,7 +28,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.Map;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
@@ -127,7 +126,7 @@ public class LoginPassageiroActivity extends FragmentActivity {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if(documentSnapshot.exists()) {
                         Log.i("tag", "Usuário existe no firestore");
-                        Intent i = new Intent(getApplicationContext(), PerfilPassageiroActivity.class);
+                        Intent i = new Intent(getApplicationContext(), MapasActivity.class);
                         startActivity(i);
                     } else {
                         String titulo = "Iniciante";
@@ -138,6 +137,8 @@ public class LoginPassageiroActivity extends FragmentActivity {
                         String fotoPerfil = String.valueOf(account.getPhotoUrl());
                         Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, reputacao, titulo, credito, viagem);
                         FirebaseUtils.salvaUsuario(passageiro);
+                        Intent i = new Intent(getApplicationContext(), MapasActivity.class);
+                        startActivity(i);
 
 
                     }
@@ -151,10 +152,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
     protected void onStart() {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (account != null) {
-            Intent i = new Intent(this, MapasActivity.class);
-            startActivity(i);
-        }
 
     }
 }
