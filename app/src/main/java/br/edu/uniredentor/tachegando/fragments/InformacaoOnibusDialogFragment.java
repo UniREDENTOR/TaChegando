@@ -3,7 +3,6 @@ package br.edu.uniredentor.tachegando.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
@@ -77,7 +76,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         viagemRef = FirebaseUtils.getBanco().collection("viagens").document(viagem.getId());
 
         mostraChat();
-        recuperaPassageiros();
 
         encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
@@ -211,7 +209,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        viagem.getIdPassageiros().remove(id);
+        viagem.getPassageiros().remove(id);
         FirebaseUtils.removePassageiro(viagem);
      //   recuperaPassageiros();
     }
@@ -229,30 +227,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         });
     }
 
-    private void recuperaPassageiros() {
-        ArrayList<String> idPassageiros;
-
-        if (viagem.getIdPassageiros() != null) {
-            idPassageiros = viagem.getIdPassageiros();
-        } else {
-            idPassageiros = new ArrayList<>();
-        }
-
-        for (String id : idPassageiros) {
-            FirebaseUtils.getBanco().collection("users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()) {
-                        Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                        passageiros.add(passageiro);
-                    }
-                    adapter.atualiza(passageiros);
-                }
-            });
-
-        }
-
-    }
 
     private void mostraChat() {
         ChatFragment chat = new ChatFragment();

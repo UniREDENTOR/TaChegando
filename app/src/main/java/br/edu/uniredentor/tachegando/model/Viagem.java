@@ -5,24 +5,18 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Viagem implements Serializable {
 
-    private String id = "";
-
+    private String id;
     private String nome;
-
-    private ArrayList<String> idPassageiros;
-    private ArrayList<Denuncia> denuncias;
+    private List<Passageiro> passageiros = new ArrayList<>();
+    private List<Denuncia> denuncias = new ArrayList<>();
     private double latitude, longitude, latitudeInicial, longitudeInicial;
-    public ArrayList<String> getIdPassageiros() {
-        return idPassageiros;
-    }
-
-    public void setIdPassageiros(ArrayList<String> idPassageiros) {
-        this.idPassageiros = idPassageiros;
-    }
 
     public String getId() {
         return id;
@@ -97,18 +91,18 @@ public class Viagem implements Serializable {
         map.put("nome", getNome());
         map.put("latitudeInicial", getLatitude());
         map.put("longitudeInicial", getLongitude());
-        map.put("idPassageiros", getIdPassageiros());
+        map.put("passageiros", getPassageiros());
         map.put("id", getId());
         map.put("denuncias", getDenuncias());
         return map;
     }
 
-    public void addPassageiro(String uid) {
+    public void addPassageiro(Passageiro passageiro) {
 
-        if(idPassageiros == null){
-            idPassageiros = new ArrayList<>();
+        if(passageiros == null){
+            passageiros = new ArrayList<>();
         }
-        idPassageiros.add(uid);
+        passageiros.add(passageiro);
     }
 
     public void addDenuncia(Denuncia denuncia) {
@@ -118,12 +112,21 @@ public class Viagem implements Serializable {
         this.denuncias.add(denuncia);
     }
 
-    public ArrayList<Denuncia> getDenuncias() {
+    public List<Denuncia> getDenuncias() {
         return denuncias;
     }
 
     public void setDenuncias(ArrayList<Denuncia> denuncias) {
         this.denuncias = denuncias;
     }
+
+    public List<Passageiro> getPassageiros() {
+        return passageiros;
+    }
+
+    public void setPassageiros(ArrayList<Passageiro> passageiros) {
+        this.passageiros = passageiros;
+    }
+
 
 }
