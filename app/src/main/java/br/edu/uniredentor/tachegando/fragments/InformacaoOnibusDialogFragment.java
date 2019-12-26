@@ -14,37 +14,27 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
@@ -179,16 +169,15 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        saiOnibus(GeralUtils.getIdDoUsuario());
+                                        saiDoOnibus(GeralUtils.getIdDoUsuario());
                                     }
                                 });
                         alerta.show();
                         break;
 
                     case R.id.item_trajeto:
-                        //Mudei aqui
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        FirebaseUtils.getBanco().collection("historico").document(user.getUid()).collection("1").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        FirebaseUtils.getBanco().collection("historico").document(GeralUtils.getIdDoUsuario()).collection("1")
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -216,17 +205,10 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return toolbar;
     }
 
-    private void saiOnibus(String id) {
+    private void saiDoOnibus(String id) {
         viagemRef.update("idPassageiros", FieldValue.arrayRemove(id));
-        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                int position = passageiros.indexOf(passageiro);
-                passageiros.remove(passageiro);
-                adapter.notifyItemRemoved(position); //não está removendo certo no adapter
-            }
-        });
+        viagem.getIdPassageiros().remove(id);
+
     }
 
     private void entraOnibus(String id) {

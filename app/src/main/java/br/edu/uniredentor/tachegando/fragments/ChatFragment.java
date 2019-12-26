@@ -82,7 +82,6 @@ public class ChatFragment extends Fragment {
                 }
                 if(mensagens.size() > 0) {
                     adapter.atualiza(mensagens);
-                    recyclerViewChat.smoothScrollToPosition(mensagens.size() - 1);
                 }
             }
         });
