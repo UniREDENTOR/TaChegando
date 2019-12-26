@@ -23,14 +23,10 @@
 
         <activity android:name=".activity.PerfilPassageiroActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
-        <activity android:name=".activity.EditarPerfilPassageiroActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
         <activity android:name=".activity.LoginPassageiroActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
 
         </activity>
-        <activity android:name=".activity.VerificarLoginPassageiroActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
 
         <activity android:name=".MapasActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"><intent-filter>

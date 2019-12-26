@@ -76,7 +76,7 @@
     <string name="entre_com_numero_valido">Entre com número válido</string>
 
     <!-- editar perfil passageiro activity -->
-    <string name="editar">Editar</string>
+    <string name="mapa">Mapa</string>
 
     <!-- activity login passageiro xml -->
     <string name="telefone">Telefone</string>
