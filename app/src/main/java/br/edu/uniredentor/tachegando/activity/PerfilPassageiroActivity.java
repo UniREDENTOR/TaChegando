@@ -27,18 +27,18 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class PerfilPassageiroActivity extends FragmentActivity {
 
-    private TextView textViewQtdTempoPercorrido, textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewTelefonePassageiro, textViewReputacaoPassageiro, textViewCreditoPassageiro;
-    private ImageView imagemPassageiro, imagemViagem, imagemCredito, imagemReputacao, imagemTituloPassageiro;
+    private TextView textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewReputacaoPassageiro;
+    private ImageView imagemPassageiro, imagemViagem, imagemReputacao, imagemTituloPassageiro;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
-
-        createToolbar();
         inicializaComponentePerfil();
-        recuperaPerfilPassageiro();
+        createToolbar();
+
+      recuperaPerfilPassageiro();
     }
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
@@ -87,7 +87,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         }
     }
 
-
     private void exibeInfoPassageiro(Passageiro passageiro) {
         String id = passageiro.getId();
         Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
@@ -100,23 +99,26 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         GeralUtils.mostraImagemCircular(getApplicationContext(), imagemPassageiro, passageiro.getFoto());
         textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
-        textViewTelefonePassageiro.setText(passageiro.getTelefone());
-        textViewCreditoPassageiro.setText(String.valueOf(passageiro.getCredito()));
-      //  textViewQtdTempoPercorrido.setText(passageiro.getTempo());
+
     }
 
+
+
+
     private void inicializaComponentePerfil() {
-        textViewQtdTempoPercorrido = findViewById(R.id.textView_qtd_tempo_percorrido);
         textViewTiuloPassageiro = findViewById(R.id.textView_titulo_perfil_passageiro);
         textViewNomePassageiro = findViewById(R.id.textView_nome_perfil_passageiro);
         textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagens_passageiro);
         textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
-        textViewTelefonePassageiro = findViewById(R.id.textView_telefone_passageiro);
-        textViewCreditoPassageiro = findViewById(R.id.textView_credito_perfil_passageiro);
         imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
         imagemReputacao = findViewById(R.id.imageView_reputacao);
         imagemViagem = findViewById(R.id.imageView_qtd_corrida);
-        imagemCredito = findViewById(R.id.imageView_credito_perfil);
-        imagemTituloPassageiro = findViewById(R.id.imageView_emblema_perfil);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 }

@@ -16,20 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="#6A5ACD"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageview"
-            android:layout_marginTop="55dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_phone_white"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            >
-
-        </ImageView>
-
-    </LinearLayout>
+        android:orientation="vertical"/>
 
     <LinearLayout
         android:id="@+id/linear2"
@@ -38,33 +25,11 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <EditText
-            android:id="@+id/editTextMobile"
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:digits="0123456789"
-            android:drawablePadding="5dp"
-            android:inputType="phone"
-            android:maxLength="12"
-            android:hint="Entre com o telefone"
-            android:drawableLeft="@drawable/ic_phone">
+            android:layout_height="wrap_content" />
 
-        </EditText>
 
-        <Button
-            android:id="@+id/buttonContinue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="#6A5ACD"
-            android:textStyle="bold"
-            android:textAllCaps="false"
-            android:layout_gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/continuar">
-
-        </Button>
     </LinearLayout>
 </LinearLayout>

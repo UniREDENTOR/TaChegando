@@ -152,12 +152,12 @@ public class VerificarLoginPassageiroActivity extends FragmentActivity {
                                 String telefone = user.getPhoneNumber();
                                 String nome = "user";
                                 String foto = "";
-                                String tempo = "0"; //reformular var para date time
+                                int tempo = 0;//reformular var para date time
                                 String titulo = "Iniciante";
                                 int viagem = 0;
                                 int reputacao = 0;
                                 double credito = 0.0;
-                                Passageiro passageiro = new Passageiro(id, telefone, nome, foto, tempo, reputacao, titulo, credito, viagem);
+                                Passageiro passageiro = new Passageiro(id, nome, foto, reputacao, titulo, credito, viagem);
                                 FirebaseUtils.salvaUsuario(passageiro);
                             }
 

@@ -15,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
-
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 
@@ -32,7 +31,6 @@ import java.io.IOException;
 
 import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
-import br.edu.uniredentor.tachegando.fragments.TelefoneDialogFragment;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
@@ -59,7 +57,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
 
         inicializandoComponente();
         recuperaEditarPerfilPassageiro();
-        abrirDialogTelefone();
 
         imageViewEditNomePerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,15 +121,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
         });
     }
 
-    private void abrirDialogTelefone() {
-        cardViewSolicitarTrocaTelefone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TelefoneDialogFragment dialogFragment = new TelefoneDialogFragment();
-                dialogFragment.show(getSupportFragmentManager(), "Dialog Telefone");
-            }
-        });
-    }
 
     private void verificaCampo() {
         editTextNomeEditarPerfil.setError("Digite um nome");
@@ -181,7 +169,6 @@ public class EditarPerfilPassageiroActivity extends FragmentActivity {
     }
 
     private void alteraInformacaoEditarPerfil(Passageiro passageiro){
-        textViewTelefoneEditarPerfil.setText(passageiro.getTelefone());
         GeralUtils.mostraImagemCircular(getApplicationContext(), imageViewFotoPerfil, passageiro.getFoto());
     }
 

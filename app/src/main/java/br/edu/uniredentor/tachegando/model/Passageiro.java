@@ -7,7 +7,6 @@ public class Passageiro {
     private String foto;
     private String nome;
     private String id;
-    private String telefone;
     private String titulo;
     private double credito;
     private int reputacao;
@@ -15,18 +14,16 @@ public class Passageiro {
 
     public Passageiro() {}
 
-    public Passageiro(String telefone) {
-        this.telefone = telefone;
-    }
     public Passageiro(String id, String foto, String nome) {
         this.id = id;
         this.foto = foto;
         this.nome = nome;
     }
 
-    public Passageiro(String id, String telefone, String nome, String foto, String tempo, int reputacao, String titulo, double credito, int viagem) {
+
+
+    public Passageiro(String id, String nome, String foto, int reputacao, String titulo, double credito, int viagem) {
         this.id = id;
-        this.telefone = telefone;
         this.nome = nome;
         this.foto = foto;
         this.reputacao = reputacao;
@@ -68,14 +65,6 @@ public class Passageiro {
         this.id = id;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
     public double getCredito() {
         return credito;
     }
@@ -115,7 +104,6 @@ public class Passageiro {
         map.put("foto", getFoto());
         map.put("nome", getNome());
         map.put("id", getId());
-        map.put("telefone", getTelefone());
         return map;
     }
 
@@ -124,7 +112,6 @@ public class Passageiro {
         usuario.put("foto", getFoto());
         usuario.put("nome", getNome());
         usuario.put("id", getId());
-        usuario.put("telefone", getTelefone());
         usuario.put("credito", getCredito());
         usuario.put("reputacao", getReputacao());
         usuario.put("titulo", getTitulo());
