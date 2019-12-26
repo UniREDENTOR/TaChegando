@@ -144,9 +144,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
 
-
                     }
-
 
                 }
             };
@@ -164,26 +162,16 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
                 viagens = queryDocumentSnapshots.toObjects(Viagem.class);
-
                 for (Viagem viagem : viagens) {
                     if (existe(viagem)) {
                         getOnibus(viagem).setPosition(viagem.getLatLng());
                     } else {
                         try {
                             listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
-
                         } catch (Exception ex) {
 
                         }
                     }
-                }
-
-                try {
-                    //Apagar depois
-                    LatLng latLng = new LatLng(viagens.get(0).getLatitude(), viagens.get(0).getLongitude());
-                    MapaUtils.moveCamera(mMap, latLng);
-                }catch (Exception ex){
-                    ex.printStackTrace();
                 }
             }
         });
@@ -236,8 +224,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             latitude = localizacaoAtual.getLatitude();
                             longitude = localizacaoAtual.getLongitude();
                             LatLng latLng = new LatLng(latitude, longitude);
-                            //Comentado para teste
-                          //  MapaUtils.moveCamera(mMap, latLng);
+                            MapaUtils.moveCamera(mMap, latLng);
                         }
                     }
                 });
