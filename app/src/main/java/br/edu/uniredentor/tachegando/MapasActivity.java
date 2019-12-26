@@ -60,7 +60,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 5000; // = 5 seconds
+    private static final long UPDATE_INTERVAL = 60000, FASTEST_INTERVAL = 60000; // = 5 seconds
     private LocationCallback locationCallback;
     private ArrayList<LatLng> locais;
     private int contador = 0;
@@ -103,11 +103,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nova_viagem:
-                        if(GeralUtils.ehUsuario(MapasActivity.this) && possuiLocalizacao()){
-                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
-                        }else{
-                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
+                        if(GeralUtils.ehUsuario(MapasActivity.this)){
+                            if(possuiLocalizacao()){
+                                NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                            }else{
+                                GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
+                            }
                         }
+
                         break;
                     case R.id.pesquisar_onibus:
                         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
