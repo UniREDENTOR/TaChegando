@@ -137,7 +137,10 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static void removePassageiro(Viagem viagem) {
-
+        HashMap<String, Object> map = new HashMap<>();
+        List<Passageiro> passageiros = viagem.getPassageiros();
+        map.put("passageiros", passageiros);
+        getViagem(viagem.getId()).update(map);
     }
 
     public static void deletaTudo() {

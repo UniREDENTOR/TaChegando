@@ -102,6 +102,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     Denuncia denuncia = new Denuncia();
                                     denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
                                     FirebaseUtils.denuncia(viagem, denuncia);
+                                    dismiss();
                                 }
                             });
                     alerta.show();
@@ -208,13 +209,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        viagem.getPassageiros().remove(id);
+        viagem.removePassageiro(id);
         FirebaseUtils.removePassageiro(viagem);
      //   recuperaPassageiros();
     }
 
     private void entraOnibus(String id) {
-        viagemRef.update("idPassageiros", FieldValue.arrayUnion(id));
+        viagemRef.update("passageiros", FieldValue.arrayUnion(id));
 
         FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
