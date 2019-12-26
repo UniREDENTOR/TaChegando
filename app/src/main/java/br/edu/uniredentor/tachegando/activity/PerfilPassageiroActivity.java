@@ -102,7 +102,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
         textViewTelefonePassageiro.setText(passageiro.getTelefone());
         textViewCreditoPassageiro.setText(String.valueOf(passageiro.getCredito()));
-        textViewQtdTempoPercorrido.setText(passageiro.getTempo());
+      //  textViewQtdTempoPercorrido.setText(passageiro.getTempo());
     }
 
     private void inicializaComponentePerfil() {

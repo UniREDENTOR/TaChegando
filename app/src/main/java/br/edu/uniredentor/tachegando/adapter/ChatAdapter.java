@@ -42,7 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return mensagens.size();
     }
 
-    public void atualiza(ArrayList<MensagemChat> mensagens) {
+    public void atualiza(List<MensagemChat> mensagens) {
         this.mensagens = mensagens;
         notifyDataSetChanged();
     }

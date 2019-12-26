@@ -258,9 +258,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                     if(documentSnapshot.exists()){
                         Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                         passageiros.add(passageiro);
-                        passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);
-
-
+                        passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);passageiros.add(passageiro);
                     }
                     adapter.atualiza(passageiros);adapter.atualiza(passageiros);
                 }

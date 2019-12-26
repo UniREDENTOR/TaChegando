@@ -9,18 +9,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +45,9 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 public class ChatFragment extends Fragment {
 
     private Viagem viagem;
+    private ChatAdapter adapter;
+    private List<MensagemChat> mensagens;
+    private RecyclerView recyclerViewChat;
 
     public ChatFragment() {}
 
@@ -48,61 +55,51 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        mensagens = new ArrayList<>();
 
-        Passageiro p = new Passageiro(
-                );
-        Passageiro p2 = new Passageiro();
-        final MensagemChat mensagemChat = new MensagemChat();
-        mensagemChat.setNomeUsuario("Arrascaeta");
-        mensagemChat.setFotoUsuario("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
-        mensagemChat.setTexto("Ganhou o brasileiro?");
-        MensagemChat mensagemChat2 = new MensagemChat();
-        mensagemChat2.setNomeUsuario("Everton");
-        mensagemChat2.setFotoUsuario("https://colunadofla.com/wp-content/uploads/2019/09/everton-ribeiro-4.jpg");
-        mensagemChat2.setTexto("Sim! E você, ganhou a libertadores?");
-
-        RecyclerView recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
-
-        recyclerViewChat.setLayoutManager(new LinearLayoutManager(getContext()));
-        final ChatAdapter adapter = new ChatAdapter(Arrays.asList(mensagemChat, mensagemChat2));
+        recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerViewChat.setLayoutManager(layoutManager);
+        adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setAdapter(adapter);
         recyclerViewChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-
-        FirebaseUtils.getBanco().collection("chats").document("1").collection("conversas").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
-                ArrayList<MensagemChat> mensagens = new ArrayList<>();
-                mensagens.addAll(queryDocumentSnapshots.toObjects(MensagemChat.class));
-                //adapter.atualiza(mensagens);
-            }
-        });
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
         final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
-        imageViewEnvia.setOnClickListener(new View.OnClickListener() {
+        FirebaseUtils.getConversas("").orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onClick(View v) {
-                /*Passageiro p = new Passageiro("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg",
-                        "20 minutos", "Raphael");
-                String mensagem = editTextMensagem.getText().toString();
-                MensagemChat mensagemChat = new MensagemChat(p, mensagem, Calendar.getInstance());
-                mensagemChat.setIdViagem("1");
-                mensagemChat.setIdUsuario("123");
-                FirebaseUtils.salvaMensagem(mensagemChat);
-                editTextMensagem.setText("");
-                */
-
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                mensagens.clear();
+                for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    if (document.exists()) {
+                        mensagens.add(document.toObject(MensagemChat.class));
+                    }
+                }
+                if(mensagens.size() > 0) {
+                    adapter.atualiza(mensagens);
+                    recyclerViewChat.smoothScrollToPosition(mensagens.size() - 1);
+                }
             }
         });
 
-
+        imageViewEnvia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mensagem = editTextMensagem.getText().toString();
+                final MensagemChat mensagemChat = new MensagemChat();
+                mensagemChat.setNomeUsuario("Gabigol");
+                mensagemChat.setFotoUsuario("https://upload.wikimedia.org/wikipedia/commons/4/47/20171114_AUT_URU_4546_%28cropped%29.jpg");
+                mensagemChat.setIdUsuario("12345");
+                mensagemChat.setTexto(mensagem);
+                editTextMensagem.setText("");
+                FirebaseUtils.getConversas("").add(mensagemChat.getMap());
+            }
+        });
     }
 
     public void setViagem(Viagem viagem) {
