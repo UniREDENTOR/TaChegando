@@ -52,6 +52,10 @@ public class FirebaseUtils extends AppCompatActivity {
                 .document(id);
     }
 
+    public static CollectionReference getViagemRealizadas(){
+        return getBanco().collection("viagens_realizadas");
+    }
+
     private static void salvaHistorico(Viagem viagem) {
         getBanco().collection("historico").document(viagem.getId()).collection(viagem.getId()).add(viagem.getLocalizacao());
     }
@@ -139,8 +143,15 @@ public class FirebaseUtils extends AppCompatActivity {
     public static void removePassageiro(Viagem viagem) {
         HashMap<String, Object> map = new HashMap<>();
         List<Passageiro> passageiros = viagem.getPassageiros();
-        map.put("passageiros", passageiros);
-        getViagem(viagem.getId()).update(map);
+        if(passageiros.size() == 0){
+            //Apagar todos os dados da viagem
+            getViagemRealizadas().add(viagem);
+            getViagem(viagem.getId()).delete();
+        }else{
+            map.put("passageiros", passageiros);
+            getViagem(viagem.getId()).update(map);
+        }
+
     }
 
     public static void deletaTudo() {

@@ -170,8 +170,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         saiDoOnibus(GeralUtils.getIdDoUsuario());
-                                        item.setVisible(false);
-                                        adapter.notifyDataSetChanged();
 
                                     }
                                 });
@@ -211,7 +209,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private void saiDoOnibus(String id) {
         viagem.removePassageiro(id);
         FirebaseUtils.removePassageiro(viagem);
-     //   recuperaPassageiros();
+        dismiss();
     }
 
     private void entraOnibus(String id) {
