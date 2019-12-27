@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,29 +13,35 @@
         android:orientation="horizontal">
 
 
-
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
             android:id="@+id/imageView_criador_lista_viagem_ativa"
+            android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_person"
-            android:background="@color/colorPrimary">
+            android:src="@drawable/ic_person">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/text_view_nome_viagem_ativa"
-                android:textAlignment="center"></TextView>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="25sp"></TextView>
+
+            <TextView
+                android:id="@+id/text_view_nome_criador_viagem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="12sp"></TextView>
 
         </LinearLayout>
 

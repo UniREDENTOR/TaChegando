@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,8 +21,10 @@ import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 
 
@@ -53,6 +56,9 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
 
         final Viagem viagem = listaDeViagensFiltrada.get(position);
         holder.textViewRotaOnibus.setText(viagem.getNome().toLowerCase());
+        Passageiro passageiro = viagem.getCriador(viagem);
+        holder.textViewCriadorRota.setText(passageiro.getNome());
+        GeralUtils.mostraImagemCircular(context,holder.imageViewCriadorRota,passageiro.getFoto());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,11 +83,15 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewRotaOnibus;
+        private TextView textViewRotaOnibus, textViewCriadorRota;
+        private ImageView imageViewCriadorRota;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewRotaOnibus = itemView.findViewById(R.id.textView_rota_onibus);
+            textViewCriadorRota = itemView.findViewById(R.id.textView_criador_rota);
+            imageViewCriadorRota = itemView.findViewById(R.id.imageView_criador_rota);
+
         }
     }
 }

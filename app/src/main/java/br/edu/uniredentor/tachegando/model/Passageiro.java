@@ -132,4 +132,5 @@ public class Passageiro implements Serializable {
     public int hashCode() {
         return Objects.hash(nome, id);
     }
+
 }
