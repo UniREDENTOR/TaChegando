@@ -93,23 +93,26 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             chamaPermissoes();
         }
 
-        String id = SharedUtils.getId(this);
-        GeralUtils.show("Teste " + id);
-        if(!id.equalsIgnoreCase("0")){
-            final DocumentReference docRef = FirebaseUtils.getViagem(id);
+        GeralUtils.show("Teste " + SharedUtils.getId(this));
+        if(!SharedUtils.getId(this).equalsIgnoreCase("0") && !SharedUtils.getId(this).equalsIgnoreCase("")){
+            final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
+
             docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
-                    Viagem viagem = documentSnapshot.toObject(Viagem.class);
-                    if(!viagem.isAtiva()){
-                        GeralUtils.show("Uai " + documentSnapshot);
-                    }else{
-                        GeralUtils.show("Deu ruim" + documentSnapshot);
+                    try{
+                        Viagem viagem = documentSnapshot.toObject(Viagem.class);
+                        if(!viagem.isAtiva()){
+                            GeralUtils.show("Uai " + documentSnapshot);
+                        }else{
+                            GeralUtils.show("Deu ruim" + documentSnapshot);
+                        }
+                    }catch (Exception e1){
+                        e1.printStackTrace();
+                        SharedUtils.save("", MapasActivity.this);
                     }
-
                 }
-
             });
         }
 
