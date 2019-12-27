@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -37,7 +39,6 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 public class LoginPassageiroActivity extends FragmentActivity {
 
     private  GoogleSignInClient mGoogleSignInClient;
-    private SignInButton signInButton;
     private int RC_SIGN_IN = 0;
     FirebaseAuth mAuth;
     private GoogleSignInAccount account;
@@ -47,8 +48,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_passageiro);
 
-        signInButton = findViewById(R.id.sign_in_button);
-        createToolbar();
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -57,25 +56,10 @@ public class LoginPassageiroActivity extends FragmentActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-       signInButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-              switch (v.getId()) {
-                  case R.id.sign_in_button:
-                      signIn();
-                      break;
-              }
-           }
-       });
+        signIn();
     }
 
-    @SuppressLint("NewApi")
-    private void createToolbar() {
-        Toolbar toolbarLoginPassageiro = findViewById(R.id.toolbar_principal);
-        toolbarLoginPassageiro.setTitle(R.string.login);
-        toolbarLoginPassageiro.setElevation(0);
-    }
+
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -90,14 +74,11 @@ public class LoginPassageiroActivity extends FragmentActivity {
             handleSignInResult(task);
         }
     }
-
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
            account = completedTask.getResult(ApiException.class);
            firebaseAuthWithGoogle(account);
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
 
         }
     }
@@ -118,34 +99,29 @@ public class LoginPassageiroActivity extends FragmentActivity {
 
     private void verificaPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final DocumentReference getId = FirebaseUtils.getBanco().collection("users").document(user.getUid());
-        getId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if(documentSnapshot.exists()) {
-                        Log.i("tag", "Usuário existe no firestore");
-                        Intent i = new Intent(getApplicationContext(), MapasActivity.class);
-                        startActivity(i);
-                    } else {
-                        String titulo = "Iniciante";
-                        int viagem = 0;
-                        int reputacao = 0;
-                        String id = user.getUid();
-                        double credito = 0.0;
-                        String fotoPerfil = String.valueOf(account.getPhotoUrl());
-                        Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, reputacao, titulo, credito, viagem);
-                        FirebaseUtils.salvaUsuario(passageiro);
-                        Intent i = new Intent(getApplicationContext(), MapasActivity.class);
-                        startActivity(i);
-
+            final DocumentReference getId = FirebaseUtils.getBanco().collection("users").document(user.getUid());
+            getId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.exists()) {
+                            Log.i("tag", "Usuário existe no firestore");
+                            Intent i = new Intent(getApplicationContext(), MapasActivity.class);
+                            startActivity(i);
+                        } else {
+                            String id = user.getUid();
+                            String fotoPerfil = String.valueOf(account.getPhotoUrl());
+                            Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, 0, "Iniciante", 0.0, 0);
+                            FirebaseUtils.salvaUsuario(passageiro);
+                            Intent i = new Intent(getApplicationContext(), MapasActivity.class);
+                            startActivity(i);
+                        }
 
                     }
-
                 }
-            }
-        });
+            });
+
     }
 
     @Override
