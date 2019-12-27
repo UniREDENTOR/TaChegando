@@ -36,11 +36,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
@@ -90,6 +93,19 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }else{
             chamaPermissoes();
         }
+
+        /*
+        final DocumentReference docRef = FirebaseUtils.getBanco().collection("cities").document("SF");
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                GeralUtils.show("Uai " + documentSnapshot);
+            }
+
+        });
+       
+         */
     }
 
     private void iniciaMapa() {
@@ -148,7 +164,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
-
                         }
                     }
 
