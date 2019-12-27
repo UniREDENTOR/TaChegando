@@ -43,6 +43,7 @@ import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
 import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
+import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
@@ -176,26 +177,24 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                         break;
 
                     case R.id.item_trajeto:
-                        FirebaseUtils.getBanco().collection("historico").document(GeralUtils.getIdDoUsuario()).collection("1")
-                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
                                 ArrayList<LatLng> locais = new ArrayList<>();
+                                GeralUtils.show("Lat " + queryDocumentSnapshots.getDocuments().size());
                                 for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                    try {
-                                        LatLng latLng = new LatLng((Double) snapshot.get(getString(R.string.latitude)), (Double) snapshot.get(getString(R.string.longitude)));
-                                        locais.add(latLng);
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
-                                    }
+                                    GeralUtils.show("Lat " + snapshot.get("latitude"));
+                                    LatLng latLng = new LatLng((Double) snapshot.get(ConstantsUtils.LATITUDE), (Double) snapshot.get(ConstantsUtils.LONGITUDE));
+                                    locais.add(latLng);
                                 }
+                                GeralUtils.show("Locias " + locais.size());
                                 Polyline polyline = MapaUtils.mostrarTrajeto(mapa, locais);
                                 marcacaoUpdate.limpar(polyline);
                                 dismiss();
 
                             }
                         });
+
                         break;
                 }
                 return true;

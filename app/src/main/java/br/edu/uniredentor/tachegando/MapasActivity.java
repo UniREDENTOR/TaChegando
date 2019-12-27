@@ -73,9 +73,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
-
     private int REQUEST_CODE = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +117,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             });
         }
-
     }
 
     private void iniciaMapa() {
@@ -379,10 +376,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 removePolyline();
             }
         });
-
         getMinhaLocalizacao();
-
-
     }
 
     //Sempre chamar antes das interações de click no mapa. Isso evitará ser traçada dois trojetos no mapa.
