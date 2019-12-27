@@ -33,7 +33,7 @@
     <string name="procurar_onibus">Procurar Onibus:</string>
     <string name="informe_para_onde_deseja_ir">Informe para onde deseja ir:</string>
     <string name="procurar">Procurar</string>
-    <string name="onibus_nao_encontrado">Ônibus não encontrado</string>
+    <string name="viagem_nao_encontrada">Viagem não encontrada</string>
     <string name="cancelar">Cancelar</string>
 
     <!-- nova Viagem controller -->

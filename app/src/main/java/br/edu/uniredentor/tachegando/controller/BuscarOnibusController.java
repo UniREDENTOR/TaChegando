@@ -35,7 +35,7 @@ public class BuscarOnibusController {
                         listaDeViagensFiltrada.add(viagem);
                         BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).setMapa(mapa).show(activity.getSupportFragmentManager(), "buscarOnibus");
                     } else {
-                        Toast.makeText(activity, activity.getString(R.string.onibus_nao_encontrado), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, activity.getString(R.string.viagem_nao_encontrada), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
