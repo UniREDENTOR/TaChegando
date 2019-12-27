@@ -24,8 +24,9 @@
         <activity android:name=".activity.PerfilPassageiroActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
         <activity android:name=".activity.LoginPassageiroActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+        <activity android:name=".activity.ViagensAtivasActivity"
             android:configChanges="orientation|screenSize|keyboardHidden">
-
         </activity>
 
         <activity android:name=".MapasActivity"

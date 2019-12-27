@@ -129,5 +129,6 @@ public class LoginPassageiroActivity extends FragmentActivity {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
 
+
     }
 }

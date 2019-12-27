@@ -48,6 +48,7 @@ import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
+import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
@@ -147,6 +148,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(GeralUtils.ehUsuario(MapasActivity.this)){
                             startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
                         }
+                    case R.id.lista_viagens_ativas:
+                        Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
+                        startActivity(i);
 
                 }
                 return false;

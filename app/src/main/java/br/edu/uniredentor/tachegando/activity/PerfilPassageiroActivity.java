@@ -125,7 +125,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagens_passageiro);
         textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
         imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
-
     }
 
     private void exibeInfoPassageiro(Passageiro passageiro) {
