@@ -62,8 +62,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private Viagem viagem;
     private TextView textViewNomeDaRota;
     private TextView textViewQuantidadeDeDenuncias;
-    private ArrayList<Passageiro> passageiros = new ArrayList<>();
-    private DocumentReference viagemRef;
     private Button buttonDenuncia;
 
     public InformacaoOnibusDialogFragment() {
@@ -75,10 +73,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        viagemRef = FirebaseUtils.getBanco().collection("viagens").document(viagem.getId());
-
         mostraChat();
-
         encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -208,7 +203,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        viagem.removePassageiro(id);
         FirebaseUtils.removePassageiro(viagem, id);
         dismiss();
     }

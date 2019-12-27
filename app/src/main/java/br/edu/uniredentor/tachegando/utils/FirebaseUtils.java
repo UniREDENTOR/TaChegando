@@ -105,7 +105,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static void removePassageiro(Viagem viagem, String passageiroId) {
-
+        viagem.removePassageiro(passageiroId);
         List<Passageiro> passageiros = viagem.getPassageiros();
 
         if (passageiros.size() == 0) {
@@ -116,11 +116,16 @@ public class FirebaseUtils extends AppCompatActivity {
             if(viagem.getId().equals(passageiroId)){
                 String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
                 viagem.setAtiva(true);
+                viagem.setId(proximoId);
                 getViagem(proximoId).set(viagem.getInicialMap());
+                getViagem(viagem.getId()).delete();
+            }else{
+                viagem.removePassageiro(passageiroId);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("passageiros", passageiros);
+                getViagem(viagem.getId()).update(map);
             }
-
         }
-
     }
 
     private static String atualizaViagemComProximoIdViagem(Viagem viagem, List<Passageiro> passageiros) {
@@ -135,40 +140,6 @@ public class FirebaseUtils extends AppCompatActivity {
         return proximoId;
     }
 
-
-    public static void deletaTudo() {
-        final CollectionReference ref = getViagens();
-        ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for (DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
-                    ref.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
-
-        final CollectionReference refUsers = getUsers();
-        refUsers.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for (DocumentSnapshot d : queryDocumentSnapshots.getDocuments()) {
-                    refUsers.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
-
-
-    }
 
     public static void denuncia(Viagem viagem, Denuncia denuncia) {
         HashMap<String, Object> map = new HashMap<>();

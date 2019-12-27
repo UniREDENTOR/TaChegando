@@ -65,7 +65,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 6000, FASTEST_INTERVAL = 6000; // = 5 seconds
+    private static final long UPDATE_INTERVAL = 3000, FASTEST_INTERVAL = 3000; // = 30 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -93,18 +93,28 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             chamaPermissoes();
         }
 
-        /*
-        final DocumentReference docRef = FirebaseUtils.getBanco().collection("cities").document("SF");
-        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+        if(!SharedUtils.getId(this).equalsIgnoreCase("0") && !SharedUtils.getId(this).equalsIgnoreCase("")){
+            final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
 
-                GeralUtils.show("Uai " + documentSnapshot);
-            }
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
-        });
+                    try{
+                        Viagem viagem = documentSnapshot.toObject(Viagem.class);
+                        if(!viagem.isAtiva()){
+                            SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
+                        }
+                    }catch (Exception e1){
+                        e1.printStackTrace();
+                        SharedUtils.save("", MapasActivity.this);
+                    }
+                }
+            });
+        }
 
-         */
+
+
     }
 
     private void iniciaMapa() {
