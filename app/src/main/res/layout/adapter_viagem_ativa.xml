@@ -31,19 +31,9 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_nome_criador_viagem"
+                android:id="@+id/text_view_nome_viagem_ativa"
                 android:textAlignment="center"></TextView>
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_nome_viagem"
-                android:textAlignment="center"></TextView>
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_nome_rota_viagem_ativa"
-                android:textAlignment="center"></TextView>
         </LinearLayout>
 
     </LinearLayout>
