@@ -46,6 +46,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import br.edu.uniredentor.tachegando.utils.SharedUtils;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -214,7 +215,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private void entraOnibus(String id) {
         FirebaseUtils.adicionaPassageiro(id, viagem);
-
+        SharedUtils.save(viagem.getId(), getActivity());
     }
 
 

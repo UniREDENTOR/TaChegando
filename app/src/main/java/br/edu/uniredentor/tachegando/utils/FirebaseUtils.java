@@ -191,10 +191,10 @@ public class FirebaseUtils extends AppCompatActivity {
         });
     }
 
-    public static void atualizaLocalizacao(Location location) {
+    public static void atualizaLocalizacao(String id, Location location) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("latitude", location.getLatitude());
         map.put("longitude", location.getLongitude());
-        getViagem(Singleton.getInstance().getIdViagem()).update(map);
+        getViagem(id).update(map);
     }
 }

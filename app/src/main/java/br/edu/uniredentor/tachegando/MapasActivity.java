@@ -53,6 +53,7 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
@@ -142,7 +143,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
                         if(souLocalizador){
-                            FirebaseUtils.atualizaLocalizacao(location);
+                            try{
+                                FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
                         }
                     }
 

@@ -33,6 +33,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class NovaViagemManualDialogFragment extends DialogFragment {
@@ -78,6 +79,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
                     FirebaseUtils.salvaViagem(viagem);
+                    SharedUtils.save(viagem.getId(), getActivity());
                 }
                 dismiss();
             }
