@@ -107,6 +107,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                         double latitudeDaViagem = viagem.getLatitude();
                         double longitudeDaViagem = viagem.getLongitude();
+                        Marker marker = getOnibus(viagem);
+                        LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
+                        marker.setPosition(latLng);
                     }catch (Exception e1){
                         e1.printStackTrace();
                         SharedUtils.save("", MapasActivity.this);
@@ -239,7 +242,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         for (Marker marker : listaDeOnibus) {
             try {
-                if (marker.getTag().toString().equalsIgnoreCase(viagem.getId())) {
+                if (isViagem(marker.getTag().toString(), viagem.getId())) {
                     return marker;
                 }
             } catch (Exception e) {
@@ -247,6 +250,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
         }
         return null;
+    }
+
+    private boolean isViagem(String s, String id) {
+        return s.equalsIgnoreCase(id);
     }
 
     private void getMinhaLocalizacao() {
@@ -332,7 +339,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }
         return true;
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
