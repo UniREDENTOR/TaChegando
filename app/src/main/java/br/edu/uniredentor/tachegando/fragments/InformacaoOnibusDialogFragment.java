@@ -46,6 +46,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import br.edu.uniredentor.tachegando.utils.SharedUtils;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -55,15 +56,15 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
-    private PassageiroAdapter adapter;
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
     private TextView textViewQuantidadeDeDenuncias;
-    private ArrayList<Passageiro> passageiros = new ArrayList<>();
-    private DocumentReference viagemRef;
     private Button buttonDenuncia;
+    private TextView textViewDistancia;
+    private double minhaLatitude;
+    private double minhaLongitude;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -74,10 +75,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        viagemRef = FirebaseUtils.getBanco().collection("viagens").document(viagem.getId());
-
         mostraChat();
-
         encontraViews(view);
         RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -110,31 +108,32 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             }
         });
 
-        //Apagar depois
-        Location origem = new Location("");
-        origem.setLatitude(-21.209075);
-        origem.setLongitude(-41.886608);
-
-        Location destino = new Location("");
-        destino.setLatitude(-21.197089);
-        destino.setLongitude(-41.867111);
-
-        float distancia = origem.distanceTo(destino);
-        String resultado = String.format("%.1f", distancia);
-        TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
-        textViewDistancia.setText(getString(R.string.distancia) + " " + resultado + " m");
-
         return view;
     }
 
     private void setTextos() {
         textViewNomeDaRota.setText(viagem.getNome());
         textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
+        textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
+    }
+
+    private String defineDistancia() {
+        Location origem = new Location("");
+        origem.setLatitude(viagem.getLatitude());
+        origem.setLongitude(viagem.getLongitude());
+
+        Location destino = new Location("");
+        destino.setLatitude(minhaLatitude);
+        destino.setLongitude(minhaLongitude);
+
+        float distancia = origem.distanceTo(destino);
+        return String.format("%.1f", distancia);
     }
 
     private void encontraViews(View view) {
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
         textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
+        textViewDistancia = view.findViewById(R.id.textView_distancia);
         buttonDenuncia = view.findViewById(R.id.button_denunciar);
     }
 
@@ -156,7 +155,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             entraOnibus(GeralUtils.getIdDoUsuario());
-                                            adapter.notifyDataSetChanged();
+
 
                                         }
                                     });
@@ -207,22 +206,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        viagem.removePassageiro(id);
-        FirebaseUtils.removePassageiro(viagem);
+        FirebaseUtils.removePassageiro(viagem, id);
         dismiss();
     }
 
     private void entraOnibus(String id) {
-        viagemRef.update("passageiros", FieldValue.arrayUnion(id));
-
-        FirebaseUtils.getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                passageiros.add(passageiro);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        FirebaseUtils.adicionaPassageiro(id, viagem);
+        SharedUtils.save(viagem.getId(), getActivity());
     }
 
 
@@ -256,6 +246,12 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         this.viagem = viagem;
         return this;
 
+    }
+
+    public InformacaoOnibusDialogFragment setLocalizacao(double latitude, double longitude) {
+        this.minhaLatitude = latitude;
+        this.minhaLongitude = longitude;
+        return this;
     }
 
     public interface MarcacaoUpdate {

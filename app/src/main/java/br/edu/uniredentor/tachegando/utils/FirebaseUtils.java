@@ -1,6 +1,8 @@
 package br.edu.uniredentor.tachegando.utils;
 
 
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,11 +37,11 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void salvaViagem(final Viagem viagem) {
         final DocumentReference reference = getBanco().collection("viagens")
-                .document(GeralUtils.getIdDoUsuario());
-        getBanco().collection("users").document(GeralUtils.getIdDoUsuario()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                .document(viagem.getId());
+        getBanco().collection("users").document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot.exists()){
+                if (documentSnapshot.exists()) {
                     viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
                     reference.set(viagem.getInicialMap());
                 }
@@ -47,19 +49,14 @@ public class FirebaseUtils extends AppCompatActivity {
         });
     }
 
-    public static DocumentReference getViagem(String id){
+    public static DocumentReference getViagem(String id) {
         return getBanco().collection("viagens")
                 .document(id);
     }
 
-    public static CollectionReference getViagemRealizadas(){
+    public static CollectionReference getViagemRealizadas() {
         return getBanco().collection("viagens_realizadas");
     }
-
-    private static void salvaHistorico(Viagem viagem) {
-        getBanco().collection("historico").document(viagem.getId()).collection(viagem.getId()).add(viagem.getLocalizacao());
-    }
-
 
     public static CollectionReference getViagens() {
         return getBanco().collection("viagens");
@@ -69,30 +66,6 @@ public class FirebaseUtils extends AppCompatActivity {
         return getBanco().collection("users");
     }
 
-    public static CollectionReference getHistorico() {
-        return getBanco().collection("historico");
-    }
-
-    public static CollectionReference getPontos() {
-        return getBanco().collection("pontos");
-    }
-
-    public static void salvaLocal(ArrayList<LatLng> locais) {
-        DocumentReference reference = getBanco().collection("historico").document();
-        reference.set(locais);
-    }
-
-    public static void atualizaLocalizacao(Viagem viagem) {
-        getBanco().collection("viagens")
-                .document(viagem.getId()).update(viagem.getLocalizacao());
-      //  salvaHistorico(viagem);
-    }
-
-    public static void salvaMensagem(MensagemChat mensagemChat) {
-       // getBanco().collection("chats").document(mensagemChat.getIdViagem()).collection("conversas").add(mensagemChat.getMap());
-    }
-
-
     public static FirebaseFirestore getBanco() {
         return FirebaseFirestore.getInstance();
     }
@@ -101,19 +74,10 @@ public class FirebaseUtils extends AppCompatActivity {
         return FirebaseFirestore.getInstance().collection("viagens").document(idViagem).collection("conversas");
     }
 
-    public static FirebaseAuth getAuth() {
-        if (auth == null) {
-            auth = FirebaseAuth.getInstance();
-        }
-        return auth;
-    }
-
-
     public static FirebaseAuth signOut() {
         FirebaseAuth.getInstance().signOut();
         return auth;
     }
-
 
     public static void salvaUsuario(final Passageiro passageiro) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -140,81 +104,42 @@ public class FirebaseUtils extends AppCompatActivity {
 
     }
 
-    public static void removePassageiro(Viagem viagem) {
-        HashMap<String, Object> map = new HashMap<>();
+    public static void removePassageiro(Viagem viagem, String passageiroId) {
+        viagem.removePassageiro(passageiroId);
         List<Passageiro> passageiros = viagem.getPassageiros();
-        if(passageiros.size() == 0){
+
+        if (passageiros.size() == 0) {
             //Apagar todos os dados da viagem
             getViagemRealizadas().add(viagem);
             getViagem(viagem.getId()).delete();
-        }else{
-            map.put("passageiros", passageiros);
-            getViagem(viagem.getId()).update(map);
+        } else {
+            if(viagem.getId().equals(passageiroId)){
+                String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
+                viagem.setAtiva(true);
+                viagem.setId(proximoId);
+                getViagem(proximoId).set(viagem.getInicialMap());
+                getViagem(viagem.getId()).delete();
+            }else{
+                viagem.removePassageiro(passageiroId);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("passageiros", passageiros);
+                getViagem(viagem.getId()).update(map);
+            }
         }
-
     }
 
-    public static void deletaTudo() {
-        final CollectionReference ref = getViagens();
-        ref.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
-                    ref.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
-
-        final CollectionReference refUsers = getUsers();
-        refUsers.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
-                    refUsers.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
-
-        final CollectionReference refHistorico = getHistorico();
-        refHistorico.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
-                    refHistorico.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
-
-        final CollectionReference refPontos = getPontos();
-        refPontos.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                for(DocumentSnapshot d : queryDocumentSnapshots.getDocuments()){
-                    refPontos.document(d.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-                }
-            }
-        });
+    private static String atualizaViagemComProximoIdViagem(Viagem viagem, List<Passageiro> passageiros) {
+        String proximoId = viagem.getPassageiros().get(0).getId();
+        viagem.setProximoIdDaViagem(proximoId);
+        viagem.setAtiva(false);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("passageiros", passageiros);
+        map.put("proximoIdViagem", proximoId);
+        map.put("ativa", false);
+        getViagem(viagem.getId()).update(map);
+        return proximoId;
     }
+
 
     public static void denuncia(Viagem viagem, Denuncia denuncia) {
         HashMap<String, Object> map = new HashMap<>();
@@ -222,5 +147,34 @@ public class FirebaseUtils extends AppCompatActivity {
         denuncias.add(denuncia);
         map.put("denuncias", denuncias);
         getViagem(viagem.getId()).update(map);
+    }
+
+    public static void adicionaPassageiro(String id, final Viagem viagem) {
+
+        getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    List<Passageiro> passageiros = viagem.getPassageiros();
+                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                    if(!passageiros.contains(passageiro)){
+                        passageiros.add(passageiro);
+                        map.put("passageiros", passageiros);
+                        getViagem(viagem.getId()).update(map);
+                        Singleton.getInstance().setIdViagem(viagem.getId());
+                    }
+
+                }
+            }
+
+        });
+    }
+
+    public static void atualizaLocalizacao(String id, Location location) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("latitude", location.getLatitude());
+        map.put("longitude", location.getLongitude());
+        getViagem(id).update(map);
     }
 }

@@ -9,10 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +38,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
 
     private TextView textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewReputacaoPassageiro;
     private ImageView imagemPassageiro;
+    private GoogleSignInClient googleSignInClient;
 
 
     @Override
@@ -39,6 +46,13 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
         inicializaComponentePerfil();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         createToolbar();
 
         recuperaPerfilPassageiro();
@@ -58,8 +72,14 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                 switch (item.getItemId()) {
                     case R.id.item_sair_app:
                         signOut();
-                        Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
-                        startActivity(i);
+                        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
+                                startActivity(i);
+                            }
+                        });
+
                         break;
                     case R.id.item_mapa_app:
                         Intent intent = new Intent(getApplicationContext(), MapasActivity.class);
@@ -86,9 +106,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                     }
                 }
             });
-        }
-        else {
-
         }
     }
 
