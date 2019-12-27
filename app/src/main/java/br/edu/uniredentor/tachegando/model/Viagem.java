@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
+
 public class Viagem implements Serializable {
 
     private String id;
     private String nome;
     private List<Passageiro> passageiros = new ArrayList<>();
     private List<Denuncia> denuncias = new ArrayList<>();
+    private boolean ativa;
+    private String proximoIdDaViagem;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
     public String getId() {
@@ -75,25 +79,25 @@ public class Viagem implements Serializable {
         this.latitudeInicial = latitudeInicial;
     }
 
-
     public Map<String, Object> getLocalizacao() {
         Map<String, Object> viagemMap = new HashMap<>();
-        viagemMap.put("latitude", getLatitude());
-        viagemMap.put("longitude", getLongitude());
+        viagemMap.put(ConstantsUtils.LATITUDE, getLatitude());
+        viagemMap.put(ConstantsUtils.LONGITUDE, getLongitude());
         return viagemMap;
     }
 
-
     public Map<String, Object> getInicialMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("latitude", getLatitude());
-        map.put("longitude", getLongitude());
-        map.put("nome", getNome());
-        map.put("latitudeInicial", getLatitude());
-        map.put("longitudeInicial", getLongitude());
-        map.put("passageiros", getPassageiros());
-        map.put("id", getId());
-        map.put("denuncias", getDenuncias());
+        map.put(ConstantsUtils.LATITUDE, getLatitude());
+        map.put(ConstantsUtils.LONGITUDE, getLongitude());
+        map.put(ConstantsUtils.NOME, getNome());
+        map.put(ConstantsUtils.LATITUDE_INICIAL, getLatitude());
+        map.put(ConstantsUtils.LONGITUDE_INICIAL, getLongitude());
+        map.put(ConstantsUtils.PASSAGEIROS, getPassageiros());
+        map.put(ConstantsUtils.ID, getId());
+        map.put(ConstantsUtils.PROXIMO_ID_VIAGEM, getProximoIdDaViagem());
+        map.put(ConstantsUtils.DENUNCIAS, getDenuncias());
+        map.put(ConstantsUtils.ATIVA, isAtiva());
         return map;
     }
 
@@ -133,7 +137,24 @@ public class Viagem implements Serializable {
         for(Passageiro passageiro : passageiros){
             if(passageiro.getId().equalsIgnoreCase(id)){
                 passageiros.remove(passageiro);
+                break;
             }
         }
+    }
+
+    public boolean isAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public String getProximoIdDaViagem() {
+        return proximoIdDaViagem;
+    }
+
+    public void setProximoIdDaViagem(String proximoIdDaViagem) {
+        this.proximoIdDaViagem = proximoIdDaViagem;
     }
 }
