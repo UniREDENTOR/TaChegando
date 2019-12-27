@@ -22,22 +22,6 @@ que ele necessita para se locomover.
 
 O aplicativo está disponível na Play Store.
 
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Ferramentas no Desenvolvimentos
 
 * [Firebase](http://https://firebase.google.com/) - Banco de dados não relacional.
@@ -48,22 +32,17 @@ Add additional notes about how to deploy this on a live system
 
 ## Contribuição
 
-Por favor, leia [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
+Por favor, leia [CONTRIBUTING.md](https://git.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Autores
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* Lista de Contribuidores [https://github.com/UniRedentor/TaChegando/] que participaram neste projeto.
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
+## Licença
 
 O projeto é licenciado pelo MIT License - see the [LICENSE.md](LICENSE.md)
 
-## Acknowledgments
+## Agradecimentos
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Nós do time de desenvolvimento do TaChegando, agradecemos a todos que de alguma forma contribuiu para este projeto.
 
