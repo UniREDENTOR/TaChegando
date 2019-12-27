@@ -150,6 +150,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(GeralUtils.ehUsuario(MapasActivity.this)){
                             startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
                         }
+                        break;
                     case R.id.lista_viagens_ativas:
                         Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
                         startActivity(i);
