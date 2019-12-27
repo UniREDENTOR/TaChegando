@@ -1,5 +1,6 @@
 package br.edu.uniredentor.tachegando.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.ViewHolder> {
 
 
-    private List<Viagem> viagensAtivas = new ArrayList<>();
+    private List<Viagem> viagensAtivas;
+    private Context context;
 
-    public ViagemAtivaAdapter(List<Viagem> viagensAtivas) {
+    public ViagemAtivaAdapter(List<Viagem> viagensAtivas, Context context) {
         this.viagensAtivas = viagensAtivas;
+        this.context = context;
     }
 
 
@@ -38,32 +41,34 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         Viagem viagem = viagensAtivas.get(position);
-        holder.set(viagem);
+        holder.nomeCriadorViagem.setText(viagem.getPassageiros().get(0).getNome());
+        holder.nomeViagemAtiva.setText(viagem.getNome());
+        GeralUtils.mostraImagemCircular(context,holder.imageCriadorViagem,viagem.getPassageiros().get(0).getFoto());
+
 
     }
 
     @Override
     public int getItemCount() {
+        if(viagensAtivas == null) {
+            return 0;
+        }
         return viagensAtivas.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView imageCriadorViagem;
-        private TextView nomeViagemAtiva;
+        private TextView nomeViagemAtiva, nomeCriadorViagem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageCriadorViagem = itemView.findViewById(R.id.imageView_criador_lista_viagem_ativa);
             nomeViagemAtiva = itemView.findViewById(R.id.text_view_nome_viagem_ativa);
+            nomeCriadorViagem = itemView.findViewById(R.id.text_view_nome_criador_viagem);
 
         }
 
-        public void set(Viagem viagem) {
-            Passageiro passageiro = new Passageiro();
-            GeralUtils.mostraImagemCircular(itemView.getContext(), imageCriadorViagem, passageiro.getFoto());
-            nomeViagemAtiva.setText(viagem.getNome());
-        }
     }
 }

@@ -42,6 +42,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +154,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         break;
                     case R.id.lista_viagens_ativas:
                         Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
+                        i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
                         startActivity(i);
                         break;
 
