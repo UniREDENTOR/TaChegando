@@ -37,13 +37,12 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void salvaViagem(final Viagem viagem) {
         final DocumentReference reference = getBanco().collection("viagens")
-                .document(GeralUtils.getIdDoUsuario());
-        getBanco().collection("users").document(GeralUtils.getIdDoUsuario()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                .document(viagem.getId());
+        getBanco().collection("users").document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot.exists()) {
                     viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
-                    Singleton.getInstance().setIdViagem(viagem.getId());
                     reference.set(viagem.getInicialMap());
                 }
             }

@@ -73,7 +73,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
-    private boolean souLocalizador = true;
 
     private int REQUEST_CODE = 0;
 
@@ -104,7 +103,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             }
 
         });
-       
+
          */
     }
 
@@ -158,7 +157,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-                        if(souLocalizador){
+                        if(souLocalizador()){
                             try{
                                 FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
                             }catch (Exception e){
@@ -166,11 +165,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                             }
                         }
                     }
-
-
                 }
             };
         }
+    }
+
+    private boolean souLocalizador() {
+        return SharedUtils.getId(MapasActivity.this).equals(GeralUtils.getIdDoUsuario());
     }
 
     private void chamaPermissoes() {
