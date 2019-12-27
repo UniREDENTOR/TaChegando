@@ -106,6 +106,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(!viagem.isAtiva()){
                             SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
+
+                        double latitudeDaViagem = viagem.getLatitude();
+                        double longitudeDaViagem = viagem.getLongitude();
                     }catch (Exception e1){
                         e1.printStackTrace();
                         SharedUtils.save("", MapasActivity.this);
