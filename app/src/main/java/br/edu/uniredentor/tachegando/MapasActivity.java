@@ -53,6 +53,7 @@ import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
+import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
@@ -66,7 +67,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 3000, FASTEST_INTERVAL = 3000; // = 30 seconds
+    private static final long UPDATE_INTERVAL = 30000, FASTEST_INTERVAL = 30000; // = 30 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -106,6 +107,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(!viagem.isAtiva()){
                             SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
+
+                        double latitudeDaViagem = viagem.getLatitude();
+                        double longitudeDaViagem = viagem.getLongitude();
                     }catch (Exception e1){
                         e1.printStackTrace();
                         SharedUtils.save("", MapasActivity.this);
@@ -113,8 +117,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             });
         }
-
-
 
     }
 
@@ -173,7 +175,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     for (Location location : locationResult.getLocations()) {
                         if(souLocalizador()){
                             try{
-                                FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                                if(location.getLatitude() != SharedUtils.getLatitude(MapasActivity.this) && location.getLongitude() != SharedUtils.getLongitude(MapasActivity.this)){
+                                    SharedUtils.save((long) location.getLatitude(), ConstantsUtils.LATITUDE, MapasActivity.this);
+                                    SharedUtils.save((long) location.getLongitude(), ConstantsUtils.LONGITUDE, MapasActivity.this);
+                                    FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                                }
+
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
