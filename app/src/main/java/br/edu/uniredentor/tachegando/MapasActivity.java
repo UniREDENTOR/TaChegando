@@ -1,14 +1,5 @@
 package br.edu.uniredentor.tachegando;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +12,15 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -43,10 +43,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
@@ -59,7 +57,6 @@ import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
-import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
 
@@ -107,6 +104,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         if(!viagem.isAtiva()){
                             SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
+
+                        double latitudeDaViagem = viagem.getLatitude();
+                        double longitudeDaViagem = viagem.getLongitude();
                     }catch (Exception e1){
                         e1.printStackTrace();
                         SharedUtils.save("", MapasActivity.this);
