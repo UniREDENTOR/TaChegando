@@ -3,14 +3,9 @@ package br.edu.uniredentor.tachegando.utils;
 
 import android.location.Location;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -19,14 +14,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import br.edu.uniredentor.tachegando.model.Denuncia;
-import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 
@@ -122,7 +112,7 @@ public class FirebaseUtils extends AppCompatActivity {
             }else{
                 viagem.removePassageiro(passageiroId);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("passageiros", passageiros);
+                map.put(ConstantsUtils.PASSAGEIROS, passageiros);
                 getViagem(viagem.getId()).update(map);
             }
         }
@@ -133,9 +123,9 @@ public class FirebaseUtils extends AppCompatActivity {
         viagem.setProximoIdDaViagem(proximoId);
         viagem.setAtiva(false);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("passageiros", passageiros);
-        map.put("proximoIdViagem", proximoId);
-        map.put("ativa", false);
+        map.put(ConstantsUtils.PASSAGEIROS, passageiros);
+        map.put(ConstantsUtils.PROXIMO_ID_VIAGEM, proximoId);
+        map.put(ConstantsUtils.ATIVA, false);
         getViagem(viagem.getId()).update(map);
         return proximoId;
     }
@@ -145,7 +135,7 @@ public class FirebaseUtils extends AppCompatActivity {
         HashMap<String, Object> map = new HashMap<>();
         List<Denuncia> denuncias = viagem.getDenuncias();
         denuncias.add(denuncia);
-        map.put("denuncias", denuncias);
+        map.put(ConstantsUtils.DENUNCIAS, denuncias);
         getViagem(viagem.getId()).update(map);
     }
 
@@ -160,7 +150,7 @@ public class FirebaseUtils extends AppCompatActivity {
                     Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
                     if(!passageiros.contains(passageiro)){
                         passageiros.add(passageiro);
-                        map.put("passageiros", passageiros);
+                        map.put(ConstantsUtils.PASSAGEIROS, passageiros);
                         getViagem(viagem.getId()).update(map);
                         Singleton.getInstance().setIdViagem(viagem.getId());
                     }
@@ -173,8 +163,8 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void atualizaLocalizacao(String id, Location location) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("latitude", location.getLatitude());
-        map.put("longitude", location.getLongitude());
+        map.put(ConstantsUtils.LATITUDE, location.getLatitude());
+        map.put(ConstantsUtils.LONGITUDE, location.getLongitude());
         getViagem(id).update(map);
         getViagem(id).collection("trajeto").add(map);
     }
