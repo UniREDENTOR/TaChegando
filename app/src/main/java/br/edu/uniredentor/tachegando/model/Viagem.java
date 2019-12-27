@@ -135,6 +135,7 @@ public class Viagem implements Serializable {
         for(Passageiro passageiro : passageiros){
             if(passageiro.getId().equalsIgnoreCase(id)){
                 passageiros.remove(passageiro);
+                break;
             }
         }
     }
