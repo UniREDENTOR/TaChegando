@@ -212,11 +212,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }
-
             }
         });
-
-
     }
 
     private boolean existe(Viagem viagem) {
@@ -233,11 +230,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
         return null;
     }
-
 
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);

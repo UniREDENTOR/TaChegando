@@ -78,6 +78,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
                     viagem.setId(GeralUtils.getIdDoUsuario());
                     viagem.setLatitude(latitude);
                     viagem.setLongitude(longitude);
+                    viagem.setAtiva(true);
                     FirebaseUtils.salvaViagem(viagem);
                     SharedUtils.save(viagem.getId(), getActivity());
                 }

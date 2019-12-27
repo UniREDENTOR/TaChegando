@@ -14,6 +14,8 @@ public class Viagem implements Serializable {
     private String nome;
     private List<Passageiro> passageiros = new ArrayList<>();
     private List<Denuncia> denuncias = new ArrayList<>();
+    private boolean ativa;
+    private String proximoIdDaViagem;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
     public String getId() {
@@ -89,7 +91,9 @@ public class Viagem implements Serializable {
         map.put("longitudeInicial", getLongitude());
         map.put("passageiros", getPassageiros());
         map.put("id", getId());
+        map.put("proximoIdViagem", getProximoIdDaViagem());
         map.put("denuncias", getDenuncias());
+        map.put("ativa", isAtiva());
         return map;
     }
 
@@ -133,4 +137,19 @@ public class Viagem implements Serializable {
         }
     }
 
+    public boolean isAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public String getProximoIdDaViagem() {
+        return proximoIdDaViagem;
+    }
+
+    public void setProximoIdDaViagem(String proximoIdDaViagem) {
+        this.proximoIdDaViagem = proximoIdDaViagem;
+    }
 }
