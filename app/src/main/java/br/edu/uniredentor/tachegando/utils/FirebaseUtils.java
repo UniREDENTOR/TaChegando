@@ -176,5 +176,6 @@ public class FirebaseUtils extends AppCompatActivity {
         map.put("latitude", location.getLatitude());
         map.put("longitude", location.getLongitude());
         getViagem(id).update(map);
+        getViagem(id).collection("trajeto").add(map);
     }
 }
