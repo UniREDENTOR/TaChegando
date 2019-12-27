@@ -93,7 +93,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             chamaPermissoes();
         }
 
-        GeralUtils.show("Teste " + SharedUtils.getId(this));
         if(!SharedUtils.getId(this).equalsIgnoreCase("0") && !SharedUtils.getId(this).equalsIgnoreCase("")){
             final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
 
@@ -104,9 +103,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     try{
                         Viagem viagem = documentSnapshot.toObject(Viagem.class);
                         if(!viagem.isAtiva()){
-                            GeralUtils.show("Uai " + documentSnapshot);
-                        }else{
-                            GeralUtils.show("Deu ruim" + documentSnapshot);
+                            SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
                     }catch (Exception e1){
                         e1.printStackTrace();
