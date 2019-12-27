@@ -57,7 +57,7 @@
     <string name="nova_viagem_qr_code">Nova Viagem QRCode</string>
 
     <!-- fragment buscar onibus dialog xml -->
-    <string name="onibus_encontrado">Onibus encontrado</string>
+    <string name="viagem_encontrada">Viagem encontrada</string>
 
     <!-- fragment nova viagem dialog xml -->
     <string name="salvar">Salvar</string>

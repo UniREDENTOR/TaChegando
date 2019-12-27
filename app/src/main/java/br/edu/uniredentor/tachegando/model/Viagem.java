@@ -157,4 +157,9 @@ public class Viagem implements Serializable {
     public void setProximoIdDaViagem(String proximoIdDaViagem) {
         this.proximoIdDaViagem = proximoIdDaViagem;
     }
+
+    public Passageiro getCriador(Viagem viagem) {
+        Passageiro passageiro = viagem.getPassageiros().get(0);
+        return passageiro;
+    }
 }
