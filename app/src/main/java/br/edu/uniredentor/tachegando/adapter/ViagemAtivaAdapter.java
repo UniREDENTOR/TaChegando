@@ -1,5 +1,6 @@
 package br.edu.uniredentor.tachegando.adapter;
 
+import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 
 public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.ViewHolder> {
 
@@ -36,6 +39,7 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Viagem viagem = viagensAtivas.get(position);
         holder.set(viagem);
+
     }
 
     @Override
@@ -45,21 +49,21 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageViewCriadorViagem;
-        private TextView textViewNomeViagemAtiva;
+        private ImageView imageCriadorViagem;
+        private TextView nomeViagemAtiva;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageViewCriadorViagem = itemView.findViewById(R.id.imageView_criador_lista_viagem_ativa);
-            textViewNomeViagemAtiva = itemView.findViewById(R.id.text_view_nome_viagem_ativa);
+            imageCriadorViagem = itemView.findViewById(R.id.imageView_criador_lista_viagem_ativa);
+            nomeViagemAtiva = itemView.findViewById(R.id.text_view_nome_viagem_ativa);
 
         }
 
         public void set(Viagem viagem) {
-            textViewNomeViagemAtiva.setText(viagem.getNome());
+            Passageiro passageiro = new Passageiro();
+            GeralUtils.mostraImagemCircular(itemView.getContext(), imageCriadorViagem, passageiro.getFoto());
+            nomeViagemAtiva.setText(viagem.getNome());
         }
-
-
     }
 }

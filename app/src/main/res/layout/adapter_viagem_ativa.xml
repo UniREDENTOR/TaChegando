@@ -17,7 +17,9 @@
             android:layout_width="60dp"
             android:id="@+id/imageView_criador_lista_viagem_ativa"
             android:layout_height="60dp"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_person"
+            android:background="@color/colorPrimary">
 
         </de.hdodenhof.circleimageview.CircleImageView>
 
