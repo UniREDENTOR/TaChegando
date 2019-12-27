@@ -36,11 +36,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.activity.LoginPassageiroActivity;
@@ -53,6 +56,7 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
@@ -61,7 +65,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 60000, FASTEST_INTERVAL = 60000; // = 5 seconds
+    private static final long UPDATE_INTERVAL = 6000, FASTEST_INTERVAL = 6000; // = 5 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -88,6 +92,19 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         }else{
             chamaPermissoes();
         }
+
+        /*
+        final DocumentReference docRef = FirebaseUtils.getBanco().collection("cities").document("SF");
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                GeralUtils.show("Uai " + documentSnapshot);
+            }
+
+        });
+
+         */
     }
 
     private void iniciaMapa() {
@@ -140,12 +157,21 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
                     for (Location location : locationResult.getLocations()) {
-
+                        if(souLocalizador()){
+                            try{
+                                FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
                     }
-
                 }
             };
         }
+    }
+
+    private boolean souLocalizador() {
+        return SharedUtils.getId(MapasActivity.this).equals(GeralUtils.getIdDoUsuario());
     }
 
     private void chamaPermissoes() {
@@ -183,11 +209,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }
-
             }
         });
-
-
     }
 
     private boolean existe(Viagem viagem) {
@@ -204,11 +227,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
         return null;
     }
-
 
     private void getMinhaLocalizacao() {
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
