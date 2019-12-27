@@ -209,7 +209,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private void saiDoOnibus(String id) {
         viagem.removePassageiro(id);
-        FirebaseUtils.removePassageiro(viagem);
+        FirebaseUtils.removePassageiro(viagem, id);
         dismiss();
     }
 

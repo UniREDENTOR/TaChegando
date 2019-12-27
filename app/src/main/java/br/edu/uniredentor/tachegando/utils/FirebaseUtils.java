@@ -104,27 +104,37 @@ public class FirebaseUtils extends AppCompatActivity {
 
     }
 
-    public static void removePassageiro(Viagem viagem) {
-        HashMap<String, Object> map = new HashMap<>();
+    public static void removePassageiro(Viagem viagem, String passageiroId) {
+
         List<Passageiro> passageiros = viagem.getPassageiros();
+
         if (passageiros.size() == 0) {
             //Apagar todos os dados da viagem
             getViagemRealizadas().add(viagem);
             getViagem(viagem.getId()).delete();
         } else {
-            atualizaLocalizador(viagem);
-            map.put("passageiros", passageiros);
-            getViagem(viagem.getId()).update(map);
+            if(viagem.getId().equals(passageiroId)){
+                String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
+                viagem.setAtiva(true);
+                getViagem(proximoId).set(viagem.getInicialMap());
+            }
+
         }
 
     }
 
-    private static void atualizaLocalizador(Viagem viagem) {
-        String id = viagem.getPassageiros().get(0).getId();
+    private static String atualizaViagemComProximoIdViagem(Viagem viagem, List<Passageiro> passageiros) {
+        String proximoId = viagem.getPassageiros().get(0).getId();
+        viagem.setProximoIdDaViagem(proximoId);
+        viagem.setAtiva(false);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("idLocalizador", id);
+        map.put("passageiros", passageiros);
+        map.put("proximoIdViagem", proximoId);
+        map.put("ativa", false);
         getViagem(viagem.getId()).update(map);
+        return proximoId;
     }
+
 
     public static void deletaTudo() {
         final CollectionReference ref = getViagens();
