@@ -339,7 +339,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 try{
                     removePolyline();
                     Viagem viagem = getViagem(marker.getTag().toString());
-                    new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).show(getSupportFragmentManager(), "informacao");
+                    new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).setLocalizacao(latitude, longitude).show(getSupportFragmentManager(), "informacao");
 
                 }catch (Exception e){
                     e.printStackTrace();

@@ -56,13 +56,15 @@ import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
 public class InformacaoOnibusDialogFragment extends DialogFragment {
 
-    private PassageiroAdapter adapter;
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
     private TextView textViewNomeDaRota;
     private TextView textViewQuantidadeDeDenuncias;
     private Button buttonDenuncia;
+    private TextView textViewDistancia;
+    private double minhaLatitude;
+    private double minhaLongitude;
 
     public InformacaoOnibusDialogFragment() {
         // Required empty public constructor
@@ -106,31 +108,32 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             }
         });
 
-        //Apagar depois
-        Location origem = new Location("");
-        origem.setLatitude(-21.209075);
-        origem.setLongitude(-41.886608);
-
-        Location destino = new Location("");
-        destino.setLatitude(-21.197089);
-        destino.setLongitude(-41.867111);
-
-        float distancia = origem.distanceTo(destino);
-        String resultado = String.format("%.1f", distancia);
-        TextView textViewDistancia = view.findViewById(R.id.textView_distancia);
-        textViewDistancia.setText(getString(R.string.distancia) + " " + resultado + " m");
-
         return view;
     }
 
     private void setTextos() {
         textViewNomeDaRota.setText(viagem.getNome());
         textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
+        textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
+    }
+
+    private String defineDistancia() {
+        Location origem = new Location("");
+        origem.setLatitude(viagem.getLatitude());
+        origem.setLongitude(viagem.getLongitude());
+
+        Location destino = new Location("");
+        destino.setLatitude(minhaLatitude);
+        destino.setLongitude(minhaLongitude);
+
+        float distancia = origem.distanceTo(destino);
+        return String.format("%.1f", distancia);
     }
 
     private void encontraViews(View view) {
         textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
         textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
+        textViewDistancia = view.findViewById(R.id.textView_distancia);
         buttonDenuncia = view.findViewById(R.id.button_denunciar);
     }
 
@@ -243,6 +246,12 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         this.viagem = viagem;
         return this;
 
+    }
+
+    public InformacaoOnibusDialogFragment setLocalizacao(double latitude, double longitude) {
+        this.minhaLatitude = latitude;
+        this.minhaLongitude = longitude;
+        return this;
     }
 
     public interface MarcacaoUpdate {
