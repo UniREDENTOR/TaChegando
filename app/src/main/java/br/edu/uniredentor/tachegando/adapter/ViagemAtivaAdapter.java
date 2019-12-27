@@ -1,6 +1,5 @@
 package br.edu.uniredentor.tachegando.adapter;
 
-import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +36,7 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         Viagem viagem = viagensAtivas.get(position);
         holder.set(viagem);
 

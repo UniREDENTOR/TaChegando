@@ -1,13 +1,13 @@
 package br.edu.uniredentor.tachegando.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class ViagensAtivasActivity extends AppCompatActivity {
     private RecyclerView recyclerViewViagemAtiva;
     private ViagemAtivaAdapter viagemAtivaAdapter;
     private List<Viagem> viagemList = new ArrayList<>();
+    private Viagem viagem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +35,6 @@ public class ViagensAtivasActivity extends AppCompatActivity {
         recyclerViewViagemAtiva.setLayoutManager(layoutManager);
         recyclerViewViagemAtiva.setAdapter(viagemAtivaAdapter);
         recyclerViewViagemAtiva.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
-
 
     }
 }
