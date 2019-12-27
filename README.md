@@ -22,7 +22,7 @@ que ele necessita para se locomover.
 
 O aplicativo está disponível na Play Store.
 
-## Ferramentas no Desenvolvimentos
+## Ferramentas de Desenvolvimento
 
 * [Firebase](http://https://firebase.google.com/) - Banco de dados não relacional.
 * [Trello](https://trello.com/) - Gerenciador de Projetos
@@ -32,7 +32,7 @@ O aplicativo está disponível na Play Store.
 
 ## Contribuição
 
-Por favor, leia [CONTRIBUTING.md](https://git.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Por favor, leia [CONTRIBUTING.md](https://git.github.com/PurpleBooth/b24679402957c63ec426) para saber como contribuir para este projeto através de um pull request.
 
 ## Autores
 
@@ -40,7 +40,7 @@ Por favor, leia [CONTRIBUTING.md](https://git.github.com/PurpleBooth/b2467940295
 
 ## Licença
 
-O projeto é licenciado pelo MIT License - see the [LICENSE.md](LICENSE.md)
+O projeto é licenciado pelo MIT License - veja [LICENSE.md](LICENSE.md)
 
 ## Agradecimentos
 
