@@ -26,9 +26,9 @@ public class FirebaseUtils extends AppCompatActivity {
     private static FirebaseAuth auth;
 
     public static void salvaViagem(final Viagem viagem) {
-        final DocumentReference reference = getBanco().collection("viagens")
+        final DocumentReference reference = getBanco().collection(ConstantsUtils.VIAGENS)
                 .document(viagem.getId());
-        getBanco().collection("users").document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        getBanco().collection(ConstantsUtils.USERS).document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot.exists()) {
@@ -40,20 +40,20 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static DocumentReference getViagem(String id) {
-        return getBanco().collection("viagens")
+        return getBanco().collection(ConstantsUtils.VIAGENS)
                 .document(id);
     }
 
     public static CollectionReference getViagemRealizadas() {
-        return getBanco().collection("viagens_realizadas");
+        return getBanco().collection(ConstantsUtils.VIAGENS_REALIZADAS);
     }
 
     public static CollectionReference getViagens() {
-        return getBanco().collection("viagens");
+        return getBanco().collection(ConstantsUtils.VIAGENS);
     }
 
     public static CollectionReference getUsers() {
-        return getBanco().collection("users");
+        return getBanco().collection(ConstantsUtils.USERS);
     }
 
     public static FirebaseFirestore getBanco() {
@@ -61,7 +61,7 @@ public class FirebaseUtils extends AppCompatActivity {
     }
 
     public static CollectionReference getConversas(String idViagem) {
-        return FirebaseFirestore.getInstance().collection("viagens").document(idViagem).collection("conversas");
+        return FirebaseFirestore.getInstance().collection(ConstantsUtils.VIAGENS).document(idViagem).collection(ConstantsUtils.CONVERSAS);
     }
 
     public static FirebaseAuth signOut() {
@@ -73,7 +73,7 @@ public class FirebaseUtils extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = user.getUid();
 
-        FirebaseUtils.getBanco().collection("users").document(id).set(passageiro.retornaUser()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.USERS).document(id).set(passageiro.retornaUser()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
@@ -141,7 +141,7 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void adicionaPassageiro(String id, final Viagem viagem) {
 
-        getBanco().collection("users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        getBanco().collection(ConstantsUtils.USERS).document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot.exists()) {
@@ -166,6 +166,6 @@ public class FirebaseUtils extends AppCompatActivity {
         map.put(ConstantsUtils.LATITUDE, location.getLatitude());
         map.put(ConstantsUtils.LONGITUDE, location.getLongitude());
         getViagem(id).update(map);
-        getViagem(id).collection("trajeto").add(map);
+        getViagem(id).collection(ConstantsUtils.TRAJETO).add(map);
     }
 }
