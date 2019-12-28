@@ -9,12 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -49,18 +50,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageViewFoto;
-        private TextView textViewNome;
-        private TextView textViewData;
-        private TextView textViewMensagem;
+        @BindView(R.id.imageView_foto_chat) ImageView imageViewFoto;
+        @BindView(R.id.textView_nome_chat) TextView textViewNome;
+        @BindView(R.id.textView_data_chat) TextView textViewData;
+        @BindView(R.id.textView_mensagem) TextView textViewMensagem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imageViewFoto = itemView.findViewById(R.id.imageView_foto_chat);
-            textViewData = itemView.findViewById(R.id.textView_data_chat);
-            textViewMensagem = itemView.findViewById(R.id.textView_mensagem);
-            textViewNome = itemView.findViewById(R.id.textView_nome_chat);
+            ButterKnife.bind(this, itemView);
         }
 
         public void set(MensagemChat mensagemChat) {

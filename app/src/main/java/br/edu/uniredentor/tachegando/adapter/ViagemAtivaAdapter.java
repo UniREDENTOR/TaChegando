@@ -17,6 +17,8 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.ViewHolder> {
 
@@ -39,13 +41,11 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         Viagem viagem = viagensAtivas.get(position);
+
         holder.nomeCriadorViagem.setText(viagem.getPassageiros().get(0).getNome());
         holder.nomeViagemAtiva.setText(viagem.getNome());
         GeralUtils.mostraImagemCircular(context,holder.imageCriadorViagem,viagem.getPassageiros().get(0).getFoto());
-
-
     }
 
     @Override
@@ -58,16 +58,13 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageCriadorViagem;
-        private TextView nomeViagemAtiva, nomeCriadorViagem;
+        @BindView(R.id.text_view_nome_criador_viagem) ImageView imageCriadorViagem;
+        @BindView(R.id.text_view_nome_viagem_ativa) TextView nomeViagemAtiva;
+        @BindView(R.id.imageView_criador_lista_viagem_ativa) TextView nomeCriadorViagem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imageCriadorViagem = itemView.findViewById(R.id.imageView_criador_lista_viagem_ativa);
-            nomeViagemAtiva = itemView.findViewById(R.id.text_view_nome_viagem_ativa);
-            nomeCriadorViagem = itemView.findViewById(R.id.text_view_nome_criador_viagem);
-
+            ButterKnife.bind(this, itemView);
         }
 
     }

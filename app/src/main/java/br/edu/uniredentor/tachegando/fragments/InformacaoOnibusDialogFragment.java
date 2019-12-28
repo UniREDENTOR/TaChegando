@@ -1,6 +1,5 @@
 package br.edu.uniredentor.tachegando.fragments;
 
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,11 +25,8 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -41,13 +36,14 @@ import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.PassageiroAdapter;
 import br.edu.uniredentor.tachegando.model.Denuncia;
-import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -60,41 +56,42 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
     private Viagem viagem;
-    private TextView textViewNomeDaRota;
-    private TextView textViewQuantidadeDeDenuncias;
-    private Button buttonDenuncia;
-    private Button buttonEntrarOuSair;
-    private TextView textViewDistancia;
+
     private double minhaLatitude;
     private double minhaLongitude;
 
+    @BindView(R.id.textView_nome_rota) TextView textViewNomeDaRota;
+    @BindView(R.id.textView_quantidade_denuncias) TextView textViewQuantidadeDeDenuncias;
+    @BindView(R.id.button_denunciar) Button buttonDenuncia;
+    @BindView(R.id.button_entrar_sair) Button buttonEntrarOuSair;
+    @BindView(R.id.textView_distancia) TextView textViewDistancia;
+    @BindView(R.id.recyclerView_passageiros) RecyclerView recyclerViewPassageiros;
+
     public InformacaoOnibusDialogFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_informacao_onibus_dialog, container, false);
+        ButterKnife.bind(this, view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         mostraChat();
-        encontraViews(view);
-        RecyclerView recyclerViewPassageiros = view.findViewById(R.id.recyclerView_passageiros);
+
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewPassageiros.setAdapter(new PassageiroAdapter(viagem.getPassageiros()));
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
-
         getToolbar(view);
         setTextos();
-
 
         buttonEntrarOuSair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-                if(viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
+                if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
                     alerta.setTitle("Ônibus")
                             .setMessage("Deseja sair do onibus?")
                             .setNegativeButton("Não", null)
@@ -106,7 +103,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
                                 }
                             });
                     alerta.show();
-                }else{
+                } else {
                     if (GeralUtils.ehUsuario(getActivity())) {
                         alerta.setTitle(getString(R.string.onibus))
                                 .setMessage(getString(R.string.deseja_entrar_no_onibus))
@@ -149,9 +146,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void defineBotaoDeEntrarOuSair() {
-        if(viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
+        if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
             buttonEntrarOuSair.setText(getString(R.string.sair));
-        }else{
+        } else {
             buttonEntrarOuSair.setText(getString(R.string.entrar));
         }
     }
@@ -176,14 +173,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return String.format("%.1f", distancia);
     }
 
-    private void encontraViews(View view) {
-        textViewNomeDaRota = view.findViewById(R.id.textView_nome_rota);
-        textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
-        textViewDistancia = view.findViewById(R.id.textView_distancia);
-        buttonDenuncia = view.findViewById(R.id.button_denunciar);
-        buttonEntrarOuSair = view.findViewById(R.id.button_entrar_sair);
-    }
-
     private Toolbar getToolbar(final View view) {
         final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(viagem.getNome());
@@ -193,7 +182,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             public boolean onMenuItemClick(final MenuItem item) {
 
                 switch (item.getItemId()) {
-                    
+
                     case R.id.item_trajeto:
                         FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -271,5 +260,4 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     public interface MarcacaoUpdate {
         void limpar(Polyline pontos);
     }
-
 }

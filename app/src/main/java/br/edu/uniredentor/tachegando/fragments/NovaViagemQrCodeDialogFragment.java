@@ -1,8 +1,6 @@
 package br.edu.uniredentor.tachegando.fragments;
 
-
 import android.Manifest;
-import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -10,13 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
@@ -31,6 +27,8 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -38,11 +36,13 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  */
 public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZXingScannerView.ResultHandler {
 
-     private double latitude;
-     private double longitude;
-     private String rota;
+    private double latitude;
+    private double longitude;
+    private String rota;
 
-
+    @BindView(R.id.qr_code_scan) ZXingScannerView qrCodeScanner;
+    @BindView(R.id.button_salvar_rota_qrcode) Button buttonSalvarRotaQrCode;
+    @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
     public static NovaViagemQrCodeDialogFragment novaInstancia(double latitude, double longitude) {
         NovaViagemQrCodeDialogFragment fragment = new NovaViagemQrCodeDialogFragment();
@@ -57,11 +57,9 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nova_viagem_qr_code_dialog, container, false);
+        ButterKnife.bind(this, view);
+        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_qr_code));
 
-        createToolbar(view);
-
-        final ZXingScannerView qrCodeScanner = view.findViewById(R.id.qr_code_scan);
-        Button buttonSalvarRotaQrCode = view.findViewById(R.id.button_salvar_rota_qrcode);
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
 
@@ -107,15 +105,9 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
         });
 
 
-
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return view;
 
-    }
-
-    private void createToolbar(View view) {
-        Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
-        toolbarNovaViagem.setTitle(getString(R.string.nova_viagem_qr_code));
     }
 
     @Override
