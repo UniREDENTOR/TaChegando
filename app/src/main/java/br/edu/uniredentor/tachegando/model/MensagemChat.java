@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import lombok.Data;
 
+@Data
 public class MensagemChat {
 
     private String idUsuario;
@@ -20,48 +22,6 @@ public class MensagemChat {
         setDiaEHora(GeralUtils.getData(Calendar.getInstance()));
         setDataDeCriacao(Calendar.getInstance().getTimeInMillis());
     }
-
-    public String getTexto() {
-        return texto;
-    }
-
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
-
-    public String getDiaEHora() {
-        return diaEHora;
-    }
-
-    public void setDiaEHora(String diaEHora) {
-        this.diaEHora = diaEHora;
-    }
-
-
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public String getFotoUsuario() {
-        return fotoUsuario;
-    }
-
-    public void setFotoUsuario(String fotoUsuario) {
-        this.fotoUsuario = fotoUsuario;
-    }
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
 
     public HashMap<String, Object> getMap() {
         HashMap<String, Object> map = new HashMap<>();
@@ -78,13 +38,5 @@ public class MensagemChat {
     @Override
     public String toString() {
         return nomeUsuario;
-    }
-
-    public Long getDataDeCriacao() {
-        return dataDeCriacao;
-    }
-
-    public void setDataDeCriacao(Long dataDeCriacao) {
-        this.dataDeCriacao = dataDeCriacao;
     }
 }

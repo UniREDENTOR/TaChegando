@@ -11,7 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
+import lombok.Data;
 
+@Data
 public class Viagem implements Serializable {
 
     private String id;
@@ -22,38 +24,6 @@ public class Viagem implements Serializable {
     private String proximoIdDaViagem;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
     public void setLatLng(LatLng latLng) {
         setLatitude(latLng.latitude);
         setLongitude(latLng.longitude);
@@ -61,22 +31,6 @@ public class Viagem implements Serializable {
 
     public LatLng getLatLng() {
         return new LatLng(latitude, longitude);
-    }
-
-    public double getLongitudeInicial() {
-        return longitudeInicial;
-    }
-
-    public void setLongitudeInicial(double longitudeInicial) {
-        this.longitudeInicial = longitudeInicial;
-    }
-
-    public double getLatitudeInicial() {
-        return latitudeInicial;
-    }
-
-    public void setLatitudeInicial(double latitudeInicial) {
-        this.latitudeInicial = latitudeInicial;
     }
 
     public Map<String, Object> getLocalizacao() {
@@ -109,30 +63,6 @@ public class Viagem implements Serializable {
         passageiros.add(passageiro);
     }
 
-    public void addDenuncia(Denuncia denuncia) {
-        if(denuncias == null){
-            denuncias = new ArrayList<>();
-        }
-        this.denuncias.add(denuncia);
-    }
-
-    public List<Denuncia> getDenuncias() {
-        return denuncias;
-    }
-
-    public void setDenuncias(ArrayList<Denuncia> denuncias) {
-        this.denuncias = denuncias;
-    }
-
-    public List<Passageiro> getPassageiros() {
-        return passageiros;
-    }
-
-    public void setPassageiros(ArrayList<Passageiro> passageiros) {
-        this.passageiros = passageiros;
-    }
-
-
     public void removePassageiro(String id) {
         if(isPassageiro(id)){
             passageiros.remove(encontraPassageiro(id));
@@ -156,22 +86,6 @@ public class Viagem implements Serializable {
             }
         }
         return false;
-    }
-
-    public boolean isAtiva() {
-        return ativa;
-    }
-
-    public void setAtiva(boolean ativa) {
-        this.ativa = ativa;
-    }
-
-    public String getProximoIdDaViagem() {
-        return proximoIdDaViagem;
-    }
-
-    public void setProximoIdDaViagem(String proximoIdDaViagem) {
-        this.proximoIdDaViagem = proximoIdDaViagem;
     }
 
     public Passageiro getCriador(Viagem viagem) {
