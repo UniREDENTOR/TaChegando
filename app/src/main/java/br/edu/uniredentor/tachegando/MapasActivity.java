@@ -59,6 +59,8 @@ import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
 
@@ -76,10 +78,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private List<Viagem> listaViagens;
     private int REQUEST_CODE = 0;
 
+    @BindView (R.id.toolbar_principal) Toolbar toolbarPrincipal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
+        ButterKnife.bind(this);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -129,7 +134,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void criaToolBar() {
-        Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);
         toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {

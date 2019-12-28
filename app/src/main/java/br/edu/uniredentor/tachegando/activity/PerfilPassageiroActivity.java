@@ -30,23 +30,29 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
 
 import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.signOut;
 
 
 public class PerfilPassageiroActivity extends FragmentActivity {
 
-    private TextView textViewTiuloPassageiro, textViewNomePassageiro, textViewViagemPassageiro, textViewReputacaoPassageiro;
-    private ImageView imagemPassageiro;
     private GoogleSignInClient googleSignInClient;
+    private FirebaseUser user;
 
+    @BindView(R.id.toolbar_principal) Toolbar toolbarPerfilActivity;
+    @BindView(R.id.textView_titulo_perfil_passageiro) TextView textViewTiuloPassageiro;
+    @BindView(R.id.textView_nome_perfil_passageiro) TextView textViewNomePassageiro;
+    @BindView(R.id.textView_qtd_viagens_passageiro) TextView textViewViagemPassageiro;
+    @BindView(R.id.textView_reputacao_passageiro) TextView textViewReputacaoPassageiro;
+    @BindView(R.id.imageView_foto_passageiro) ImageView imagemPassageiro;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
-        inicializaComponentePerfil();
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -60,8 +66,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
     private void createToolbar() {
-        final Toolbar toolbarPerfilActivity = findViewById(R.id.toolbar_principal);
-
         toolbarPerfilActivity.setTitle(R.string.perfil);
         toolbarPerfilActivity.setElevation(0);
         //infla menu do perfil na toolbar
@@ -116,15 +120,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
 
-    }
-
-
-    private void inicializaComponentePerfil() {
-        textViewTiuloPassageiro = findViewById(R.id.textView_titulo_perfil_passageiro);
-        textViewNomePassageiro = findViewById(R.id.textView_nome_perfil_passageiro);
-        textViewViagemPassageiro = findViewById(R.id.textView_qtd_viagens_passageiro);
-        textViewReputacaoPassageiro = findViewById(R.id.textView_reputacao_passageiro);
-        imagemPassageiro = findViewById(R.id.imageView_foto_passageiro);
     }
 
     private void exibeInfoPassageiro(Passageiro passageiro) {
