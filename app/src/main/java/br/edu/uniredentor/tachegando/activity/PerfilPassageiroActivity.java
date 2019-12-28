@@ -122,12 +122,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
 
     }
 
-    private void exibeInfoPassageiro(Passageiro passageiro) {
-        String id = passageiro.getId();
-        Toast toast = Toast.makeText(getApplicationContext(), id, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
     @Override
     protected void onStart() {
         super.onStart();

@@ -8,16 +8,17 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.ViewHolder>{
 
-    private List<Passageiro> passageiros = new ArrayList<>();
+    private List<Passageiro> passageiros;
 
     public PassageiroAdapter(List<Passageiro> passageiros) {
         this.passageiros = passageiros;
@@ -32,7 +33,6 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         Passageiro passageiro = passageiros.get(position);
         holder.set(passageiro);
     }
@@ -42,19 +42,13 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
         return passageiros.size();
     }
 
-    public void atualiza(ArrayList<Passageiro> passageiros){
-        this.passageiros = passageiros;
-        notifyDataSetChanged();
-    }
-
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView imageViewFoto;
+        @BindView(R.id.imageView_foto) ImageView imageViewFoto;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imageViewFoto = itemView.findViewById(R.id.imageView_foto);
+            ButterKnife.bind(this, itemView);
         }
 
         public void set(Passageiro passageiro) {

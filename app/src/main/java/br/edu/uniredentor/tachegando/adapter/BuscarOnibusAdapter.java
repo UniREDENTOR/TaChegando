@@ -1,8 +1,6 @@
 package br.edu.uniredentor.tachegando.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +21,10 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
-import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapter.ViewHolder> {
@@ -35,14 +34,12 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
     private GoogleMap mapa;
     private BuscarOnibusDialogFragment buscarOnibusDialogFragment;
 
-
     public BuscarOnibusAdapter(List<Viagem> listaDeViagensFiltrada, Context context, GoogleMap mapa, BuscarOnibusDialogFragment buscarOnibusDialogFragment) {
         this.listaDeViagensFiltrada = listaDeViagensFiltrada;
         this.context = context;
         this.mapa = mapa;
         this.buscarOnibusDialogFragment = buscarOnibusDialogFragment;
     }
-
 
     @NonNull
     @Override
@@ -53,19 +50,20 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-
         final Viagem viagem = listaDeViagensFiltrada.get(position);
-        holder.textViewRotaOnibus.setText(viagem.getNome().toLowerCase());
         Passageiro passageiro = viagem.getCriador(viagem);
+
+        holder.textViewRotaOnibus.setText(viagem.getNome().toLowerCase());
         holder.textViewCriadorRota.setText(passageiro.getNome());
         GeralUtils.mostraImagemCircular(context,holder.imageViewCriadorRota,passageiro.getFoto());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LatLng latLng = new LatLng(viagem.getLatitude(), viagem.getLongitude());
                 MapaUtils.moveCamera(mapa, latLng);
                 buscarOnibusDialogFragment.dismiss();
-                Log.d("teste", String.valueOf(viagem.getLatitude()) + String.valueOf(viagem.getLongitude()));
+                Log.d("teste", viagem.getLatitude() + viagem.getLongitude() + "");
             }
         });
 
@@ -83,15 +81,13 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewRotaOnibus, textViewCriadorRota;
-        private ImageView imageViewCriadorRota;
+        @BindView(R.id.textView_rota_onibus) TextView textViewRotaOnibus;
+        @BindView(R.id.textView_criador_rota) TextView textViewCriadorRota;
+        @BindView(R.id.imageView_criador_rota) ImageView imageViewCriadorRota;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewRotaOnibus = itemView.findViewById(R.id.textView_rota_onibus);
-            textViewCriadorRota = itemView.findViewById(R.id.textView_criador_rota);
-            imageViewCriadorRota = itemView.findViewById(R.id.imageView_criador_rota);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 }
