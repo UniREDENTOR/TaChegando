@@ -5,7 +5,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import lombok.Data;
 
+@Data
 public class Denuncia implements Serializable {
 
     private String idDenunciante;
@@ -17,29 +19,4 @@ public class Denuncia implements Serializable {
         setData(GeralUtils.getDataFirebase(dia));
         setHorario(GeralUtils.getHorario(dia));
     }
-
-    public String getIdDenunciante() {
-        return idDenunciante;
-    }
-
-    public void setIdDenunciante(String idDenunciante) {
-        this.idDenunciante = idDenunciante;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
-
 }
