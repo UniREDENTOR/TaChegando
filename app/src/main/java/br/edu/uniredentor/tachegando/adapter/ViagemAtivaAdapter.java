@@ -58,9 +58,9 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.text_view_nome_criador_viagem) ImageView imageCriadorViagem;
+        @BindView(R.id.imageView_criador_lista_viagem_ativa) ImageView imageCriadorViagem;
         @BindView(R.id.text_view_nome_viagem_ativa) TextView nomeViagemAtiva;
-        @BindView(R.id.imageView_criador_lista_viagem_ativa) TextView nomeCriadorViagem;
+        @BindView(R.id.text_view_nome_criador_viagem) TextView nomeCriadorViagem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
