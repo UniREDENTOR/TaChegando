@@ -27,7 +27,8 @@
 
     <!-- menu principal xml -->
     <string name="nova_viagem">Nova viagem</string>
-    <string name="pesquisar_onibus">Pesquisar Onibus</string>
+    <string name="procurar_viagem">Procurar viagem</string>
+    <string name="lista_de_viagens">Lista de viagens</string>
 
     <!-- buscar onibus controller -->
     <string name="procurar_onibus">Procurar Onibus:</string>
@@ -120,5 +121,6 @@
         ]
     </string>
     <string name="denunciar_viagem">Deseja denunciar essa viagem?</string>
+
 
 </resources>
