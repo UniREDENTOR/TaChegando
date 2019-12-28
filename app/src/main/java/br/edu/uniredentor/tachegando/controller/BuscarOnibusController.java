@@ -17,6 +17,7 @@ import java.util.List;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.fragments.BuscarOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
+import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 
 
 public class BuscarOnibusController {
@@ -39,7 +40,7 @@ public class BuscarOnibusController {
                 if(listaDeViagensFiltrada.size() > 0) {
                     BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).setMapa(mapa).show(activity.getSupportFragmentManager(), "buscarOnibus");
                 } else {
-                    Toast.makeText(activity, "não encontrada", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, ConstantsUtils.VIAGEM_NÃO_ENCONTRADA, Toast.LENGTH_LONG).show();
                     BuscarOnibusController.alertaDeBusca(activity,listaLocal,mapa);
                 }
                 
