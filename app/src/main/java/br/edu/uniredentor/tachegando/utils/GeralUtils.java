@@ -40,13 +40,11 @@ public class GeralUtils {
             Address obj = addresses.get(0);
 
             String add = obj.getAddressLine(0);
-            add = add + "," + obj.getAdminArea();
-            add = add + "," + obj.getCountryName();
 
             return add;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
