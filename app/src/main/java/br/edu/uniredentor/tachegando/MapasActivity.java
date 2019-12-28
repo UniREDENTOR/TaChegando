@@ -66,7 +66,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 5000; // = 30 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -404,8 +403,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private void iniciaAtualizacaoDaLocalizacao() {
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(UPDATE_INTERVAL);
-        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+        locationRequest.setSmallestDisplacement(100);
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
