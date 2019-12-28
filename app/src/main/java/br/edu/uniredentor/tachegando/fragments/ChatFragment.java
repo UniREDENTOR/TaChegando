@@ -9,36 +9,29 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.ChatAdapter;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
-import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
-import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,8 +41,11 @@ public class ChatFragment extends Fragment {
     private Viagem viagem;
     private ChatAdapter adapter;
     private List<MensagemChat> mensagens;
-    private RecyclerView recyclerViewChat;
     private FirebaseUser user;
+
+    @BindView(R.id.recyclerView_chat) RecyclerView recyclerViewChat;
+    @BindView(R.id.imageView_envia) ImageView imageViewEnvia;
+    @BindView(R.id.editText_mensagem) TextInputEditText editTextMensagem;
 
     public ChatFragment() {}
 
@@ -57,23 +53,24 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        ButterKnife.bind(this, view);
+
         mensagens = new ArrayList<>();
 
-        recyclerViewChat = view.findViewById(R.id.recyclerView_chat);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setAdapter(adapter);
         recyclerViewChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         user = FirebaseUtils.getUser();
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ImageView imageViewEnvia = getView().findViewById(R.id.imageView_envia);
-        final TextInputEditText editTextMensagem = getView().findViewById(R.id.editText_mensagem);
+
         FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -94,7 +91,7 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 String mensagem = editTextMensagem.getText().toString();
 
-                final MensagemChat mensagemChat = new MensagemChat();
+                MensagemChat mensagemChat = new MensagemChat();
                 mensagemChat.setNomeUsuario(user.getDisplayName());
                 mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
                 mensagemChat.setIdUsuario(user.getUid());

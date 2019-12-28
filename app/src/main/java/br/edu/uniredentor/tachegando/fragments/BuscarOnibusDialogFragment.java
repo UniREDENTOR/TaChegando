@@ -24,12 +24,16 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.adapter.BuscarOnibusAdapter;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BuscarOnibusDialogFragment extends DialogFragment {
     private GoogleMap mapa;
+
+    @BindView(R.id.recyclerView_buscar_onibus) RecyclerView recyclerViewOnibus;
 
     public BuscarOnibusDialogFragment setMapa(GoogleMap map) {
         this.mapa = map;
@@ -47,11 +51,15 @@ public class BuscarOnibusDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        List<Viagem> listaFiltrada = (List<Viagem>) getArguments().getSerializable(ConstantsUtils.LISTAFILTRADA);
-        final BuscarOnibusAdapter adapter = new BuscarOnibusAdapter((ArrayList<Viagem>) listaFiltrada, getContext(), mapa, BuscarOnibusDialogFragment.this);
-        adapter.atualiza(listaFiltrada);
         View view = inflater.inflate(R.layout.fragment_buscar_onibus_dialog, container, false);
-        RecyclerView recyclerViewOnibus = view.findViewById(R.id.recyclerView_buscar_onibus);
+        ButterKnife.bind(this, view);
+
+        List<Viagem> listaFiltrada = (List<Viagem>) getArguments().getSerializable(ConstantsUtils.LISTAFILTRADA);
+        BuscarOnibusAdapter adapter = new BuscarOnibusAdapter(listaFiltrada, getContext(),
+                mapa, BuscarOnibusDialogFragment.this);
+
+        adapter.atualiza(listaFiltrada);
+
         recyclerViewOnibus.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewOnibus.setAdapter(adapter);
 

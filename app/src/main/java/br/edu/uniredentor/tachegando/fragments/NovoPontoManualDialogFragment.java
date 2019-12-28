@@ -1,6 +1,5 @@
 package br.edu.uniredentor.tachegando.fragments;
 
-
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -20,6 +19,8 @@ import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Ponto;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,11 +29,13 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
 
     private double latitude;
     private double longitude;
-    private TextInputEditText editTextPontoManual;
 
+    @BindView(R.id.editText_ponto) TextInputEditText editTextPontoManual;
+    @BindView(R.id.button_salvar_ponto_manual) Button buttonPontoManual;
+    @BindView(R.id.textView_endereco_atual_ponto) TextView textViewEndereco;
+    @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
     public static NovoPontoManualDialogFragment novaInstancia(double latitude, double longitude) {
-        // Required empty public constructor
         NovoPontoManualDialogFragment fragment = new NovoPontoManualDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putDouble(ConstantsUtils.LATITUDE, latitude);
@@ -45,13 +48,13 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_novo_ponto_manual_dialog, container,false);
-        createToolbar(view);
+        View view = inflater.inflate(R.layout.fragment_novo_ponto_manual_dialog, container, false);
+        ButterKnife.bind(this, view);
+        toolbarNovaViagem.setTitle(getString(R.string.novo_ponto_manual));
+
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
-        editTextPontoManual = view.findViewById(R.id.editText_ponto);
-        Button buttonPontoManual = view.findViewById(R.id.button_salvar_ponto_manual);
-        TextView textViewEndereco = view.findViewById(R.id.textView_endereco_atual_ponto);
+
         String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
         textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
 
@@ -74,14 +77,6 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
         return view;
 
     }
-
-
-
-    private void createToolbar(View view) {
-        Toolbar toolbarNovaViagem = view.findViewById(R.id.toolbar_principal);
-        toolbarNovaViagem.setTitle(getString(R.string.novo_ponto_manual));
-    }
-
 
     @Override
     public void onStart() {
