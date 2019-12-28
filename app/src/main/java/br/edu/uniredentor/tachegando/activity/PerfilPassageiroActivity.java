@@ -1,13 +1,11 @@
 package br.edu.uniredentor.tachegando.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import br.edu.uniredentor.tachegando.MapasActivity;
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -84,13 +81,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                                 finish();
                             }
                         });
-
                         break;
-                    case R.id.item_mapa_app:
-                        Intent intent = new Intent(getApplicationContext(), MapasActivity.class);
-                        startActivity(intent);
-                        break;
-
                 }
                 return true;
             }
@@ -120,12 +111,6 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         GeralUtils.mostraImagemCircular(getApplicationContext(), imagemPassageiro, passageiro.getFoto());
         textViewReputacaoPassageiro.setText(String.valueOf(passageiro.getReputacao()));
         textViewViagemPassageiro.setText(String.valueOf(passageiro.getQtdViagem()));
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
     }
 }
