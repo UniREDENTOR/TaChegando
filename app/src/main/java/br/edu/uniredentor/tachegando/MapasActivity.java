@@ -61,6 +61,7 @@ import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
 
@@ -129,34 +130,39 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         mapeiaViagens();
     }
 
+    @OnClick(R.id.fab_menu_lista_viagem)
+    public void listaViagens(){
+        Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
+        i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.fab_menu_nova_viagem)
+    public void novaViagem(){
+        if(GeralUtils.ehUsuario(MapasActivity.this)){
+            if(possuiLocalizacao()){
+                NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+            }else{
+                GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
+            }
+        }
+    }
+
+    @OnClick(R.id.fab_menu_procurar_viagem)
+    public void procuraViagem(){
+        BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
+    }
+
     private void criaToolBar() {
         toolbarPrincipal.setTitle(getString(R.string.app_name));
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);
         toolbarPrincipal.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.nova_viagem:
-                    if(GeralUtils.ehUsuario(MapasActivity.this)){
-                        if(possuiLocalizacao()){
-                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
-                        }else{
-                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
-                        }
-                    }
-                    break;
-                case R.id.pesquisar_onibus:
-                    BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
-                    break;
                 case R.id.perfil:
                     if(GeralUtils.ehUsuario(MapasActivity.this)){
                         startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
                     }
                     break;
-                case R.id.lista_viagens_ativas:
-                    Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
-                    i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
-                    startActivity(i);
-                    break;
-
             }
             return false;
         });
