@@ -63,6 +63,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private TextView textViewNomeDaRota;
     private TextView textViewQuantidadeDeDenuncias;
     private Button buttonDenuncia;
+    private Button buttonEntrarOuSair;
     private TextView textViewDistancia;
     private double minhaLatitude;
     private double minhaLongitude;
@@ -86,6 +87,41 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
         getToolbar(view);
         setTextos();
+
+
+        buttonEntrarOuSair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+                if(viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
+                    alerta.setTitle("Ônibus")
+                            .setMessage("Deseja sair do onibus?")
+                            .setNegativeButton("Não", null)
+                            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    saiDoOnibus(GeralUtils.getIdDoUsuario());
+
+                                }
+                            });
+                    alerta.show();
+                }else{
+                    if (GeralUtils.ehUsuario(getActivity())) {
+                        alerta.setTitle(getString(R.string.onibus))
+                                .setMessage(getString(R.string.deseja_entrar_no_onibus))
+                                .setNegativeButton(getString(R.string.nao), null)
+                                .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        entraOnibus(GeralUtils.getIdDoUsuario());
+                                    }
+                                });
+                        alerta.show();
+                    }
+                }
+            }
+        });
 
         buttonDenuncia.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,10 +148,19 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         return view;
     }
 
+    private void defineBotaoDeEntrarOuSair() {
+        if(viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
+            buttonEntrarOuSair.setText(getString(R.string.sair));
+        }else{
+            buttonEntrarOuSair.setText(getString(R.string.entrar));
+        }
+    }
+
     private void setTextos() {
         textViewNomeDaRota.setText(viagem.getNome());
         textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
         textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
+        defineBotaoDeEntrarOuSair();
     }
 
     private String defineDistancia() {
@@ -136,6 +181,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         textViewQuantidadeDeDenuncias = view.findViewById(R.id.textView_quantidade_denuncias);
         textViewDistancia = view.findViewById(R.id.textView_distancia);
         buttonDenuncia = view.findViewById(R.id.button_denunciar);
+        buttonEntrarOuSair = view.findViewById(R.id.button_entrar_sair);
     }
 
     private Toolbar getToolbar(final View view) {
@@ -145,49 +191,18 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(final MenuItem item) {
-                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+
                 switch (item.getItemId()) {
-                    case R.id.item_entrar:
-                        if (GeralUtils.ehUsuario(getActivity())) {
-                            alerta.setTitle(getString(R.string.onibus))
-                                    .setMessage(getString(R.string.deseja_entrar_no_onibus))
-                                    .setNegativeButton(getString(R.string.nao), null)
-                                    .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            entraOnibus(GeralUtils.getIdDoUsuario());
-
-
-                                        }
-                                    });
-                            alerta.show();
-                        }                        break;
-                    case R.id.item_sair:
-                        alerta.setTitle("Ônibus")
-                                .setMessage("Deseja sair do onibus?")
-                                .setNegativeButton("Não", null)
-                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        saiDoOnibus(GeralUtils.getIdDoUsuario());
-
-                                    }
-                                });
-                        alerta.show();
-                        break;
-
+                    
                     case R.id.item_trajeto:
                         FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                 ArrayList<LatLng> locais = new ArrayList<>();
-                                GeralUtils.show("Lat " + queryDocumentSnapshots.getDocuments().size());
                                 for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                    GeralUtils.show("Lat " + snapshot.get("latitude"));
                                     LatLng latLng = new LatLng((Double) snapshot.get(ConstantsUtils.LATITUDE), (Double) snapshot.get(ConstantsUtils.LONGITUDE));
                                     locais.add(latLng);
                                 }
-                                GeralUtils.show("Locias " + locais.size());
                                 Polyline polyline = MapaUtils.mostrarTrajeto(mapa, locais);
                                 marcacaoUpdate.limpar(polyline);
                                 dismiss();
