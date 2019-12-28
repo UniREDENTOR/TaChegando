@@ -52,23 +52,20 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
         textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
 
-        buttonSalvarRotaManual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonSalvarRotaManual.setOnClickListener(v -> {
 
-                String nome = editTextRotaManual.getText().toString();
-                if (ehValido(nome)) {
-                    Viagem viagem = new Viagem();
-                    viagem.setNome(nome);
-                    viagem.setId(GeralUtils.getIdDoUsuario());
-                    viagem.setLatitude(latitude);
-                    viagem.setLongitude(longitude);
-                    viagem.setAtiva(true);
-                    FirebaseUtils.salvaViagem(viagem);
-                    SharedUtils.save(viagem.getId(), getActivity());
-                }
-                dismiss();
+            String nome = editTextRotaManual.getText().toString();
+            if (ehValido(nome)) {
+                Viagem viagem = new Viagem();
+                viagem.setNome(nome);
+                viagem.setId(GeralUtils.getIdDoUsuario());
+                viagem.setLatitude(latitude);
+                viagem.setLongitude(longitude);
+                viagem.setAtiva(true);
+                FirebaseUtils.salvaViagem(viagem);
+                SharedUtils.save(viagem.getId(), getActivity());
             }
+            dismiss();
         });
 
         return view;

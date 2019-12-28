@@ -58,20 +58,16 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
         String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
         textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
 
-        buttonPontoManual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nomePonto = editTextPontoManual.getText().toString();
-                Ponto ponto = new Ponto();
-                ponto.setNome(nomePonto);
-                ponto.setId("1231");
-                ponto.setIdUsuario("2");
-                ponto.setLatitude(latitude);
-                ponto.setLongitude(longitude);
+        buttonPontoManual.setOnClickListener(v -> {
+            String nomePonto = editTextPontoManual.getText().toString();
+            Ponto ponto = new Ponto();
+            ponto.setNome(nomePonto);
+            ponto.setId("1231");
+            ponto.setIdUsuario("2");
+            ponto.setLatitude(latitude);
+            ponto.setLongitude(longitude);
 
-                dismiss();
-            }
-
+            dismiss();
         });
 
         return view;

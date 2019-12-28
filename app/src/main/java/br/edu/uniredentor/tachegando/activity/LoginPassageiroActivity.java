@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
@@ -13,10 +12,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -77,15 +74,12 @@ public class LoginPassageiroActivity extends FragmentActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    verificaPassageiro();
-                    Log.v("ID USUÁRIO", mAuth.getCurrentUser().getUid());
-                } else {
-                    finish();
-                }
+        mAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                verificaPassageiro();
+                Log.v("ID USUÁRIO", mAuth.getCurrentUser().getUid());
+            } else {
+                finish();
             }
         });
 
@@ -94,23 +88,20 @@ public class LoginPassageiroActivity extends FragmentActivity {
     private void verificaPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             final DocumentReference getId = FirebaseUtils.getBanco().collection("users").document(user.getUid());
-            getId.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        if (documentSnapshot.exists()) {
-                            Log.i("tag", "Usuário existe no firestore");
-                            finish();
-                        } else {
-                            String id = user.getUid();
-                            String fotoPerfil = String.valueOf(account.getPhotoUrl());
-                            Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, 0, "Iniciante", 0.0, 0);
-                            FirebaseUtils.salvaUsuario(passageiro);
-                            finish();
-                        }
-
+            getId.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Log.i("tag", "Usuário existe no firestore");
+                        finish();
+                    } else {
+                        String id = user.getUid();
+                        String fotoPerfil = String.valueOf(account.getPhotoUrl());
+                        Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, 0, "Iniciante", 0.0, 0);
+                        FirebaseUtils.salvaUsuario(passageiro);
+                        finish();
                     }
+
                 }
             });
     }
