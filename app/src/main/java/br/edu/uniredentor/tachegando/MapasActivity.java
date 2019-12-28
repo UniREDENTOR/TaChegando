@@ -94,28 +94,25 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         if(!SharedUtils.getId(this).equalsIgnoreCase("")){
             final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
 
-            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+            docRef.addSnapshotListener((documentSnapshot, e) -> {
 
-                    try{
-                        Viagem viagem = documentSnapshot.toObject(Viagem.class);
-                        if(viagem.isAtiva()){
-                            double latitudeDaViagem = viagem.getLatitude();
-                            double longitudeDaViagem = viagem.getLongitude();
-                            Marker marker = getOnibus(viagem);
-                            LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
-                            marker.setPosition(latLng);
-                            MapaUtils.moveCamera(mMap, latLng);
-                        }else{
-                            SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
-                        }
-
-
-                    }catch (Exception e1){
-                        e1.printStackTrace();
-                        SharedUtils.save("", MapasActivity.this);
+                try{
+                    Viagem viagem = documentSnapshot.toObject(Viagem.class);
+                    if(viagem.isAtiva()){
+                        double latitudeDaViagem = viagem.getLatitude();
+                        double longitudeDaViagem = viagem.getLongitude();
+                        Marker marker = getOnibus(viagem);
+                        LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
+                        marker.setPosition(latLng);
+                        MapaUtils.moveCamera(mMap, latLng);
+                    }else{
+                        SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                     }
+
+
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                    SharedUtils.save("", MapasActivity.this);
                 }
             });
         }
@@ -131,36 +128,33 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         Toolbar toolbarPrincipal = findViewById(R.id.toolbar_principal);
         toolbarPrincipal.setTitle(getString(R.string.app_name));
         toolbarPrincipal.inflateMenu(R.menu.menu_principal);
-        toolbarPrincipal.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nova_viagem:
-                        if(GeralUtils.ehUsuario(MapasActivity.this)){
-                            if(possuiLocalizacao()){
-                                NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
-                            }else{
-                                GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
-                            }
+        toolbarPrincipal.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nova_viagem:
+                    if(GeralUtils.ehUsuario(MapasActivity.this)){
+                        if(possuiLocalizacao()){
+                            NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                        }else{
+                            GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
                         }
-                        break;
-                    case R.id.pesquisar_onibus:
-                        BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
-                        break;
-                    case R.id.perfil:
-                        if(GeralUtils.ehUsuario(MapasActivity.this)){
-                            startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
-                        }
-                        break;
-                    case R.id.lista_viagens_ativas:
-                        Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
-                        i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
-                        startActivity(i);
-                        break;
+                    }
+                    break;
+                case R.id.pesquisar_onibus:
+                    BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
+                    break;
+                case R.id.perfil:
+                    if(GeralUtils.ehUsuario(MapasActivity.this)){
+                        startActivity(new Intent(getApplicationContext(), PerfilPassageiroActivity.class));
+                    }
+                    break;
+                case R.id.lista_viagens_ativas:
+                    Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
+                    i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
+                    startActivity(i);
+                    break;
 
-                }
-                return false;
             }
+            return false;
         });
     }
 
@@ -226,14 +220,11 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void buscarViagens() {
-        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                try{
-                    listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                }catch (Exception e1){
-                    e1.printStackTrace();
-                }
+        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
+            try{
+                listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+            }catch (Exception e1){
+                e1.printStackTrace();
             }
         });
     }
@@ -268,16 +259,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         } else {
             try {
                 final Task localizacao = fusedLocation.getLastLocation();
-                localizacao.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful() && localizacao != null) {
-                            Location localizacaoAtual = (Location) task.getResult();
-                            latitude = localizacaoAtual.getLatitude();
-                            longitude = localizacaoAtual.getLongitude();
-                            LatLng latLng = new LatLng(latitude, longitude);
-                            MapaUtils.moveCamera(mMap, latLng);
-                        }
+                localizacao.addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && localizacao != null) {
+                        Location localizacaoAtual = (Location) task.getResult();
+                        latitude = localizacaoAtual.getLatitude();
+                        longitude = localizacaoAtual.getLongitude();
+                        LatLng latLng = new LatLng(latitude, longitude);
+                        MapaUtils.moveCamera(mMap, latLng);
                     }
                 });
 
@@ -319,12 +307,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(getString(R.string.gps_ainda_desativado))
-                        .setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivityForResult(intent, REQUEST_CODE);
-                            }
+                        .setPositiveButton(getString(R.string.ativar), (dialog, which) -> {
+                            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivityForResult(intent, REQUEST_CODE);
                         }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -351,36 +336,25 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
         mMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                try{
-                    removePolyline();
-                    Viagem viagem = getViagem(marker.getTag().toString());
-                    new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).setLocalizacao(latitude, longitude).show(getSupportFragmentManager(), "informacao");
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                    GeralUtils.mostraAlerta("Atenção", "Algum erro aconteceu com esta viagem. Estamos tentando identificar o problema.", MapasActivity.this);
-                }
-
-            }
-        });
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
+        mMap.setOnInfoWindowClickListener(marker -> {
+            try{
                 removePolyline();
-                return false;
+                Viagem viagem = getViagem(marker.getTag().toString());
+                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).setLocalizacao(latitude, longitude).show(getSupportFragmentManager(), "informacao");
+
+            }catch (Exception e){
+                e.printStackTrace();
+                GeralUtils.mostraAlerta("Atenção", "Algum erro aconteceu com esta viagem. Estamos tentando identificar o problema.", MapasActivity.this);
             }
+
         });
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                removePolyline();
-            }
+        mMap.setOnMarkerClickListener( marker -> {
+            removePolyline();
+            return false;
         });
+
+        mMap.setOnMapClickListener(latLng -> removePolyline());
         getMinhaLocalizacao();
     }
 
