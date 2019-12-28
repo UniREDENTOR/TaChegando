@@ -66,7 +66,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
-    private static final long UPDATE_INTERVAL = 30000, FASTEST_INTERVAL = 30000; // = 30 seconds
+    private static final long UPDATE_INTERVAL = 10000, FASTEST_INTERVAL = 5000; // = 30 seconds
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
@@ -92,7 +92,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             chamaPermissoes();
         }
 
-        if(!SharedUtils.getId(this).equalsIgnoreCase("0") && !SharedUtils.getId(this).equalsIgnoreCase("")){
+        if(!SharedUtils.getId(this).equalsIgnoreCase("")){
             final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
 
             docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -101,16 +101,18 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                     try{
                         Viagem viagem = documentSnapshot.toObject(Viagem.class);
-                        if(!viagem.isAtiva()){
+                        if(viagem.isAtiva()){
+                            double latitudeDaViagem = viagem.getLatitude();
+                            double longitudeDaViagem = viagem.getLongitude();
+                            Marker marker = getOnibus(viagem);
+                            LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
+                            marker.setPosition(latLng);
+                            MapaUtils.moveCamera(mMap, latLng);
+                        }else{
                             SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
 
-                        double latitudeDaViagem = viagem.getLatitude();
-                        double longitudeDaViagem = viagem.getLongitude();
-                        Marker marker = getOnibus(viagem);
-                        LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
-                        marker.setPosition(latLng);
-                        MapaUtils.moveCamera(mMap, latLng);
+
                     }catch (Exception e1){
                         e1.printStackTrace();
                         SharedUtils.save("", MapasActivity.this);
@@ -204,7 +206,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void mapeiaViagens() {
-        FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -225,7 +227,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void buscarViagens() {
-        FirebaseUtils.getBanco().collection("viagens").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 try{

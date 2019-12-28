@@ -20,7 +20,7 @@ public class SharedUtils {
     }
 
     public static String getId(Activity activity){
-        return getShared(activity).getString(VIAGEM_ID, "0");
+        return getShared(activity).getString(VIAGEM_ID, "");
     }
 
     private static SharedPreferences getShared(Activity activity) {
