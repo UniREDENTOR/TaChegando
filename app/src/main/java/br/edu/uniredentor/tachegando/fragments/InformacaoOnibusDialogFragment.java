@@ -2,11 +2,9 @@ package br.edu.uniredentor.tachegando.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,9 +23,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -86,59 +80,39 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         getToolbar(view);
         setTextos();
 
-        buttonEntrarOuSair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonEntrarOuSair.setOnClickListener(v -> {
 
-                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-                if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
-                    alerta.setTitle("Ônibus")
-                            .setMessage("Deseja sair do onibus?")
-                            .setNegativeButton("Não", null)
-                            .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    saiDoOnibus(GeralUtils.getIdDoUsuario());
-
-                                }
-                            });
+            AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+            if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
+                alerta.setTitle("Ônibus")
+                        .setMessage("Deseja sair do onibus?")
+                        .setNegativeButton("Não", null)
+                        .setPositiveButton("Sim", (dialog, which) -> saiDoOnibus(GeralUtils.getIdDoUsuario()));
+                alerta.show();
+            } else {
+                if (GeralUtils.ehUsuario(getActivity())) {
+                    alerta.setTitle(getString(R.string.onibus))
+                            .setMessage(getString(R.string.deseja_entrar_no_onibus))
+                            .setNegativeButton(getString(R.string.nao), null)
+                            .setPositiveButton(getString(R.string.sim), (dialog, which) -> entraOnibus(GeralUtils.getIdDoUsuario()));
                     alerta.show();
-                } else {
-                    if (GeralUtils.ehUsuario(getActivity())) {
-                        alerta.setTitle(getString(R.string.onibus))
-                                .setMessage(getString(R.string.deseja_entrar_no_onibus))
-                                .setNegativeButton(getString(R.string.nao), null)
-                                .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        entraOnibus(GeralUtils.getIdDoUsuario());
-                                    }
-                                });
-                        alerta.show();
-                    }
                 }
             }
         });
 
-        buttonDenuncia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-                if (GeralUtils.ehUsuario(getActivity())) {
-                    alerta.setTitle(getString(R.string.onibus))
-                            .setMessage(getString(R.string.denunciar_viagem))
-                            .setNegativeButton(getString(R.string.nao), null)
-                            .setPositiveButton(getString(R.string.sim), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Denuncia denuncia = new Denuncia();
-                                    denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
-                                    FirebaseUtils.denuncia(viagem, denuncia);
-                                    dismiss();
-                                }
-                            });
-                    alerta.show();
-                }
+        buttonDenuncia.setOnClickListener(v -> {
+            AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+            if (GeralUtils.ehUsuario(getActivity())) {
+                alerta.setTitle(getString(R.string.onibus))
+                        .setMessage(getString(R.string.denunciar_viagem))
+                        .setNegativeButton(getString(R.string.nao), null)
+                        .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
+                            Denuncia denuncia = new Denuncia();
+                            denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
+                            FirebaseUtils.denuncia(viagem, denuncia);
+                            dismiss();
+                        });
+                alerta.show();
             }
         });
 
@@ -177,32 +151,26 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
         toolbar.setTitle(viagem.getNome());
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(final MenuItem item) {
+        toolbar.setOnMenuItemClickListener(item -> {
 
-                switch (item.getItemId()) {
+            switch (item.getItemId()) {
 
-                    case R.id.item_trajeto:
-                        FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                ArrayList<LatLng> locais = new ArrayList<>();
-                                for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                    LatLng latLng = new LatLng((Double) snapshot.get(ConstantsUtils.LATITUDE), (Double) snapshot.get(ConstantsUtils.LONGITUDE));
-                                    locais.add(latLng);
-                                }
-                                Polyline polyline = MapaUtils.mostrarTrajeto(mapa, locais);
-                                marcacaoUpdate.limpar(polyline);
-                                dismiss();
+                case R.id.item_trajeto:
+                    FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                        ArrayList<LatLng> locais = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+                            LatLng latLng = new LatLng((Double) snapshot.get(ConstantsUtils.LATITUDE), (Double) snapshot.get(ConstantsUtils.LONGITUDE));
+                            locais.add(latLng);
+                        }
+                        Polyline polyline = MapaUtils.mostrarTrajeto(mapa, locais);
+                        marcacaoUpdate.limpar(polyline);
+                        dismiss();
 
-                            }
-                        });
+                    });
 
-                        break;
-                }
-                return true;
+                    break;
             }
+            return true;
         });
         toolbar.inflateMenu(R.menu.menu_informacao_dialog);
         return toolbar;

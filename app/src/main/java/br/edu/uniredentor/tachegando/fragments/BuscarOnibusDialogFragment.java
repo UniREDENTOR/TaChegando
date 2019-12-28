@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;

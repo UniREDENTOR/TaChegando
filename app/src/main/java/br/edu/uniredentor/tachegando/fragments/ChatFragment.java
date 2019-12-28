@@ -17,10 +17,7 @@ import android.widget.ImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,34 +68,29 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                mensagens.clear();
-                for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                    if (document.exists()) {
-                        mensagens.add(document.toObject(MensagemChat.class));
-                    }
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20)
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+            mensagens.clear();
+            for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                if (document.exists()) {
+                    mensagens.add(document.toObject(MensagemChat.class));
                 }
-                if(mensagens.size() > 0) {
-                    adapter.atualiza(mensagens);
-                }
+            }
+            if(mensagens.size() > 0) {
+                adapter.atualiza(mensagens);
             }
         });
 
-        imageViewEnvia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mensagem = editTextMensagem.getText().toString();
+        imageViewEnvia.setOnClickListener(v -> {
+            String mensagem = editTextMensagem.getText().toString();
 
-                MensagemChat mensagemChat = new MensagemChat();
-                mensagemChat.setNomeUsuario(user.getDisplayName());
-                mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
-                mensagemChat.setIdUsuario(user.getUid());
-                mensagemChat.setTexto(mensagem);
-                editTextMensagem.setText("");
-                FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
-            }
+            MensagemChat mensagemChat = new MensagemChat();
+            mensagemChat.setNomeUsuario(user.getDisplayName());
+            mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
+            mensagemChat.setIdUsuario(user.getUid());
+            mensagemChat.setTexto(mensagem);
+            editTextMensagem.setText("");
+            FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
         });
     }
 

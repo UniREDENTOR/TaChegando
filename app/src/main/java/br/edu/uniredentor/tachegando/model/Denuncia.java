@@ -2,7 +2,6 @@ package br.edu.uniredentor.tachegando.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import lombok.Data;

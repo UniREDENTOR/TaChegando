@@ -3,11 +3,9 @@ package br.edu.uniredentor.tachegando.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
@@ -15,13 +13,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Passageiro;
@@ -69,37 +62,26 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         toolbarPerfilActivity.setElevation(0);
         //infla menu do perfil na toolbar
         toolbarPerfilActivity.inflateMenu(R.menu.menu_perfil_passageiro);
-        toolbarPerfilActivity.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.item_sair_app:
-                        signOut();
-                        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                finish();
-                            }
-                        });
-                        break;
-                }
-                return true;
+        toolbarPerfilActivity.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.item_sair_app:
+                    signOut();
+                    googleSignInClient.signOut().addOnCompleteListener(task -> finish());
+                    break;
             }
+            return true;
         });
     }
 
     private void recuperaPerfilPassageiro() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
-                        Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                        alteraInformacaoPerfil(passageiro);
-                    } else {
-                        Log.d("Usuário: ", "Não existe");
-                    }
+            FirebaseUtils.getBanco().collection("users").document(user.getUid()).addSnapshotListener((documentSnapshot, e) -> {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                    alteraInformacaoPerfil(passageiro);
+                } else {
+                    Log.d("Usuário: ", "Não existe");
                 }
             });
         }

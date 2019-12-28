@@ -2,7 +2,6 @@ package br.edu.uniredentor.tachegando;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.util.MapUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,13 +32,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -177,7 +169,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     for (Location location : locationResult.getLocations()) {
                         if(souLocalizador()){
                             try{
-                                if(location.getLatitude() != SharedUtils.getLatitude(MapasActivity.this) && location.getLongitude() != SharedUtils.getLongitude(MapasActivity.this)){
+                                if(location.getLatitude() != SharedUtils.getLatitude(MapasActivity.this) &&
+                                        location.getLongitude() != SharedUtils.getLongitude(MapasActivity.this)){
                                     SharedUtils.save((long) location.getLatitude(), ConstantsUtils.LATITUDE, MapasActivity.this);
                                     SharedUtils.save((long) location.getLongitude(), ConstantsUtils.LONGITUDE, MapasActivity.this);
                                     FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
@@ -203,20 +196,17 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void mapeiaViagens() {
-        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
 
-                viagens = queryDocumentSnapshots.toObjects(Viagem.class);
-                for (Viagem viagem : viagens) {
-                    if (existe(viagem)) {
-                        getOnibus(viagem).setPosition(viagem.getLatLng());
-                    } else {
-                        try {
-                            listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
-                        } catch (Exception ex) {
+            viagens = queryDocumentSnapshots.toObjects(Viagem.class);
+            for (Viagem viagem : viagens) {
+                if (existe(viagem)) {
+                    getOnibus(viagem).setPosition(viagem.getLatLng());
+                } else {
+                    try {
+                        listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
+                    } catch (Exception ex) {
 
-                        }
                     }
                 }
             }
@@ -283,18 +273,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private void alertaGpsDesligado() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setMessage(getString(R.string.seu_gps_esta_desligado)).setPositiveButton(getString(R.string.ativar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivityForResult(intent, REQUEST_CODE);
-            }
-        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create().show();
+        alertDialog.setMessage(getString(R.string.seu_gps_esta_desligado)).setPositiveButton(getString(R.string.ativar), (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, REQUEST_CODE);
+        }).setNegativeButton(getString(R.string.nao_ativar), (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -314,12 +296,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         .setPositiveButton(getString(R.string.ativar), (dialog, which) -> {
                             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivityForResult(intent, REQUEST_CODE);
-                        }).setNegativeButton(getString(R.string.nao_ativar), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+                        }).setNegativeButton(getString(R.string.nao_ativar), (dialog, which) -> dialog.dismiss()).create().show();
             }
         }
     }
@@ -344,7 +321,12 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             try{
                 removePolyline();
                 Viagem viagem = getViagem(marker.getTag().toString());
-                new InformacaoOnibusDialogFragment().setMapa(mMap).setMarcacaoUpdate(MapasActivity.this).setViagem(viagem).setLocalizacao(latitude, longitude).show(getSupportFragmentManager(), "informacao");
+                new InformacaoOnibusDialogFragment()
+                        .setMapa(mMap)
+                        .setMarcacaoUpdate(MapasActivity.this)
+                        .setViagem(viagem)
+                        .setLocalizacao(latitude, longitude)
+                        .show(getSupportFragmentManager(), "informacao");
 
             }catch (Exception e){
                 e.printStackTrace();
