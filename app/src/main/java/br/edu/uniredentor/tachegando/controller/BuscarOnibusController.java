@@ -33,11 +33,16 @@ public class BuscarOnibusController {
                 for (Viagem viagem : listaLocal) {
                     if(viagem.getNome().toLowerCase().contains(localDesejado) && !localDesejado.isEmpty()){
                         listaDeViagensFiltrada.add(viagem);
-                        BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).setMapa(mapa).show(activity.getSupportFragmentManager(), "buscarOnibus");
-                    } else {
-                        Toast.makeText(activity, activity.getString(R.string.viagem_nao_encontrada), Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                if(listaDeViagensFiltrada.size() > 0) {
+                    BuscarOnibusDialogFragment.novaInstancia(listaDeViagensFiltrada).setMapa(mapa).show(activity.getSupportFragmentManager(), "buscarOnibus");
+                } else {
+                    Toast.makeText(activity, "não encontrada", Toast.LENGTH_LONG).show();
+                    BuscarOnibusController.alertaDeBusca(activity,listaLocal,mapa);
+                }
+                
             }
         }).setNegativeButton(activity.getString(R.string.cancelar), null).show();
     }
