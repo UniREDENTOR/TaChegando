@@ -31,6 +31,7 @@ import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.signOut;
 
@@ -51,6 +52,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_passageiro);
+        ButterKnife.bind(this);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -59,9 +61,9 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-        createToolbar();
 
         recuperaPerfilPassageiro();
+        createToolbar();
     }
 
     @SuppressLint({"NewApi", "ResourceAsColor"})
