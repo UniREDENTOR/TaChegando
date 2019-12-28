@@ -134,12 +134,28 @@ public class Viagem implements Serializable {
 
 
     public void removePassageiro(String id) {
+        if(isPassageiro(id)){
+            passageiros.remove(encontraPassageiro(id));
+        }
+
+    }
+
+    private Passageiro encontraPassageiro(String id) {
         for(Passageiro passageiro : passageiros){
             if(passageiro.getId().equalsIgnoreCase(id)){
-                passageiros.remove(passageiro);
-                break;
+                return passageiro;
             }
         }
+        return new Passageiro();
+    }
+
+    public boolean isPassageiro(String id){
+        for(Passageiro passageiro : passageiros){
+            if(passageiro.getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isAtiva() {

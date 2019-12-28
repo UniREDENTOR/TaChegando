@@ -2,16 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/entrar" app:showAsAction="always" android:id="@+id/item_entrar"
-        android:icon="@drawable/ic_action_entrar"
-        ></item>
-
     <item android:title="@string/trajeto" app:showAsAction="always" android:id="@+id/item_trajeto"
         android:icon="@drawable/ic_action_trajeto"
         ></item>
 
-    <item android:title="@string/sair" app:showAsAction="always" android:id="@+id/item_sair"
-        android:icon="@drawable/ic_action_sair"
-        ></item>
 
 </menu>
