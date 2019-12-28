@@ -84,6 +84,8 @@ public class LoginPassageiroActivity extends FragmentActivity {
                 if(task.isSuccessful()) {
                     verificaPassageiro();
                     Log.v("ID USUÁRIO", mAuth.getCurrentUser().getUid());
+                } else {
+                    finish();
                 }
             }
         });
@@ -100,28 +102,23 @@ public class LoginPassageiroActivity extends FragmentActivity {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
                             Log.i("tag", "Usuário existe no firestore");
-                            Intent i = new Intent(getApplicationContext(), MapasActivity.class);
-                            startActivity(i);
+                            finish();
                         } else {
                             String id = user.getUid();
                             String fotoPerfil = String.valueOf(account.getPhotoUrl());
                             Passageiro passageiro = new Passageiro(id, account.getDisplayName(), fotoPerfil, 0, "Iniciante", 0.0, 0);
                             FirebaseUtils.salvaUsuario(passageiro);
-                            Intent i = new Intent(getApplicationContext(), MapasActivity.class);
-                            startActivity(i);
+                            finish();
                         }
 
                     }
                 }
             });
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-
-
     }
 }

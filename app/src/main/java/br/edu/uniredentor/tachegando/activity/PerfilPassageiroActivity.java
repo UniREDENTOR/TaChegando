@@ -81,8 +81,7 @@ public class PerfilPassageiroActivity extends FragmentActivity {
                         googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Intent i = new Intent(getApplicationContext(), LoginPassageiroActivity.class);
-                                startActivity(i);
+                                finish();
                             }
                         });
 
