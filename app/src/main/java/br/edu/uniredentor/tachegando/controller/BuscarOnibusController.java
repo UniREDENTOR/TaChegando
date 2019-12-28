@@ -2,7 +2,9 @@ package br.edu.uniredentor.tachegando.controller;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.text.InputType;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -24,9 +26,24 @@ public class BuscarOnibusController {
 
     public static void alertaDeBusca(final FragmentActivity activity, final List<Viagem> listaLocal, final GoogleMap mapa) {
         final AlertDialog.Builder alerta = new AlertDialog.Builder(activity);
+
+        LinearLayout container = new LinearLayout(activity.getApplicationContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(64, -48, 64, 0);
+
         final List<Viagem> listaDeViagensFiltrada = new ArrayList<>();
+
+
         final EditText editTextlocal = new EditText(activity.getApplicationContext());
-        alerta.setView(editTextlocal);
+        editTextlocal.setLayoutParams(lp);
+        editTextlocal.setHint("Nome da Viagem");
+        editTextlocal.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+
+        container.addView(editTextlocal, lp);
+        alerta.setView(container);
+
         alerta.setTitle(activity.getString(R.string.procurar_onibus)).setMessage(activity.getString(R.string.informe_para_onde_deseja_ir)).setPositiveButton(activity.getString(R.string.procurar), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
