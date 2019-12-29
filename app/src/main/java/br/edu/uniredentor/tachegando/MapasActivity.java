@@ -51,6 +51,7 @@ import br.edu.uniredentor.tachegando.utils.GPSUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
+import br.edu.uniredentor.tachegando.utils.Singleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -124,9 +125,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     @OnClick(R.id.fab_menu_lista_viagem)
     public void listaViagens(){
-        Intent i = new Intent(getApplicationContext(), ViagensAtivasActivity.class);
-        i.putExtra(ConstantsUtils.LISTA_VIAGENS_ATIVAS, (Serializable) listaViagens);
-        startActivity(i);
+        Singleton.getInstance().setViagemListMap(mMap, listaViagens);
+        startActivity(new Intent(getApplicationContext(),ViagensAtivasActivity.class));
     }
 
     @OnClick(R.id.fab_menu_nova_viagem)
