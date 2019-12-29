@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".fragments.InformacaoOnibusDialogFragment">
 
@@ -40,13 +40,23 @@
                 android:layout_marginLeft="3dp"></TextView>
         </LinearLayout>
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
             android:id="@+id/button_entrar_sair"
-            android:layout_marginLeft="5dp"
-            android:text="@string/entrar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></Button>
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            fancy:fb_textGravity="center_vertical"
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="2dp"
+            fancy:fb_defaultColor="@color/verde"
+            fancy:fb_focusColor="#8cc9f8"
+            fancy:fb_fontIconSize="30sp"
+            fancy:fb_radius="10dp"
+            fancy:fb_text="@string/entrar"
+            fancy:fb_textColor="#FFFFFF">
+        </mehdi.sakout.fancybuttons.FancyButton>
 
     </LinearLayout>
 
@@ -74,12 +84,24 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"></TextView>
 
-        <Button
-            android:id="@+id/button_denunciar"
+        <mehdi.sakout.fancybuttons.FancyButton
             android:layout_marginLeft="5dp"
-            android:text="@string/denunciar"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/button_denunciar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></Button>
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            fancy:fb_textGravity="center_vertical"
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="2dp"
+            fancy:fb_defaultColor="#dd4b39"
+            fancy:fb_focusColor="#E21600"
+            fancy:fb_fontIconSize="30sp"
+            fancy:fb_radius="10dp"
+            fancy:fb_text="@string/denunciar"
+            fancy:fb_textColor="#FFFFFF">
+        </mehdi.sakout.fancybuttons.FancyButton>
+
     </LinearLayout>
 
     <View

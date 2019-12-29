@@ -42,6 +42,7 @@ import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
@@ -60,8 +61,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     @BindView(R.id.textView_nome_rota) TextView textViewNomeDaRota;
     @BindView(R.id.textView_quantidade_denuncias) TextView textViewQuantidadeDeDenuncias;
-    @BindView(R.id.button_denunciar) Button buttonDenuncia;
-    @BindView(R.id.button_entrar_sair) Button buttonEntrarOuSair;
+    @BindView(R.id.button_denunciar) FancyButton buttonDenuncia;
+    @BindView(R.id.button_entrar_sair)
+    FancyButton buttonEntrarOuSair;
     @BindView(R.id.textView_distancia) TextView textViewDistancia;
     @BindView(R.id.recyclerView_passageiros) RecyclerView recyclerViewPassageiros;
     private PassageiroAdapter adapter;
@@ -76,9 +78,13 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         LiveData<DocumentSnapshot> liveData = viewModelPassageiro.getDataSnapshotLiveData(viagem.getId());
         liveData.observe(this, dataSnapshot -> {
             if(dataSnapshot != null){
-                viagem = dataSnapshot.toObject(Viagem.class);
-                adapter.atualiza(viagem.getPassageiros());
-                defineBotaoDeEntrarOuSair();
+                try {
+                    viagem = dataSnapshot.toObject(Viagem.class);
+                    adapter.atualiza(viagem.getPassageiros());
+                    defineBotaoDeEntrarOuSair();
+                }catch (Exception e){
+                    dismiss();
+                }
             }
         });
     }
@@ -141,7 +147,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private void defineBotaoDeEntrarOuSair() {
         if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
             buttonEntrarOuSair.setText(getString(R.string.sair));
+            buttonEntrarOuSair.setBackgroundColor(getResources().getColor(R.color.amarelo));
         } else {
+            buttonEntrarOuSair.setBackgroundColor(getResources().getColor(R.color.verde));
             buttonEntrarOuSair.setText(getString(R.string.entrar));
         }
     }
