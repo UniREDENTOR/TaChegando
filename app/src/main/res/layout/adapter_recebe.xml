@@ -44,6 +44,7 @@
                     android:id="@+id/textView_mensagem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxEms="10"
                     android:textSize="12sp"
                     tools:text="Mensagem" />
             </LinearLayout>
@@ -53,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
+                android:lines="1"
                 android:textSize="10sp"
                 android:layout_marginStart="8dp"
                 android:textStyle="italic"

@@ -99,7 +99,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         adapter = new PassageiroAdapter(viagem.getPassageiros());
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewPassageiros.setAdapter(adapter);
-        recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
         getToolbar(view);
         setTextos();
