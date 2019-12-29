@@ -58,8 +58,7 @@ public class BuscarOnibusAdapter extends RecyclerView.Adapter<BuscarOnibusAdapte
         GeralUtils.mostraImagemCircular(context,holder.imageViewCriadorRota,passageiro.getFoto());
 
         holder.itemView.setOnClickListener(v -> {
-            LatLng latLng = new LatLng(viagem.getLatitude(), viagem.getLongitude());
-            MapaUtils.moveCamera(mapa, latLng);
+            MapaUtils.moveCamera(mapa, viagem.getLatLng());
             buscarOnibusDialogFragment.dismiss();
             Log.d("teste", viagem.getLatitude() + viagem.getLongitude() + "");
         });
