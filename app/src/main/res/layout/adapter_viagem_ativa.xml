@@ -8,15 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView_criador_lista_viagem_ativa"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_person">
 
@@ -34,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="25sp"></TextView>
+                android:textSize="15sp"></TextView>
 
             <TextView
                 android:id="@+id/text_view_nome_criador_viagem"
