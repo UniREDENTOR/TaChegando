@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="horizontal">
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/imageView_criador_lista_viagem_ativa"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/ic_person">
 
-        </de.hdodenhof.circleimageview.CircleImageView>
+        </ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:paddingLeft="12dp"
             android:orientation="vertical">
 
             <TextView
@@ -33,17 +25,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="15sp"></TextView>
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:textSize="21sp"
+                tools:text="Nome Viagem" />
 
             <TextView
                 android:id="@+id/text_view_nome_criador_viagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="12sp"></TextView>
+                android:textSize="12sp"
+                tools:text="Nome Criador" />
 
         </LinearLayout>
-
-    </LinearLayout>
 
 </LinearLayout>
