@@ -5,9 +5,12 @@ import android.app.Dialog;
 import android.location.Location;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +39,7 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
+import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -60,8 +64,23 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     @BindView(R.id.button_entrar_sair) Button buttonEntrarOuSair;
     @BindView(R.id.textView_distancia) TextView textViewDistancia;
     @BindView(R.id.recyclerView_passageiros) RecyclerView recyclerViewPassageiros;
+    private PassageiroAdapter adapter;
 
     public InformacaoOnibusDialogFragment() {
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ViewModelPassageiro viewModelPassageiro = ViewModelProviders.of(this).get(ViewModelPassageiro.class);
+        LiveData<DocumentSnapshot> liveData = viewModelPassageiro.getDataSnapshotLiveData(viagem.getId());
+        liveData.observe(this, dataSnapshot -> {
+            if(dataSnapshot != null){
+                viagem = dataSnapshot.toObject(Viagem.class);
+                adapter.atualiza(viagem.getPassageiros());
+                defineBotaoDeEntrarOuSair();
+            }
+        });
     }
 
     @Override
@@ -72,9 +91,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         mostraChat();
-
+        adapter = new PassageiroAdapter(viagem.getPassageiros());
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerViewPassageiros.setAdapter(new PassageiroAdapter(viagem.getPassageiros()));
+        recyclerViewPassageiros.setAdapter(adapter);
         recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
         getToolbar(view);

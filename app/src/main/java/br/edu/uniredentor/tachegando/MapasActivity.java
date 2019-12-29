@@ -19,6 +19,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -34,11 +36,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
@@ -52,6 +54,7 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
+import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -121,6 +124,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         buscarViagens();
         mostraMapa();
         mapeiaViagens();
+
     }
 
     @OnClick(R.id.fab_menu_lista_viagem)
@@ -210,12 +214,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     getOnibus(viagem).setPosition(viagem.getLatLng());
                 } else {
                     try {
-                        listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
+                        Marker marker = MapaUtils.criaMarker(mMap, viagem);
+                        listaDeOnibus.add(marker);
                     } catch (Exception ex) {
 
                     }
                 }
             }
+
         });
     }
 
