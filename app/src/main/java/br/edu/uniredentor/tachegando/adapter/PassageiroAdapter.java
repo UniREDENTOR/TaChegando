@@ -42,6 +42,11 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
         return passageiros.size();
     }
 
+    public void atualiza(List<Passageiro> passageiros) {
+        this.passageiros = passageiros;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.imageView_foto) ImageView imageViewFoto;

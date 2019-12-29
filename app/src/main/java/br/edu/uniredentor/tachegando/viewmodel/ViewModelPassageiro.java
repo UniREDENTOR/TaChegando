@@ -13,8 +13,8 @@ public class ViewModelPassageiro extends ViewModel {
     private final FirebaseLiveDataPassageiro liveData = new FirebaseLiveDataPassageiro();
 
     @NonNull
-    public LiveData<DocumentSnapshot> getdataSnapshotLiveData(){
-        return liveData;
+    public LiveData<DocumentSnapshot> getDataSnapshotLiveData(String id){
+        return liveData.setId(id);
     }
 
 }

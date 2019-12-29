@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,7 +35,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -119,17 +117,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             });
         }
-
-        ViewModelPassageiro viewModel7 = ViewModelProviders.of(this).get(ViewModelPassageiro.class);
-        LiveData<DocumentSnapshot> liveData = viewModel7.getdataSnapshotLiveData();
-        liveData.observe(this, dataSnapshot -> {
-            if(dataSnapshot != null){
-                GeralUtils.show("Teste " + dataSnapshot);
-            }
-        });
-
-
-
     }
 
     private void iniciaMapa() {
