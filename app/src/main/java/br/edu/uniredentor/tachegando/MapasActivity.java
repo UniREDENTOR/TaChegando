@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -25,12 +28,17 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -120,6 +128,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         buscarViagens();
         mostraMapa();
         mapeiaViagens();
+
     }
 
     @OnClick(R.id.fab_menu_lista_viagem)
@@ -210,12 +219,14 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     getOnibus(viagem).setPosition(viagem.getLatLng());
                 } else {
                     try {
-                        listaDeOnibus.add(MapaUtils.criaMarker(mMap, viagem));
+                        Marker marker = MapaUtils.criaMarker(mMap, viagem);
+                        listaDeOnibus.add(marker);
                     } catch (Exception ex) {
 
                     }
                 }
             }
+
         });
     }
 
