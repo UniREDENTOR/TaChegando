@@ -63,5 +63,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     implementation 'com.github.clans:fab:1.6.4'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -141,22 +141,17 @@ public class FirebaseUtils extends AppCompatActivity {
 
     public static void adicionaPassageiro(String id, final Viagem viagem) {
 
-        getBanco().collection(ConstantsUtils.USERS).document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot.exists()) {
-                    HashMap<String, Object> map = new HashMap<>();
-                    List<Passageiro> passageiros = viagem.getPassageiros();
-                    Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
-                    if(!passageiros.contains(passageiro)){
-                        passageiros.add(passageiro);
-                        map.put(ConstantsUtils.PASSAGEIROS, passageiros);
-                        getViagem(viagem.getId()).update(map);
-                    }
-
+        getBanco().collection(ConstantsUtils.USERS).document(id).addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot.exists()) {
+                HashMap<String, Object> map = new HashMap<>();
+                List<Passageiro> passageiros = viagem.getPassageiros();
+                Passageiro passageiro = documentSnapshot.toObject(Passageiro.class);
+                if(!passageiros.contains(passageiro)){
+                    passageiros.add(passageiro);
+                    map.put(ConstantsUtils.PASSAGEIROS, passageiros);
+                    getViagem(viagem.getId()).update(map);
                 }
             }
-
         });
     }
 
