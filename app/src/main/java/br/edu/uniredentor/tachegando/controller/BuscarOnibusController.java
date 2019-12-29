@@ -32,7 +32,7 @@ public class BuscarOnibusController {
         container.setOrientation(LinearLayout.VERTICAL);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(64, -48, 64, 0);
+        lp.setMargins(60, -20, 60, 0);
 
         final List<Viagem> listaDeViagensFiltrada = new ArrayList<>();
 
@@ -45,7 +45,7 @@ public class BuscarOnibusController {
         container.addView(editTextlocal, lp);
         alerta.setView(container);
 
-        alerta.setTitle(activity.getString(R.string.procurar_onibus)).setMessage(activity.getString(R.string.informe_para_onde_deseja_ir))
+        alerta.setTitle(activity.getString(R.string.procurar_viagem)).setMessage(activity.getString(R.string.informe_o_nome_da_viagem))
                 .setPositiveButton(activity.getString(R.string.procurar), (dialog, which) -> {
                     String localDesejado = editTextlocal.getText().toString().toLowerCase();
                     for (Viagem viagem : listaLocal) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +61,7 @@ public class BuscarOnibusDialogFragment extends DialogFragment {
         adapter.atualiza(listaFiltrada);
 
         recyclerViewOnibus.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewOnibus.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerViewOnibus.setAdapter(adapter);
 
         return view;
