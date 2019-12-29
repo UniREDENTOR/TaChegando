@@ -5,4 +5,6 @@
     <color name="colorAccent">#806DF7</color>
 
     <color name="lightPurple">#6A5ACD</color>
+    <color name="amarelo">#FFC107</color>
+    <color name="verde">#40a75a</color>
 </resources>
