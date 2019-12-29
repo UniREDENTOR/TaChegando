@@ -33,7 +33,6 @@ public class MapaUtils {
 
     public static Marker criaMarker(GoogleMap mMap, Viagem viagem) {
         Marker marker = mMap.addMarker(new MarkerOptions().position(viagem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_onibus)).title(viagem.getNome()));
-
         marker.setTag(viagem.getId());
         return marker;
     }

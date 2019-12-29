@@ -152,7 +152,6 @@ public class FirebaseUtils extends AppCompatActivity {
                         passageiros.add(passageiro);
                         map.put(ConstantsUtils.PASSAGEIROS, passageiros);
                         getViagem(viagem.getId()).update(map);
-                        Singleton.getInstance().setIdViagem(viagem.getId());
                     }
 
                 }
