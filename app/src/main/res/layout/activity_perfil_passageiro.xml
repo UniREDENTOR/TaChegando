@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include
             android:id="@+id/toolbar_principal"
             layout="@layout/toolbar_principal" />
@@ -23,25 +23,21 @@
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/imageView_foto_passageiro"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_person"
-                app:civ_border_color="#FFFFFF"
-                app:civ_border_width="3dp">
-
-            </de.hdodenhof.circleimageview.CircleImageView>
+                android:src="@drawable/ic_person" />
 
             <TextView
                 android:id="@+id/textView_nome_perfil_passageiro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Nome"
                 android:layout_marginTop="5dp"
+                android:text="Nome"
                 android:textColor="@android:color/background_light"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -79,7 +75,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/imageView_reputacao"
                     android:layout_width="56dp"
                     android:layout_height="50dp"
@@ -105,7 +101,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/imageView_qtd_corrida"
                     android:layout_width="56dp"
                     android:layout_height="50dp"
