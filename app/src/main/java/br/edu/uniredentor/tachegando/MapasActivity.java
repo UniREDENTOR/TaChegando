@@ -46,6 +46,7 @@ import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
 import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
+import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
@@ -137,7 +138,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     public void novaViagem(){
         if(GeralUtils.ehUsuario(MapasActivity.this)){
             if(possuiLocalizacao()){
-                NovaViagemController.alertaDeNovaViagem(MapasActivity.this, latitude, longitude);
+                NovaViagemManualDialogFragment.novaInstancia(latitude, longitude)
+                        .show(getSupportFragmentManager(), "novaViagem");
             }else{
                 GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
             }

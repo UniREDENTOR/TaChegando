@@ -11,16 +11,23 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
 
 import br.edu.uniredentor.tachegando.R;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 public class NovaViagemManualDialogFragment extends DialogFragment {
 
@@ -28,7 +35,8 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     private double longitude;
 
     @BindView(R.id.editText_rota_manual) TextInputEditText editTextRotaManual;
-    @BindView(R.id.button_salvar_rota_manual) Button buttonSalvarRotaManual;
+    @BindView(R.id.button_salvar_rota_manual)
+    FancyButton buttonSalvarRotaManual;
     @BindView(R.id.textView_endereco_atual) TextView textViewEndereco;
     @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
@@ -67,8 +75,27 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
             }
             dismiss();
         });
-
+        getToolbar(view);
         return view;
+    }
+
+    private Toolbar getToolbar(final View view) {
+        final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
+
+        toolbar.setOnMenuItemClickListener(item -> {
+
+            switch (item.getItemId()) {
+
+                case R.id.item_qrcode:
+                    NovaViagemQrCodeDialogFragment.novaInstancia(latitude, longitude)
+                            .show(getActivity().getSupportFragmentManager(), "novaViagemCrCode");
+
+                    break;
+            }
+            return true;
+        });
+        toolbar.inflateMenu(R.menu.menu_nova_viagem_dialog);
+        return toolbar;
     }
 
     private boolean ehValido(String nome) {
