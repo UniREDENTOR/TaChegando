@@ -10,11 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
+import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
+import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,10 +27,12 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
 
     private List<Viagem> viagensAtivas;
     private Context context;
+    private GoogleMap googleMap;
 
-    public ViagemAtivaAdapter(List<Viagem> viagensAtivas, Context context) {
+    public ViagemAtivaAdapter(List<Viagem> viagensAtivas, Context context, GoogleMap googleMap) {
         this.viagensAtivas = viagensAtivas;
         this.context = context;
+        this.googleMap = googleMap;
     }
 
 
@@ -44,6 +50,13 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
         holder.nomeCriadorViagem.setText(viagem.getPassageiros().get(0).getNome());
         holder.nomeViagemAtiva.setText(viagem.getNome());
         GeralUtils.mostraImagemCircular(context,holder.imageCriadorViagem,viagem.getPassageiros().get(0).getFoto());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapaUtils.moveCamera(googleMap,viagem.getLatLng());
+                ((ViagensAtivasActivity)context).finish();
+            }
+        });
     }
 
     @Override
