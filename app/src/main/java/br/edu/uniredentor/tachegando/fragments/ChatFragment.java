@@ -57,8 +57,9 @@ public class ChatFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
+        recyclerViewChat.setHasFixedSize(true);
+        layoutManager.setStackFromEnd(true);
         recyclerViewChat.setAdapter(adapter);
-        recyclerViewChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         user = FirebaseUtils.getUser();
 
         return view;
@@ -68,12 +69,13 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20)
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.ASCENDING).limit(20)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
             mensagens.clear();
             for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                 if (document.exists()) {
                     mensagens.add(document.toObject(MensagemChat.class));
+                    adapter.notifyDataSetChanged();
                 }
             }
             if(mensagens.size() > 0) {
