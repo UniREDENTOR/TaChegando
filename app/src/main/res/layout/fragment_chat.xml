@@ -3,50 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".fragments.ChatFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_chat"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <View
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"></View>
+        android:background="@color/colorPrimary" />-->
 
     <LinearLayout
-        android:id="@+id/linearLayout_mensagem"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
             android:layout_weight="1"
-            android:hint="@string/digite_sua_mensagem"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content">
+            android:background="@drawable/bg_edittext"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginRight="6dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:elevation="2dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/editText_mensagem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Digite sua mensagem"
+                android:ems="10"
+                android:background="@android:color/white"
+                android:inputType="textPersonName" />
 
-            </com.google.android.material.textfield.TextInputEditText>
+        </LinearLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:layout_gravity="center_vertical"
-            android:id="@+id/imageView_envia"
-            android:padding="5dp"
-            android:src="@drawable/ic_action_enviar"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_enviar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ImageView>
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:src="@drawable/ic_send"
+            app:fabSize="mini" />
     </LinearLayout>
 
 </LinearLayout>

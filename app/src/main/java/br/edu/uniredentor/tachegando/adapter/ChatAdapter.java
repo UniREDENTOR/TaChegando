@@ -17,9 +17,13 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getIdUsuario;
+
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     private List<MensagemChat> mensagens;
+    private static final int TIPO_ENVIA = 0;
+    private static final int TIPO_RECEBE = 1;
 
     public ChatAdapter(List<MensagemChat> mensagemChats) {
         mensagens = mensagemChats;
@@ -28,7 +32,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_chat, parent, false);
+        View view;
+
+        if (viewType == TIPO_RECEBE){
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_recebe, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_envia, parent, false);
+        }
+
         return new ViewHolder(view);
     }
 
@@ -41,6 +52,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return mensagens.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        MensagemChat mensagem = mensagens.get(position);
+        String idUsuario = getIdUsuario();
+
+        if (idUsuario.equals(mensagem.getIdUsuario())){
+            return TIPO_ENVIA;
+        }
+
+        return TIPO_RECEBE;
     }
 
     public void atualiza(List<MensagemChat> mensagens) {

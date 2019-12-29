@@ -62,8 +62,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     @BindView(R.id.textView_nome_rota) TextView textViewNomeDaRota;
     @BindView(R.id.textView_quantidade_denuncias) TextView textViewQuantidadeDeDenuncias;
     @BindView(R.id.button_denunciar) FancyButton buttonDenuncia;
-    @BindView(R.id.button_entrar_sair)
-    FancyButton buttonEntrarOuSair;
+    @BindView(R.id.button_entrar_sair) FancyButton buttonEntrarOuSair;
     @BindView(R.id.textView_distancia) TextView textViewDistancia;
     @BindView(R.id.recyclerView_passageiros) RecyclerView recyclerViewPassageiros;
     private PassageiroAdapter adapter;
@@ -100,7 +99,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         adapter = new PassageiroAdapter(viagem.getPassageiros());
         recyclerViewPassageiros.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerViewPassageiros.setAdapter(adapter);
-        recyclerViewPassageiros.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
 
         getToolbar(view);
         setTextos();

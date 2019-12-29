@@ -32,7 +32,7 @@
 
     <!-- buscar onibus controller -->
     <string name="procurar_onibus">Procurar Onibus:</string>
-    <string name="informe_para_onde_deseja_ir">Informe para onde deseja ir:</string>
+    <string name="informe_o_nome_da_viagem">Informe o nome da viagem:</string>
     <string name="procurar">Procurar</string>
     <string name="viagem_nao_encontrada">Viagem não encontrada</string>
     <string name="cancelar">Cancelar</string>

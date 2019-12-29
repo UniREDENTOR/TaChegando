@@ -5,15 +5,15 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.EditText;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -41,8 +41,8 @@ public class ChatFragment extends Fragment {
     private FirebaseUser user;
 
     @BindView(R.id.recyclerView_chat) RecyclerView recyclerViewChat;
-    @BindView(R.id.imageView_envia) ImageView imageViewEnvia;
-    @BindView(R.id.editText_mensagem) TextInputEditText editTextMensagem;
+    @BindView(R.id.fab_enviar) FloatingActionButton fabEnvia;
+    @BindView(R.id.editText_mensagem) EditText editTextMensagem;
 
     public ChatFragment() {}
 
@@ -57,8 +57,9 @@ public class ChatFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
+        recyclerViewChat.setHasFixedSize(true);
+        layoutManager.setStackFromEnd(true);
         recyclerViewChat.setAdapter(adapter);
-        recyclerViewChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         user = FirebaseUtils.getUser();
 
         return view;
@@ -68,12 +69,13 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20)
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.ASCENDING).limit(20)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
             mensagens.clear();
             for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                 if (document.exists()) {
                     mensagens.add(document.toObject(MensagemChat.class));
+                    adapter.notifyDataSetChanged();
                 }
             }
             if(mensagens.size() > 0) {
@@ -81,7 +83,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        imageViewEnvia.setOnClickListener(v -> {
+        fabEnvia.setOnClickListener(v -> {
             String mensagem = editTextMensagem.getText().toString();
 
             MensagemChat mensagemChat = new MensagemChat();

@@ -50,12 +50,9 @@ public class ViagemAtivaAdapter extends RecyclerView.Adapter<ViagemAtivaAdapter.
         holder.nomeCriadorViagem.setText(viagem.getPassageiros().get(0).getNome());
         holder.nomeViagemAtiva.setText(viagem.getNome());
         GeralUtils.mostraImagemCircular(context,holder.imageCriadorViagem,viagem.getPassageiros().get(0).getFoto());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MapaUtils.moveCamera(googleMap,viagem.getLatLng());
-                ((ViagensAtivasActivity)context).finish();
-            }
+        holder.itemView.setOnClickListener(v -> {
+            MapaUtils.moveCamera(googleMap,viagem.getLatLng());
+            ((ViagensAtivasActivity)context).finish();
         });
     }
 

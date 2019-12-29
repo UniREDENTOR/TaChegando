@@ -7,4 +7,7 @@
     <color name="lightPurple">#6A5ACD</color>
     <color name="amarelo">#FFC107</color>
     <color name="verde">#40a75a</color>
+
+    <color name="colorEnvia">#dbf9c4</color>
+    <color name="colorRecebe">#F7F7F7</color>
 </resources>
