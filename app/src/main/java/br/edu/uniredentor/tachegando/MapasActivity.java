@@ -210,7 +210,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void chamaPermissoes() {
-        String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        String[] permissoes = {Manifest.permission.ACCESS_COARSE_LOCATION};
         ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
@@ -322,8 +322,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private boolean possuiPermissao() {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             return false;
         }
         return true;
