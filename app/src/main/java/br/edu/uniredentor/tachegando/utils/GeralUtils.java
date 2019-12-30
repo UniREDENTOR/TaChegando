@@ -86,6 +86,18 @@ public class GeralUtils {
         }).show();
     }
 
+    public static String getEnderecoCurto(Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            Address obj = addresses.get(0);
+            return obj.getThoroughfare();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public String getLocalizacaoPeloEndereco(Context context, String strAddress) {
 
         Geocoder coder = new Geocoder(context);
@@ -102,7 +114,7 @@ public class GeralUtils {
 
             return lat + "," + lng;
         } catch (Exception e) {
-            return null;
+            return "";
         }
     }
     public static boolean esconderTeclado(ImageView imageView, Context context) {

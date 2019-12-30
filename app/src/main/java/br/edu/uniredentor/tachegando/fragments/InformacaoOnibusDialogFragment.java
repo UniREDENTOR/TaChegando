@@ -60,6 +60,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     private double minhaLongitude;
 
     @BindView(R.id.textView_nome_rota) TextView textViewNomeDaRota;
+    @BindView(R.id.textView_endereco) TextView textViewEndereco;
     @BindView(R.id.textView_quantidade_denuncias) TextView textViewQuantidadeDeDenuncias;
     @BindView(R.id.button_denunciar) FancyButton buttonDenuncia;
     @BindView(R.id.button_entrar_sair) FancyButton buttonEntrarOuSair;
@@ -67,8 +68,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     @BindView(R.id.recyclerView_passageiros) RecyclerView recyclerViewPassageiros;
     private PassageiroAdapter adapter;
 
-    public InformacaoOnibusDialogFragment() {
-    }
+    public InformacaoOnibusDialogFragment() {}
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -156,6 +156,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         textViewNomeDaRota.setText(viagem.getNome());
         textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
         textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
+        String enderecoAtual = GeralUtils.getEnderecoCurto(getContext(), viagem.getLatitude(), viagem.getLongitude());
+        textViewEndereco.setText(enderecoAtual);
         defineBotaoDeEntrarOuSair();
     }
 

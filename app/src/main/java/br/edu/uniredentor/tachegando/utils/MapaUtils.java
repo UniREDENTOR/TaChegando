@@ -37,4 +37,7 @@ public class MapaUtils {
         return marker;
     }
 
+    public static String getEndereco(double latitude, double longitude) {
+        return null;
+    }
 }
