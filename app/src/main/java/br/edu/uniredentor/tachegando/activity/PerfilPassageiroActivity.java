@@ -1,6 +1,7 @@
 package br.edu.uniredentor.tachegando.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -65,8 +66,14 @@ public class PerfilPassageiroActivity extends FragmentActivity {
         toolbarPerfilActivity.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.item_sair_app:
-                    signOut();
-                    googleSignInClient.signOut().addOnCompleteListener(task -> finish());
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(this);
+                    alerta.setTitle(R.string.sair)
+                            .setMessage(R.string.deseja_sair_do_app)
+                            .setNegativeButton(R.string.nao, null)
+                            .setPositiveButton(R.string.sim, (dialog, which) -> {
+                                signOut();
+                                googleSignInClient.signOut().addOnCompleteListener(task -> finish());
+                            }).create().show();
                     break;
             }
             return true;

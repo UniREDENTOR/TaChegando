@@ -1,5 +1,6 @@
 package br.edu.uniredentor.tachegando.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getIdUsuario;
+import static br.edu.uniredentor.tachegando.utils.GeralUtils.getData;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -85,7 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         public void set(MensagemChat mensagemChat) {
             GeralUtils.mostraImagemCircular(itemView.getContext(), imageViewFoto, mensagemChat.getFotoUsuario());
-            textViewData.setText(mensagemChat.getDiaEHora());
+            textViewData.setText(getData(mensagemChat.getDataCriacao()));
             textViewNome.setText(mensagemChat.getNomeUsuario());
             textViewMensagem.setText(mensagemChat.getTexto());
         }

@@ -48,9 +48,9 @@ public class GeralUtils {
         }
     }
 
-    public static String getData(Calendar calendar) {
+    public static String getData(Long calendar) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
-        return format.format(calendar.getTime());
+        return format.format(calendar);
     }
 
     public static String getDataFirebase(Calendar calendar) {

@@ -15,13 +15,7 @@ public class MensagemChat {
     private String nomeUsuario;
     private String fotoUsuario;
     private String texto;
-    private String diaEHora;
-    private Long dataDeCriacao;
-
-    public MensagemChat(){
-        setDiaEHora(GeralUtils.getData(Calendar.getInstance()));
-        setDataDeCriacao(Calendar.getInstance().getTimeInMillis());
-    }
+    private Long dataCriacao;
 
     public HashMap<String, Object> getMap() {
         HashMap<String, Object> map = new HashMap<>();
@@ -29,8 +23,7 @@ public class MensagemChat {
         map.put("nomeUsuario", getNomeUsuario());
         map.put("fotoUsuario", getFotoUsuario());
         map.put("texto", getTexto());
-        map.put("diaEHora", getDiaEHora());
-        map.put("dataCriacao", getDataDeCriacao());
+        map.put("dataCriacao", getDataCriacao());
         return map;
     }
 

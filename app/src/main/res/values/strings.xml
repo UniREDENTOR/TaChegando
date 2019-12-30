@@ -121,6 +121,8 @@
         ]
     </string>
     <string name="denunciar_viagem">Deseja denunciar essa viagem?</string>
+    <string name="deseja_sair_do_onibus">Deseja sair do onibus?</string>
+    <string name="deseja_sair_do_app">Deseja sair do app?</string>
 
 
 </resources>

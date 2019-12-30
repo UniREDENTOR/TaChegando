@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.edu.uniredentor.tachegando.R;
@@ -92,6 +93,7 @@ public class ChatFragment extends Fragment {
             mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
             mensagemChat.setIdUsuario(user.getUid());
             mensagemChat.setTexto(mensagem);
+            mensagemChat.setDataCriacao(Calendar.getInstance().getTimeInMillis());
             editTextMensagem.setText("");
             FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
         });
