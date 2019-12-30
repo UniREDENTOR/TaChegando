@@ -58,6 +58,7 @@ public class ChatFragment extends Fragment {
         recyclerViewChat.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setHasFixedSize(true);
+        layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerViewChat.setAdapter(adapter);
         user = FirebaseUtils.getUser();
@@ -69,7 +70,7 @@ public class ChatFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.ASCENDING).limit(20)
+        FirebaseUtils.getConversas(viagem.getId()).orderBy("dataCriacao", Query.Direction.DESCENDING).limit(20)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
             mensagens.clear();
             for(DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
