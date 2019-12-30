@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
             android:id="@+id/card_linear"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:background="#6A5ACD"
+            android:background="@color/colorPrimary"
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
 
