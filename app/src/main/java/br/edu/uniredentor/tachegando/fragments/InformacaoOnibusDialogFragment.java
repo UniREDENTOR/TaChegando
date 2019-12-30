@@ -153,12 +153,16 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void setTextos() {
-        textViewNomeDaRota.setText(viagem.getNome());
-        textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
-        textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
-        String enderecoAtual = GeralUtils.getEnderecoCurto(getContext(), viagem.getLatitude(), viagem.getLongitude());
-        textViewEndereco.setText(enderecoAtual);
-        defineBotaoDeEntrarOuSair();
+        try {
+            textViewNomeDaRota.setText(viagem.getNome());
+            textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
+            textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
+            String enderecoAtual = GeralUtils.getEnderecoCurto(getContext(), viagem.getLatitude(), viagem.getLongitude());
+            textViewEndereco.setText(enderecoAtual);
+            defineBotaoDeEntrarOuSair();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private String defineDistancia() {

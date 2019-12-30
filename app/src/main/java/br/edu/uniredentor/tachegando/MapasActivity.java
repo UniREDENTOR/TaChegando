@@ -37,6 +37,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -69,7 +72,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private LocationCallback locationCallback;
     protected double latitude, longitude;
     private ArrayList<Marker> listaDeOnibus = new ArrayList<>();
-    private List<Viagem> viagens;
     private SupportMapFragment mapFragment;
     private Polyline polyline;
     private List<Viagem> listaViagens;
@@ -119,13 +121,18 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 }
             });
         }
+
+        ViewModelPassageiro viewModelPassageiro = ViewModelProviders.of(this).get(ViewModelPassageiro.class);
+        LiveData<QuerySnapshot> liveData = viewModelPassageiro.getQuerySnapshotLiveDataViagens();
+        liveData.observe(this, queryDocumentSnapshots -> {
+            criaMarkers(queryDocumentSnapshots);
+        });
+
     }
 
     private void iniciaMapa() {
         buscarViagens();
         mostraMapa();
-        mapeiaViagens();
-
     }
 
     @OnClick(R.id.fab_menu_lista_viagem)
@@ -207,11 +214,18 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
-    private void mapeiaViagens() {
-        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
 
-            viagens = queryDocumentSnapshots.toObjects(Viagem.class);
-            for (Viagem viagem : viagens) {
+    private void buscarViagens() {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
+            mMap.clear();
+            criaMarkers(queryDocumentSnapshots);
+        });
+    }
+
+    private void criaMarkers(QuerySnapshot queryDocumentSnapshots) {
+        try{
+            listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
+            for (Viagem viagem : listaViagens) {
                 if (existe(viagem)) {
                     getOnibus(viagem).setPosition(viagem.getLatLng());
                 } else {
@@ -223,18 +237,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                     }
                 }
             }
-
-        });
-    }
-
-    private void buscarViagens() {
-        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
-            try{
-                listaViagens = queryDocumentSnapshots.toObjects(Viagem.class);
-            }catch (Exception e1){
-                e1.printStackTrace();
-            }
-        });
+        }catch (Exception e1){
+            e1.printStackTrace();
+        }
     }
 
     private boolean existe(Viagem viagem) {
@@ -366,7 +371,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private Viagem getViagem(String id) {
-        for (Viagem viagem : viagens) {
+        for (Viagem viagem : listaViagens) {
             if (viagem.getId().equalsIgnoreCase(id)) {
                 return viagem;
             }
