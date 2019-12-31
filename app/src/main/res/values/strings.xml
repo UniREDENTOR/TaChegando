@@ -89,7 +89,7 @@
     <string name="verificacao_do_codigo">Verificação do código</string>
 
     <!-- fragment chat xml -->
-    <string name="digite_sua_mensagem">Digite sua mensagem...</string>
+    <string name="digite_sua_mensagem">Digite sua mensagem</string>
 
     <!-- fragment nova viagem manual dialog xml -->
     <string name="nome_da_rota">Nome da rota</string>
@@ -123,6 +123,7 @@
     <string name="denunciar_viagem">Deseja denunciar essa viagem?</string>
     <string name="deseja_sair_do_onibus">Deseja sair do onibus?</string>
     <string name="deseja_sair_do_app">Deseja sair do app?</string>
+    <string name="detalhes">Detalhes</string>
 
 
 </resources>

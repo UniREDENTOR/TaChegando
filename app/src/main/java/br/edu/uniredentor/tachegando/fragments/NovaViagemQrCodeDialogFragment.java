@@ -29,6 +29,7 @@ import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -41,7 +42,6 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
     private String rota;
 
     @BindView(R.id.qr_code_scan) ZXingScannerView qrCodeScanner;
-    @BindView(R.id.button_salvar_rota_qrcode) Button buttonSalvarRotaQrCode;
     @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
     public static NovaViagemQrCodeDialogFragment novaInstancia(double latitude, double longitude) {
@@ -86,25 +86,25 @@ public class NovaViagemQrCodeDialogFragment extends DialogFragment implements ZX
                 })
                 .check();
 
-        buttonSalvarRotaQrCode.setOnClickListener(v -> {
-            if (rota != null && !rota.isEmpty()) {
-                Viagem viagem = new Viagem();
-                viagem.setLongitude(longitude);
-                viagem.setLatitude(latitude);
-                viagem.setNome(rota);
-                viagem.setId("4");
-                viagem.setId("4");
-                FirebaseUtils.salvaViagem(viagem);
-                dismiss();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.tente_scannear_novamente), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         return view;
 
+    }
+
+    @OnClick(R.id.button_salvar_rota_qrcode)
+    public void salvarRotaQRCode(){
+        if (rota != null && !rota.isEmpty()) {
+            Viagem viagem = new Viagem();
+            viagem.setLongitude(longitude);
+            viagem.setLatitude(latitude);
+            viagem.setNome(rota);
+            viagem.setId("4");
+            viagem.setId("4");
+            FirebaseUtils.salvaViagem(viagem);
+            dismiss();
+        } else {
+            Toast.makeText(getContext(), getString(R.string.tente_scannear_novamente), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

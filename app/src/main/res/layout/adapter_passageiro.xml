@@ -8,6 +8,6 @@
         android:id="@+id/imageView_foto"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:padding="5dp"/>
+        android:layout_marginRight="6dp"/>
 
 </LinearLayout>

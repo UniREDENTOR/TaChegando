@@ -27,6 +27,7 @@ import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class NovaViagemManualDialogFragment extends DialogFragment {
@@ -35,8 +36,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
     private double longitude;
 
     @BindView(R.id.editText_rota_manual) TextInputEditText editTextRotaManual;
-    @BindView(R.id.button_salvar_rota_manual)
-    FancyButton buttonSalvarRotaManual;
+    @BindView(R.id.button_salvar_rota_manual) FancyButton buttonSalvarRotaManual;
     @BindView(R.id.textView_endereco_atual) TextView textViewEndereco;
     @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
@@ -59,24 +59,24 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
         String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
         textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
-
-        buttonSalvarRotaManual.setOnClickListener(v -> {
-
-            String nome = editTextRotaManual.getText().toString();
-            if (ehValido(nome)) {
-                Viagem viagem = new Viagem();
-                viagem.setNome(nome);
-                viagem.setId(GeralUtils.getIdDoUsuario());
-                viagem.setLatitude(latitude);
-                viagem.setLongitude(longitude);
-                viagem.setAtiva(true);
-                FirebaseUtils.salvaViagem(viagem);
-                SharedUtils.save(viagem.getId(), getActivity());
-            }
-            dismiss();
-        });
         getToolbar(view);
         return view;
+    }
+
+    @OnClick(R.id.button_salvar_rota_manual)
+    public void salvarRotaManual(){
+        String nome = editTextRotaManual.getText().toString();
+        if (ehValido(nome)) {
+            Viagem viagem = new Viagem();
+            viagem.setNome(nome);
+            viagem.setId(GeralUtils.getIdDoUsuario());
+            viagem.setLatitude(latitude);
+            viagem.setLongitude(longitude);
+            viagem.setAtiva(true);
+            FirebaseUtils.salvaViagem(viagem);
+            SharedUtils.save(viagem.getId(), getActivity());
+        }
+        dismiss();
     }
 
     private Toolbar getToolbar(final View view) {

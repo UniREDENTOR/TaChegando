@@ -21,6 +21,7 @@ import br.edu.uniredentor.tachegando.utils.ConstantsUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +32,6 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
     private double longitude;
 
     @BindView(R.id.editText_ponto) TextInputEditText editTextPontoManual;
-    @BindView(R.id.button_salvar_ponto_manual) Button buttonPontoManual;
     @BindView(R.id.textView_endereco_atual_ponto) TextView textViewEndereco;
     @BindView(R.id.toolbar_principal) Toolbar toolbarNovaViagem;
 
@@ -58,20 +58,21 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
         String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
         textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
 
-        buttonPontoManual.setOnClickListener(v -> {
-            String nomePonto = editTextPontoManual.getText().toString();
-            Ponto ponto = new Ponto();
-            ponto.setNome(nomePonto);
-            ponto.setId("1231");
-            ponto.setIdUsuario("2");
-            ponto.setLatitude(latitude);
-            ponto.setLongitude(longitude);
-
-            dismiss();
-        });
-
         return view;
 
+    }
+
+    @OnClick(R.id.button_salvar_ponto_manual)
+    public void salvarPontoManual(){
+        String nomePonto = editTextPontoManual.getText().toString();
+        Ponto ponto = new Ponto();
+        ponto.setNome(nomePonto);
+        ponto.setId("1231");
+        ponto.setIdUsuario("2");
+        ponto.setLatitude(latitude);
+        ponto.setLongitude(longitude);
+
+        dismiss();
     }
 
     @Override

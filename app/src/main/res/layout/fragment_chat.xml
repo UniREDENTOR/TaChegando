@@ -13,13 +13,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <!--<View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:background="@color/colorPrimary" />-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,10 +41,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Digite sua mensagem"
+                android:hint="@string/digite_sua_mensagem"
                 android:ems="10"
                 android:background="@android:color/white"
-                android:inputType="textPersonName" />
+                android:inputType="textCapWords|textCapSentences|textMultiLine" />
 
         </LinearLayout>
 
