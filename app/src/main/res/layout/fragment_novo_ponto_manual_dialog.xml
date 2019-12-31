@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".fragments.NovoPontoManualDialogFragment">
 
@@ -30,10 +31,18 @@
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/button_salvar_ponto_manual"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/salvar" />
+        android:layout_gravity="center_vertical"
+        android:padding="10dp"
+        fancy:fb_defaultColor="@color/colorPrimary"
+        fancy:fb_focusColor="@color/colorAccent"
+        fancy:fb_fontIconSize="30sp"
+        fancy:fb_radius="10dp"
+        fancy:fb_text="@string/salvar"
+        fancy:fb_textColor="#FFFFFF"
+        fancy:fb_textGravity="center_vertical"/>
 
 </LinearLayout>

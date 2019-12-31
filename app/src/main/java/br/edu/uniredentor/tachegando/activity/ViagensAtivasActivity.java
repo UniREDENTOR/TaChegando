@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 
 public class ViagensAtivasActivity extends AppCompatActivity {
 
-
     @BindView(R.id.recycler_view_lista_viagens_ativas) RecyclerView recyclerViewViagemAtiva;
     private ViagemAtivaAdapter viagemAtivaAdapter;
     private List<Viagem> viagemList = new ArrayList<>();

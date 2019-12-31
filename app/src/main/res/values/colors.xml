@@ -6,6 +6,7 @@
 
     <color name="amarelo">#FFC107</color>
     <color name="verde">#40a75a</color>
+    <color name="verdeClaro">#64AC76</color>
 
     <color name="colorEnvia">#2656074B</color>
     <color name="colorRecebe">#F7F7F7</color>
