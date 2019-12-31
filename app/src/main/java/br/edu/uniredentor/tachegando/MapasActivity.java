@@ -76,6 +76,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private Polyline polyline;
     private List<Viagem> listaViagens;
     private int REQUEST_CODE = 0;
+    private int quantidadeDeViagens = 0;
 
     @BindView (R.id.toolbar_principal) Toolbar toolbarPrincipal;
 
@@ -131,7 +132,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void iniciaMapa() {
-        buscarViagens();
+   //     buscarViagens();
         mostraMapa();
     }
 
@@ -193,6 +194,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                                     SharedUtils.save((long) location.getLatitude(), ConstantsUtils.LATITUDE, MapasActivity.this);
                                     SharedUtils.save((long) location.getLongitude(), ConstantsUtils.LONGITUDE, MapasActivity.this);
                                     FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                                    GeralUtils.show("Atualizao loca " + location);
                                 }
 
                             }catch (Exception e){
@@ -210,15 +212,21 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void chamaPermissoes() {
-        String[] permissoes = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        String[] permissoes = {Manifest.permission.ACCESS_COARSE_LOCATION};
         ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
 
     private void buscarViagens() {
         FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
-            mMap.clear();
-            criaMarkers(queryDocumentSnapshots);
+            if(queryDocumentSnapshots.getDocuments().size() != quantidadeDeViagens){
+                this.quantidadeDeViagens = queryDocumentSnapshots.getDocumentChanges().size();
+                mMap.clear();
+                criaMarkers(queryDocumentSnapshots);
+                GeralUtils.show("Buscanod localizacao");
+            }
+
+
         });
     }
 
@@ -278,6 +286,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         latitude = localizacaoAtual.getLatitude();
                         longitude = localizacaoAtual.getLongitude();
                         LatLng latLng = new LatLng(latitude, longitude);
+                        GeralUtils.show("Minha localizacao " + latLng);
                         MapaUtils.moveCamera(mMap, latLng);
                     }
                 });
@@ -322,8 +331,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private boolean possuiPermissao() {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             return false;
         }
         return true;
@@ -382,7 +390,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private void iniciaAtualizacaoDaLocalizacao() {
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setSmallestDisplacement(100);
+    //    locationRequest.setSmallestDisplacement(100);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 

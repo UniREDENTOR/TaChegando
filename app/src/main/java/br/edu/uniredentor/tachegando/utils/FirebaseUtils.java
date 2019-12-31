@@ -14,6 +14,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.model.Document;
+
 import java.util.HashMap;
 import java.util.List;
 import br.edu.uniredentor.tachegando.model.Denuncia;
@@ -102,6 +105,14 @@ public class FirebaseUtils extends AppCompatActivity {
             //Apagar todos os dados da viagem
             getViagemRealizadas().add(viagem);
             getViagem(viagem.getId()).delete();
+            getViagem(viagem.getId()).collection(ConstantsUtils.CONVERSAS).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                remove(queryDocumentSnapshots);
+
+            });
+
+            getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener( (queryDocumentSnapshots, e) -> {
+                remove(queryDocumentSnapshots);
+            });
         } else {
             if(viagem.getId().equals(passageiroId)){
                 String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
@@ -115,6 +126,16 @@ public class FirebaseUtils extends AppCompatActivity {
                 map.put(ConstantsUtils.PASSAGEIROS, passageiros);
                 getViagem(viagem.getId()).update(map);
             }
+        }
+    }
+
+    private static void remove(QuerySnapshot queryDocumentSnapshots) {
+        try{
+            for(DocumentSnapshot document: queryDocumentSnapshots.getDocuments()){
+                document.getReference().delete();
+            }
+        }catch (Exception e1){
+            e1.printStackTrace();
         }
     }
 
