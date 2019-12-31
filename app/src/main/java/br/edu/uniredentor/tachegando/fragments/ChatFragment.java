@@ -30,6 +30,7 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +43,6 @@ public class ChatFragment extends Fragment {
     private FirebaseUser user;
 
     @BindView(R.id.recyclerView_chat) RecyclerView recyclerViewChat;
-    @BindView(R.id.fab_enviar) FloatingActionButton fabEnvia;
     @BindView(R.id.editText_mensagem) EditText editTextMensagem;
 
     public ChatFragment() {}
@@ -84,19 +84,20 @@ public class ChatFragment extends Fragment {
                 adapter.atualiza(mensagens);
             }
         });
+    }
 
-        fabEnvia.setOnClickListener(v -> {
-            String mensagem = editTextMensagem.getText().toString();
+    @OnClick(R.id.fab_enviar)
+    public void enviarMensagem(){
+        String mensagem = editTextMensagem.getText().toString();
 
-            MensagemChat mensagemChat = new MensagemChat();
-            mensagemChat.setNomeUsuario(user.getDisplayName());
-            mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
-            mensagemChat.setIdUsuario(user.getUid());
-            mensagemChat.setTexto(mensagem);
-            mensagemChat.setDataCriacao(Calendar.getInstance().getTimeInMillis());
-            editTextMensagem.setText("");
-            FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
-        });
+        MensagemChat mensagemChat = new MensagemChat();
+        mensagemChat.setNomeUsuario(user.getDisplayName());
+        mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
+        mensagemChat.setIdUsuario(user.getUid());
+        mensagemChat.setTexto(mensagem);
+        mensagemChat.setDataCriacao(Calendar.getInstance().getTimeInMillis());
+        editTextMensagem.setText("");
+        FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
     }
 
     public void setViagem(Viagem viagem) {

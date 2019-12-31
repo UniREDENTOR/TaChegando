@@ -36,18 +36,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import br.edu.uniredentor.tachegando.activity.PerfilPassageiroActivity;
 import br.edu.uniredentor.tachegando.activity.ViagensAtivasActivity;
 import br.edu.uniredentor.tachegando.controller.BuscarOnibusController;
-import br.edu.uniredentor.tachegando.controller.NovaViagemController;
 import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.fragments.NovaViagemManualDialogFragment;
 import br.edu.uniredentor.tachegando.model.Viagem;

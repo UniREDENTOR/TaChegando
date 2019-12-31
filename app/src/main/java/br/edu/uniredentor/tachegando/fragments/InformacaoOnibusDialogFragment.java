@@ -42,6 +42,7 @@ import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
@@ -103,43 +104,45 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         getToolbar(view);
         setTextos();
 
-        buttonEntrarOuSair.setOnClickListener(v -> {
-
-            AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-            if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
-                alerta.setTitle("Ônibus")
-                        .setMessage("Deseja sair do onibus?")
-                        .setNegativeButton("Não", null)
-                        .setPositiveButton("Sim", (dialog, which) -> saiDoOnibus(GeralUtils.getIdDoUsuario()));
-                alerta.show();
-            } else {
-                if (GeralUtils.ehUsuario(getActivity())) {
-                    alerta.setTitle(getString(R.string.onibus))
-                            .setMessage(getString(R.string.deseja_entrar_no_onibus))
-                            .setNegativeButton(getString(R.string.nao), null)
-                            .setPositiveButton(getString(R.string.sim), (dialog, which) -> entraOnibus(GeralUtils.getIdDoUsuario()));
-                    alerta.show();
-                }
-            }
-        });
-
-        buttonDenuncia.setOnClickListener(v -> {
-            AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
-            if (GeralUtils.ehUsuario(getActivity())) {
-                alerta.setTitle(getString(R.string.onibus))
-                        .setMessage(getString(R.string.denunciar_viagem))
-                        .setNegativeButton(getString(R.string.nao), null)
-                        .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
-                            Denuncia denuncia = new Denuncia();
-                            denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
-                            FirebaseUtils.denuncia(viagem, denuncia);
-                            dismiss();
-                        });
-                alerta.show();
-            }
-        });
 
         return view;
+    }
+
+    @OnClick(R.id.button_entrar_sair)
+    public void entrarOuSair(){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+        if (viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
+            alerta.setTitle("Ônibus")
+                    .setMessage("Deseja sair do onibus?")
+                    .setNegativeButton("Não", null)
+                    .setPositiveButton("Sim", (dialog, which) -> saiDoOnibus(GeralUtils.getIdDoUsuario()));
+            alerta.show();
+        } else {
+            if (GeralUtils.ehUsuario(getActivity())) {
+                alerta.setTitle(getString(R.string.onibus))
+                        .setMessage(getString(R.string.deseja_entrar_no_onibus))
+                        .setNegativeButton(getString(R.string.nao), null)
+                        .setPositiveButton(getString(R.string.sim), (dialog, which) -> entraOnibus(GeralUtils.getIdDoUsuario()));
+                alerta.show();
+            }
+        }
+    }
+
+    @OnClick(R.id.button_denunciar)
+    public void denunciarViagem(){
+        AlertDialog.Builder alerta = new AlertDialog.Builder(getContext());
+        if (GeralUtils.ehUsuario(getActivity())) {
+            alerta.setTitle(getString(R.string.onibus))
+                    .setMessage(getString(R.string.denunciar_viagem))
+                    .setNegativeButton(getString(R.string.nao), null)
+                    .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
+                        Denuncia denuncia = new Denuncia();
+                        denuncia.setIdDenunciante(GeralUtils.getIdDoUsuario());
+                        FirebaseUtils.denuncia(viagem, denuncia);
+                        dismiss();
+                    });
+            alerta.show();
+        }
     }
 
     private void defineBotaoDeEntrarOuSair() {
@@ -180,7 +183,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private Toolbar getToolbar(final View view) {
         final Toolbar toolbar = view.findViewById(R.id.toolbar_principal);
-        toolbar.setTitle(viagem.getNome());
+        toolbar.setTitle(getString(R.string.detalhes));
 
         toolbar.setOnMenuItemClickListener(item -> {
 
