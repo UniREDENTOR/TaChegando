@@ -73,7 +73,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private Polyline polyline;
     private List<Viagem> listaViagens;
     private int REQUEST_CODE = 0;
-    private int quantidadeDeViagens = 0;
 
     @BindView (R.id.toolbar_principal) Toolbar toolbarPrincipal;
 
@@ -209,7 +208,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             for (Viagem viagem : listaViagens) {
                 if (existe(viagem)) {
                     getOnibus(viagem).setPosition(viagem.getLatLng());
-                    if(viagem.getId().equalsIgnoreCase(SharedUtils.getId(this))){
+                    if(viagem.getId().equalsIgnoreCase(SharedUtils.getId(this)) || viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
                         if(viagem.isAtiva()){
                             MapaUtils.moveCamera(mMap, viagem.getLatLng());
                         }else{
