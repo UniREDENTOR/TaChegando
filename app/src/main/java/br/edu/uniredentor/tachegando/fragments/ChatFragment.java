@@ -28,6 +28,7 @@ import br.edu.uniredentor.tachegando.adapter.ChatAdapter;
 import br.edu.uniredentor.tachegando.model.MensagemChat;
 import br.edu.uniredentor.tachegando.model.Viagem;
 import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
+import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,14 +91,23 @@ public class ChatFragment extends Fragment {
     public void enviarMensagem(){
         String mensagem = editTextMensagem.getText().toString();
 
-        MensagemChat mensagemChat = new MensagemChat();
-        mensagemChat.setNomeUsuario(user.getDisplayName());
-        mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
-        mensagemChat.setIdUsuario(user.getUid());
-        mensagemChat.setTexto(mensagem);
-        mensagemChat.setDataCriacao(Calendar.getInstance().getTimeInMillis());
-        editTextMensagem.setText("");
-        FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
+        try{
+            if(GeralUtils.ehUsuario(getActivity())){
+                MensagemChat mensagemChat = new MensagemChat();
+                mensagemChat.setNomeUsuario(user.getDisplayName());
+                mensagemChat.setFotoUsuario(user.getPhotoUrl().toString());
+                mensagemChat.setIdUsuario(user.getUid());
+                mensagemChat.setTexto(mensagem);
+                mensagemChat.setDataCriacao(Calendar.getInstance().getTimeInMillis());
+                editTextMensagem.setText("");
+                FirebaseUtils.getConversas(viagem.getId()).add(mensagemChat.getMap());
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
     }
 
     public void setViagem(Viagem viagem) {

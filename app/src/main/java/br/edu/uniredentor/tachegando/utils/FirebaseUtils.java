@@ -28,9 +28,9 @@ import br.edu.uniredentor.tachegando.model.Viagem;
 
 public class FirebaseUtils extends AppCompatActivity {
 
-    private static FirebaseAuth auth;
-
     public static void salvaViagem(final Viagem viagem) {
+        removeViagem(viagem, null);
+
         final DocumentReference reference = getBanco().collection(ConstantsUtils.VIAGENS)
                 .document(viagem.getId());
         getBanco().collection(ConstantsUtils.USERS).document(viagem.getId()).addSnapshotListener((documentSnapshot, e) -> {
@@ -39,6 +39,15 @@ public class FirebaseUtils extends AppCompatActivity {
                 reference.set(viagem.getInicialMap());
             }
         });
+
+    }
+
+    private static void removeTrajeto(String id) {
+        getTrajeto(id).get().addOnCompleteListener(task -> remove(task.getResult()));
+    }
+
+    private static void removeConversas(String id) {
+        getConversas(id).get().addOnCompleteListener(task -> remove(task.getResult()));
     }
 
     public static DocumentReference getViagem(String id) {
@@ -65,19 +74,20 @@ public class FirebaseUtils extends AppCompatActivity {
     public static CollectionReference getConversas(String idViagem) {
         return FirebaseFirestore.getInstance().collection(ConstantsUtils.VIAGENS).document(idViagem).collection(ConstantsUtils.CONVERSAS);
     }
+    public static CollectionReference getTrajeto(String idViagem) {
+        return FirebaseFirestore.getInstance().collection(ConstantsUtils.VIAGENS).document(idViagem).collection(ConstantsUtils.TRAJETO);
+    }
 
-    public static FirebaseAuth signOut() {
+
+    public static void signOut() {
         FirebaseAuth.getInstance().signOut();
-        return auth;
     }
 
     public static void salvaUsuario(final Passageiro passageiro) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = user.getUid();
 
-        FirebaseUtils.getBanco().collection(ConstantsUtils.USERS).document(id).set(passageiro.retornaUser()).addOnSuccessListener(aVoid -> {
-
-        });
+        FirebaseUtils.getBanco().collection(ConstantsUtils.USERS).document(id).set(passageiro.retornaUser());
     }
 
     public static boolean usuarioCadastrado() {
@@ -93,6 +103,23 @@ public class FirebaseUtils extends AppCompatActivity {
 
     }
 
+    private static void removeViagem(Viagem viagem, InformacaoOnibusDialogFragment.RemoveMarker removeMarkerListener){
+        getViagem(viagem.getId()).delete().addOnCompleteListener(task -> {
+            if(removeMarkerListener != null){
+                removeMarkerListener.remove(viagem);
+            }
+
+        });
+        getViagem(viagem.getId()).collection(ConstantsUtils.CONVERSAS).addSnapshotListener((queryDocumentSnapshots, e) -> {
+            remove(queryDocumentSnapshots);
+
+        });
+
+        getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener( (queryDocumentSnapshots, e) -> {
+            remove(queryDocumentSnapshots);
+        });
+    }
+
     public static void removePassageiro(Viagem viagem, String passageiroId, InformacaoOnibusDialogFragment.RemoveMarker removeMarkerListener) {
         viagem.removePassageiro(passageiroId);
         List<Passageiro> passageiros = viagem.getPassageiros();
@@ -100,20 +127,7 @@ public class FirebaseUtils extends AppCompatActivity {
         if (passageiros.size() == 0) {
             //Apagar todos os dados da viagem
             getViagemRealizadas().add(viagem);
-            getViagem(viagem.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    removeMarkerListener.remove(viagem);
-                }
-            });
-            getViagem(viagem.getId()).collection(ConstantsUtils.CONVERSAS).addSnapshotListener((queryDocumentSnapshots, e) -> {
-                remove(queryDocumentSnapshots);
-
-            });
-
-            getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener( (queryDocumentSnapshots, e) -> {
-                remove(queryDocumentSnapshots);
-            });
+           removeViagem(viagem, removeMarkerListener);
         } else {
             if(viagem.getId().equals(passageiroId)){
                 String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
