@@ -3,8 +3,11 @@ package br.edu.uniredentor.tachegando.utils;
 
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -17,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import br.edu.uniredentor.tachegando.fragments.InformacaoOnibusDialogFragment;
 import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -89,14 +93,19 @@ public class FirebaseUtils extends AppCompatActivity {
 
     }
 
-    public static void removePassageiro(Viagem viagem, String passageiroId) {
+    public static void removePassageiro(Viagem viagem, String passageiroId, InformacaoOnibusDialogFragment.RemoveMarker removeMarkerListener) {
         viagem.removePassageiro(passageiroId);
         List<Passageiro> passageiros = viagem.getPassageiros();
 
         if (passageiros.size() == 0) {
             //Apagar todos os dados da viagem
             getViagemRealizadas().add(viagem);
-            getViagem(viagem.getId()).delete();
+            getViagem(viagem.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    removeMarkerListener.remove(viagem);
+                }
+            });
             getViagem(viagem.getId()).collection(ConstantsUtils.CONVERSAS).addSnapshotListener((queryDocumentSnapshots, e) -> {
                 remove(queryDocumentSnapshots);
 

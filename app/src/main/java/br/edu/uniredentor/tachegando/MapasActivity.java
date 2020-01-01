@@ -59,7 +59,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
+public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate, InformacaoOnibusDialogFragment.RemoveMarker {
 
     private static final int CODIGO_PERMISSAO = 123;
     private static final float DISTANCIA_MINIMA = 50f;
@@ -396,6 +396,13 @@ ex.printStackTrace();
                 iniciaMapa();
             }
         }
+
+    }
+
+    @Override
+    public void remove(Viagem viagem) {
+        getOnibus(viagem).remove();
+        listaViagens.remove(viagem);
 
     }
 }

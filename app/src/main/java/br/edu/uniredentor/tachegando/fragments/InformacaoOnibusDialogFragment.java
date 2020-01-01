@@ -51,6 +51,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     private GoogleMap mapa;
     private MarcacaoUpdate marcacaoUpdate;
+    private RemoveMarker removeMarkerListener;
     private Viagem viagem;
 
     private double minhaLatitude;
@@ -207,7 +208,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     }
 
     private void saiDoOnibus(String id) {
-        FirebaseUtils.removePassageiro(viagem, id);
+        FirebaseUtils.removePassageiro(viagem, id, removeMarkerListener);
         dismiss();
     }
 
@@ -240,6 +241,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     public InformacaoOnibusDialogFragment setMarcacaoUpdate(MapasActivity activity) {
         this.marcacaoUpdate = activity;
+        this.removeMarkerListener = activity;
         return this;
     }
 
@@ -257,5 +259,9 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
 
     public interface MarcacaoUpdate {
         void limpar(Polyline pontos);
+    }
+
+    public interface RemoveMarker {
+        void remove(Viagem viagem);
     }
 }
