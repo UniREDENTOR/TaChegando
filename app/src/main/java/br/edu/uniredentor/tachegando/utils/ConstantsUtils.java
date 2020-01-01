@@ -27,4 +27,6 @@ public class ConstantsUtils {
 
     public static final String LISTA_VIAGENS_ATIVAS = "listaViagensAtivas";
     public static final String VIAGEM_NÃO_ENCONTRADA = "Viagem não encontrada";
+    public static final String VIAGEM_ID = "viagemID";
+    public static final String VIAGEM = "viagem";
 }

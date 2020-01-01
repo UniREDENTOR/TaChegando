@@ -34,11 +34,10 @@ public class ViagensAtivasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        googleMap = Singleton.getInstance().getGoogleMap();
         viagemList = Singleton.getInstance().getViagemList();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        viagemAtivaAdapter = new ViagemAtivaAdapter(viagemList, this, googleMap);
+        viagemAtivaAdapter = new ViagemAtivaAdapter(viagemList, this);
         recyclerViewViagemAtiva.setLayoutManager(layoutManager);
         recyclerViewViagemAtiva.setAdapter(viagemAtivaAdapter);
         recyclerViewViagemAtiva.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));

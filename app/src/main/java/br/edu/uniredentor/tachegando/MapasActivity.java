@@ -63,6 +63,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
     private static final int CODIGO_PERMISSAO = 123;
     private static final float DISTANCIA_MINIMA = 50f;
+    private static final int BUSCA_VIAGEM = 421;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
@@ -128,7 +129,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     @OnClick(R.id.fab_menu_lista_viagem)
     public void listaViagens(){
         Singleton.getInstance().setViagemListMap(mMap, listaViagens);
-        startActivity(new Intent(getApplicationContext(),ViagensAtivasActivity.class));
+        startActivityForResult(new Intent(getApplicationContext(),ViagensAtivasActivity.class), BUSCA_VIAGEM);
     }
 
     @OnClick(R.id.fab_menu_nova_viagem)
@@ -304,6 +305,12 @@ ex.printStackTrace();
                             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivityForResult(intent, REQUEST_CODE);
                         }).setNegativeButton(getString(R.string.nao_ativar), (dialog, which) -> dialog.dismiss()).create().show();
+            }
+        }else if(requestCode == BUSCA_VIAGEM){
+            if(resultCode == RESULT_OK){
+                Viagem viagem = (Viagem) data.getSerializableExtra(ConstantsUtils.VIAGEM);
+                MapaUtils.moveCamera(mMap, viagem.getLatLng());
+
             }
         }
     }
