@@ -3,22 +3,20 @@ package br.edu.uniredentor.tachegando.utils;
 
 import android.location.Location;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+
 import br.edu.uniredentor.tachegando.model.Denuncia;
 import br.edu.uniredentor.tachegando.model.Passageiro;
 import br.edu.uniredentor.tachegando.model.Viagem;
@@ -31,13 +29,10 @@ public class FirebaseUtils extends AppCompatActivity {
     public static void salvaViagem(final Viagem viagem) {
         final DocumentReference reference = getBanco().collection(ConstantsUtils.VIAGENS)
                 .document(viagem.getId());
-        getBanco().collection(ConstantsUtils.USERS).document(viagem.getId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot.exists()) {
-                    viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
-                    reference.set(viagem.getInicialMap());
-                }
+        getBanco().collection(ConstantsUtils.USERS).document(viagem.getId()).addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot.exists()) {
+                viagem.addPassageiro(documentSnapshot.toObject(Passageiro.class));
+                reference.set(viagem.getInicialMap());
             }
         });
     }
@@ -76,11 +71,8 @@ public class FirebaseUtils extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String id = user.getUid();
 
-        FirebaseUtils.getBanco().collection(ConstantsUtils.USERS).document(id).set(passageiro.retornaUser()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+        FirebaseUtils.getBanco().collection(ConstantsUtils.USERS).document(id).set(passageiro.retornaUser()).addOnSuccessListener(aVoid -> {
 
-            }
         });
     }
 

@@ -11,7 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import br.edu.uniredentor.tachegando.livedata.FirebaseLiveDataPassageiro;
 import br.edu.uniredentor.tachegando.livedata.FirebaseLiveDataViagens;
 
-public class ViewModelPassageiro extends ViewModel {
+public class ViewModelMap extends ViewModel {
 
     private final FirebaseLiveDataPassageiro liveData = new FirebaseLiveDataPassageiro();
     private final FirebaseLiveDataViagens liveDataViagens = new FirebaseLiveDataViagens();

@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +54,7 @@ import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
 import br.edu.uniredentor.tachegando.utils.Singleton;
-import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
+import br.edu.uniredentor.tachegando.viewmodel.ViewModelMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,6 +62,7 @@ import butterknife.OnClick;
 public class MapasActivity extends FragmentActivity implements OnMapReadyCallback, InformacaoOnibusDialogFragment.MarcacaoUpdate {
 
     private static final int CODIGO_PERMISSAO = 123;
+    private static final float DISTANCIA_MINIMA = 50f;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
@@ -80,6 +82,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
         ButterKnife.bind(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -92,6 +95,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             chamaPermissoes();
         }
 
+
+
         if(!SharedUtils.getId(this).equalsIgnoreCase("")){
             final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
 
@@ -99,16 +104,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
 
                 try{
                     Viagem viagem = documentSnapshot.toObject(Viagem.class);
-                    if(viagem.isAtiva()){
-                        double latitudeDaViagem = viagem.getLatitude();
-                        double longitudeDaViagem = viagem.getLongitude();
-                        Marker marker = getOnibus(viagem);
-                        LatLng latLng = new LatLng(latitudeDaViagem, longitudeDaViagem);
-                        marker.setPosition(latLng);
-                        MapaUtils.moveCamera(mMap, latLng);
-                    }else{
-                        SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
-                    }
+
 
 
                 }catch (Exception e1){
@@ -118,8 +114,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             });
         }
 
-        ViewModelPassageiro viewModelPassageiro = ViewModelProviders.of(this).get(ViewModelPassageiro.class);
-        LiveData<QuerySnapshot> liveData = viewModelPassageiro.getQuerySnapshotLiveDataViagens();
+        ViewModelMap viewModelMap = ViewModelProviders.of(this).get(ViewModelMap.class);
+        LiveData<QuerySnapshot> liveData = viewModelMap.getQuerySnapshotLiveDataViagens();
         liveData.observe(this, queryDocumentSnapshots -> {
             criaMarkers(queryDocumentSnapshots);
         });
@@ -127,7 +123,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void iniciaMapa() {
-   //     buscarViagens();
         mostraMapa();
     }
 
@@ -178,23 +173,19 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             if (mapFragment != null) {
                 mapFragment.getMapAsync(this);
             }
+
             locationCallback = new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
-                    for (Location location : locationResult.getLocations()) {
-                        if(souLocalizador()){
-                            try{
-                                if(location.getLatitude() != SharedUtils.getLatitude(MapasActivity.this) &&
-                                        location.getLongitude() != SharedUtils.getLongitude(MapasActivity.this)){
-                                    SharedUtils.save((long) location.getLatitude(), ConstantsUtils.LATITUDE, MapasActivity.this);
-                                    SharedUtils.save((long) location.getLongitude(), ConstantsUtils.LONGITUDE, MapasActivity.this);
-                                    FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
-                                    GeralUtils.show("Atualizao loca " + location);
-                                }
 
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
+                    Location location = locationResult.getLastLocation();
+                    if(souLocalizador()){
+                        try{
+                            SharedUtils.save(location.getLatitude()+"", ConstantsUtils.LATITUDE, MapasActivity.this);
+                            SharedUtils.save(location.getLongitude() + "", ConstantsUtils.LONGITUDE, MapasActivity.this);
+                            FirebaseUtils.atualizaLocalizacao(SharedUtils.getId(MapasActivity.this), location);
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -207,23 +198,10 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     }
 
     private void chamaPermissoes() {
-        String[] permissoes = {Manifest.permission.ACCESS_COARSE_LOCATION};
+        String[] permissoes = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
         ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
 
-
-    private void buscarViagens() {
-        FirebaseUtils.getBanco().collection(ConstantsUtils.VIAGENS).addSnapshotListener((queryDocumentSnapshots, e) -> {
-            if(queryDocumentSnapshots.getDocuments().size() != quantidadeDeViagens){
-                this.quantidadeDeViagens = queryDocumentSnapshots.getDocumentChanges().size();
-                mMap.clear();
-                criaMarkers(queryDocumentSnapshots);
-                GeralUtils.show("Buscanod localizacao");
-            }
-
-
-        });
-    }
 
     private void criaMarkers(QuerySnapshot queryDocumentSnapshots) {
         try{
@@ -231,12 +209,20 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             for (Viagem viagem : listaViagens) {
                 if (existe(viagem)) {
                     getOnibus(viagem).setPosition(viagem.getLatLng());
+                    if(viagem.getId().equalsIgnoreCase(SharedUtils.getId(this))){
+                        if(viagem.isAtiva()){
+                            MapaUtils.moveCamera(mMap, viagem.getLatLng());
+                        }else{
+                            SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
+                        }
+                    }
+
                 } else {
                     try {
                         Marker marker = MapaUtils.criaMarker(mMap, viagem);
                         listaDeOnibus.add(marker);
                     } catch (Exception ex) {
-
+ex.printStackTrace();
                     }
                 }
             }
@@ -281,7 +267,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         latitude = localizacaoAtual.getLatitude();
                         longitude = localizacaoAtual.getLongitude();
                         LatLng latLng = new LatLng(latitude, longitude);
-                        GeralUtils.show("Minha localizacao " + latLng);
                         MapaUtils.moveCamera(mMap, latLng);
                     }
                 });
@@ -385,9 +370,9 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private void iniciaAtualizacaoDaLocalizacao() {
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    //    locationRequest.setSmallestDisplacement(100);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest.setSmallestDisplacement(DISTANCIA_MINIMA);
+     //   locationRequest.setInterval(5000);
+     //   locationRequest.setFastestInterval(5000);
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 

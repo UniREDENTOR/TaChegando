@@ -15,8 +15,8 @@ public class SharedUtils {
         getShared(activity).edit().putString(VIAGEM_ID, id).apply();
     }
 
-    public static void save(long valor, String id, Activity activity){
-        getShared(activity).edit().putLong(id, valor).apply();
+    public static void save(String valor, String id, Activity activity){
+        getShared(activity).edit().putString(id, valor).apply();
     }
 
     public static String getId(Activity activity){
@@ -27,11 +27,11 @@ public class SharedUtils {
         return activity.getSharedPreferences(SHARED_NOME, Context.MODE_PRIVATE);
     }
 
-    public static double getLatitude(MapasActivity activity) {
-        return getShared(activity).getLong(ConstantsUtils.LATITUDE, 0);
+    public static String getLatitude(MapasActivity activity) {
+        return getShared(activity).getString(ConstantsUtils.LATITUDE, "");
     }
 
-    public static double getLongitude(MapasActivity activity) {
-        return getShared(activity).getLong(ConstantsUtils.LONGITUDE, 0);
+    public static String getLongitude(MapasActivity activity) {
+        return getShared(activity).getString(ConstantsUtils.LONGITUDE, "");
     }
 }

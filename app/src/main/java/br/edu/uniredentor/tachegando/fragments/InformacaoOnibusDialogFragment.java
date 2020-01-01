@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -39,13 +37,11 @@ import br.edu.uniredentor.tachegando.utils.FirebaseUtils;
 import br.edu.uniredentor.tachegando.utils.GeralUtils;
 import br.edu.uniredentor.tachegando.utils.MapaUtils;
 import br.edu.uniredentor.tachegando.utils.SharedUtils;
-import br.edu.uniredentor.tachegando.viewmodel.ViewModelPassageiro;
+import br.edu.uniredentor.tachegando.viewmodel.ViewModelMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
-
-import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,8 +70,8 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ViewModelPassageiro viewModelPassageiro = ViewModelProviders.of(this).get(ViewModelPassageiro.class);
-        LiveData<DocumentSnapshot> liveData = viewModelPassageiro.getDataSnapshotLiveData(viagem.getId());
+        ViewModelMap viewModelMap = ViewModelProviders.of(this).get(ViewModelMap.class);
+        LiveData<DocumentSnapshot> liveData = viewModelMap.getDataSnapshotLiveData(viagem.getId());
         liveData.observe(this, dataSnapshot -> {
             if(dataSnapshot != null){
                 try {
