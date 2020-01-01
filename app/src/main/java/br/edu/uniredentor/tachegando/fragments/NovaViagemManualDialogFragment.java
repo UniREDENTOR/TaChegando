@@ -94,7 +94,7 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
             }
             return true;
         });
-        toolbar.inflateMenu(R.menu.menu_nova_viagem_dialog);
+ //       toolbar.inflateMenu(R.menu.menu_nova_viagem_dialog);
         return toolbar;
     }
 
