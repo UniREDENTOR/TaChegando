@@ -16,7 +16,6 @@ public class FirebaseLiveDataPassageiro extends LiveData<DocumentSnapshot> {
 
     @Override
     protected void onActive(){
-        GeralUtils.show("onActive");
         if(!id.isEmpty()){
             FirebaseUtils.getViagem(id).addSnapshotListener(listener);
 
@@ -25,7 +24,7 @@ public class FirebaseLiveDataPassageiro extends LiveData<DocumentSnapshot> {
 
     @Override
     protected void onInactive(){
-        GeralUtils.show("onInactive");
+
     }
 
     public LiveData<DocumentSnapshot> setId(String id) {

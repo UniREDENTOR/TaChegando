@@ -64,6 +64,8 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private static final int CODIGO_PERMISSAO = 123;
     private static final float DISTANCIA_MINIMA = 50f;
     private static final int BUSCA_VIAGEM = 421;
+    private static final long INTERVALO = 10000;
+    private static final long INTERVALO_MAIS_RAPIDO = 5000;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocation;
     private LocationRequest locationRequest;
@@ -76,6 +78,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private int REQUEST_CODE = 0;
 
     @BindView (R.id.toolbar_principal) Toolbar toolbarPrincipal;
+    private Viagem viagemEscolhida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,25 +96,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             iniciaMapa();
         }else{
             chamaPermissoes();
-        }
-
-
-
-        if(!SharedUtils.getId(this).equalsIgnoreCase("")){
-            final DocumentReference docRef = FirebaseUtils.getViagem(SharedUtils.getId(this));
-
-            docRef.addSnapshotListener((documentSnapshot, e) -> {
-
-                try{
-                    Viagem viagem = documentSnapshot.toObject(Viagem.class);
-
-
-
-                }catch (Exception e1){
-                    e1.printStackTrace();
-                    SharedUtils.save("", MapasActivity.this);
-                }
-            });
         }
 
         ViewModelMap viewModelMap = ViewModelProviders.of(this).get(ViewModelMap.class);
@@ -209,22 +193,25 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
             for (Viagem viagem : listaViagens) {
                 if (existe(viagem)) {
                     getOnibus(viagem).setPosition(viagem.getLatLng());
-                    if(viagem.getId().equalsIgnoreCase(SharedUtils.getId(this)) || viagem.isPassageiro(GeralUtils.getIdDoUsuario())){
-                        if(viagem.isAtiva()){
+                    if (viagem.getId().equalsIgnoreCase(SharedUtils.getId(this)) || viagem.isPassageiro(GeralUtils.getIdDoUsuario())) {
+                        if (viagem.isAtiva()) {
                             MapaUtils.moveCamera(mMap, viagem.getLatLng());
-                        }else{
+                        } else {
                             SharedUtils.save(viagem.getProximoIdDaViagem(), MapasActivity.this);
                         }
                     }
-
                 } else {
                     try {
                         Marker marker = MapaUtils.criaMarker(mMap, viagem);
                         listaDeOnibus.add(marker);
                     } catch (Exception ex) {
-ex.printStackTrace();
+                        ex.printStackTrace();
                     }
                 }
+            }
+            if(viagemEscolhida != null){
+                MapaUtils.moveCamera(mMap, viagemEscolhida.getLatLng());
+                viagemEscolhida = null;
             }
         }catch (Exception e1){
             e1.printStackTrace();
@@ -308,9 +295,7 @@ ex.printStackTrace();
             }
         }else if(requestCode == BUSCA_VIAGEM){
             if(resultCode == RESULT_OK){
-                Viagem viagem = (Viagem) data.getSerializableExtra(ConstantsUtils.VIAGEM);
-                MapaUtils.moveCamera(mMap, viagem.getLatLng());
-
+                viagemEscolhida = (Viagem) data.getSerializableExtra(ConstantsUtils.VIAGEM);
             }
         }
     }
@@ -377,8 +362,8 @@ ex.printStackTrace();
         locationRequest = new LocationRequest();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setSmallestDisplacement(DISTANCIA_MINIMA);
-     //   locationRequest.setInterval(5000);
-     //   locationRequest.setFastestInterval(5000);
+        locationRequest.setInterval(INTERVALO);
+        locationRequest.setFastestInterval(INTERVALO_MAIS_RAPIDO);
         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 
