@@ -24,7 +24,7 @@ O aplicativo está disponível na Play Store.
 
 ## Ferramentas de Desenvolvimento
 
-* [Firebase](http://https://firebase.google.com/) - Plataforma do Google que disponibiliza serviços como autenticação, monitoramento, banco de dados, serviço em nuvem e etc.
+* [Firebase](https://https://firebase.google.com/) - Plataforma do Google que disponibiliza serviços como autenticação, monitoramento, banco de dados, serviço em nuvem e etc.
 * [Trello](https://trello.com/) - Gerenciador de Projetos
 * [Whatsapp](https://whatsapp.com/) - Rede social para comunicação
 * [Android Studio](https://https://developer.android.com/studio/) - IDE de desenvolvimento
