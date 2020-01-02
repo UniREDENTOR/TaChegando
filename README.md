@@ -24,7 +24,7 @@ O aplicativo está disponível na Play Store.
 
 ## Ferramentas de Desenvolvimento
 
-* [Firebase](http://https://firebase.google.com/) - Banco de dados não relacional.
+* [Firebase](http://https://firebase.google.com/) - Plataforma do Google que disponibiliza serviços como autenticação, monitoramento, banco de dados, serviço em nuvem e etc.
 * [Trello](https://trello.com/) - Gerenciador de Projetos
 * [Whatsapp](https://whatsapp.com/) - Rede social para comunicação
 * [Android Studio](https://https://developer.android.com/studio/) - IDE de desenvolvimento
@@ -32,11 +32,11 @@ O aplicativo está disponível na Play Store.
 
 ## Contribuição
 
-Por favor, leia [CONTRIBUTING.md](https://git.github.com/PurpleBooth/b24679402957c63ec426) para saber como contribuir para este projeto através de um pull request.
+Por favor, caso queira contribuir para o projeto, envie um pull request com as alterações e nós da equipe TaChegando analisaremos.
 
 ## Autores
 
-* Lista de Contribuidores [https://github.com/UniRedentor/TaChegando/] que participaram neste projeto.
+* Lista de Contribuidores [https://github.com/UniREDENTOR/TaChegando/graphs/contributors] que participaram neste projeto.
 
 ## Licença
 
