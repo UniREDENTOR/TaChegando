@@ -43,6 +43,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 
+import static br.edu.uniredentor.tachegando.utils.FirebaseUtils.getViagem;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -101,7 +103,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         getToolbar(view);
         setTextos();
 
-
         return view;
     }
 
@@ -152,6 +153,10 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         }
     }
 
+    private void mostraResponsavel(){
+        String idResponsavel = viagem.getPassageiros().get(0).getId();
+    }
+
     private void setTextos() {
         try {
             textViewNomeDaRota.setText(viagem.getNome());
@@ -187,7 +192,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             switch (item.getItemId()) {
 
                 case R.id.item_trajeto:
-                    FirebaseUtils.getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    getViagem(viagem.getId()).collection(ConstantsUtils.TRAJETO).addSnapshotListener((queryDocumentSnapshots, e) -> {
                         ArrayList<LatLng> locais = new ArrayList<>();
                         for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                             LatLng latLng = new LatLng((Double) snapshot.get(ConstantsUtils.LATITUDE), (Double) snapshot.get(ConstantsUtils.LONGITUDE));
@@ -216,7 +221,6 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
         FirebaseUtils.adicionaPassageiro(id, viagem);
         SharedUtils.save(viagem.getId(), getActivity());
     }
-
 
     private void mostraChat() {
         ChatFragment chat = new ChatFragment();

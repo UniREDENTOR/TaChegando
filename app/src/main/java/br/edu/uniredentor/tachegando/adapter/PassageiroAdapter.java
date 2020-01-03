@@ -35,6 +35,9 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Passageiro passageiro = passageiros.get(position);
         holder.set(passageiro);
+        if (passageiros.indexOf(passageiro) == 0){
+            holder.imageViewResponsavel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -50,6 +53,7 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
     class ViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.imageView_foto) ImageView imageViewFoto;
+        @BindView(R.id.imageView_responsavel) ImageView imageViewResponsavel;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
