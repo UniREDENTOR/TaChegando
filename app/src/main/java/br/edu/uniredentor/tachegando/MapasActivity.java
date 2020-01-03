@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -76,9 +77,11 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     private Polyline polyline;
     private List<Viagem> listaViagens;
     private int REQUEST_CODE = 0;
-
-    @BindView (R.id.toolbar_principal) Toolbar toolbarPrincipal;
     private Viagem viagemEscolhida;
+
+
+    @BindView(R.id.toolbar_principal) Toolbar toolbarPrincipal;
+    @BindView(R.id.fab_menu) FloatingActionMenu fabMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +117,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
     public void listaViagens(){
         Singleton.getInstance().setViagemListMap(mMap, listaViagens);
         startActivityForResult(new Intent(getApplicationContext(),ViagensAtivasActivity.class), BUSCA_VIAGEM);
+        fabMenu.close(true);
     }
 
     @OnClick(R.id.fab_menu_nova_viagem)
@@ -126,11 +130,13 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                 GeralUtils.mostraAlerta("Atenção", "Não encontramos sua localização. Por favor, verifique seu GPS.", MapasActivity.this);
             }
         }
+        fabMenu.close(true);
     }
 
     @OnClick(R.id.fab_menu_procurar_viagem)
     public void procuraViagem(){
         BuscarOnibusController.alertaDeBusca(MapasActivity.this, listaViagens, mMap);
+        fabMenu.close(true);
     }
 
     private void criaToolBar() {
@@ -185,7 +191,6 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
         String[] permissoes = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
         ActivityCompat.requestPermissions(MapasActivity.this, permissoes, CODIGO_PERMISSAO);
     }
-
 
     private void criaMarkers(QuerySnapshot queryDocumentSnapshots) {
         try{
@@ -325,6 +330,7 @@ public class MapasActivity extends FragmentActivity implements OnMapReadyCallbac
                         .setViagem(viagem)
                         .setLocalizacao(latitude, longitude)
                         .show(getSupportFragmentManager(), "informacao");
+                fabMenu.close(true);
 
             }catch (Exception e){
                 e.printStackTrace();
