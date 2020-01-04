@@ -22,10 +22,21 @@ public class Viagem implements Serializable {
     private String proximoIdDaViagem;
     private double latitude, longitude, latitudeInicial, longitudeInicial;
 
-    public void setLatLng(LatLng latLng) {
-        setLatitude(latLng.latitude);
-        setLongitude(latLng.longitude);
+    public Viagem(){}
+
+    public Viagem(Viagem viagem) {
+        setId(viagem.getId());
+        setAtiva(viagem.isAtiva());
+        setProximoIdDaViagem(viagem.getProximoIdDaViagem());
+        setLongitude(viagem.getLongitude());
+        setLatitude(viagem.getLatitude());
+        setNome(viagem.getNome());
+        setDenuncias(new ArrayList<>(viagem.getDenuncias()));
+        setLatitudeInicial(viagem.getLatitudeInicial());
+        setLongitudeInicial(viagem.getLongitudeInicial());
+        setPassageiros(new ArrayList<>(viagem.getPassageiros()));
     }
+
 
     public LatLng getLatLng() {
         return new LatLng(latitude, longitude);

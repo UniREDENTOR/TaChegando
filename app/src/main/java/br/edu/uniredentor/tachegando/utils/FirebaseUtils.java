@@ -130,11 +130,12 @@ public class FirebaseUtils extends AppCompatActivity {
            removeViagem(viagem, removeMarkerListener);
         } else {
             if(viagem.getId().equals(passageiroId)){
+                Viagem viagemParaSerRemovida = new Viagem(viagem);
                 String proximoId = atualizaViagemComProximoIdViagem(viagem, passageiros);
                 viagem.setAtiva(true);
                 viagem.setId(proximoId);
                 getViagem(proximoId).set(viagem.getInicialMap());
-                getViagem(passageiroId).delete();
+                removeViagem(viagemParaSerRemovida, removeMarkerListener);
             }else{
                 viagem.removePassageiro(passageiroId);
                 HashMap<String, Object> map = new HashMap<>();
