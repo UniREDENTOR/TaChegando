@@ -61,8 +61,8 @@ public class ChatFragment extends Fragment {
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setHasFixedSize(true);
         layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
         recyclerViewChat.setAdapter(adapter);
+
         user = FirebaseUtils.getUser();
 
         return view;
