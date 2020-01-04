@@ -7,8 +7,7 @@
     <string name="chave_rodrigo">AIzaSyAvI1Xwfvx9ZfY1oj2G4o6mMrMv8eAeYz0</string>
     <string name="chave_gustavo">AIzaSyAq-TF61G2jutp1sFIRq2Vh8Hk4OEE_-Xg</string>
     <string name="chave_ivan">AIzaSyDuGhdvXJpIKLZx96YMs5FlklLrT9ENew4</string>
-    <string name="chave_release">AIzaSyAyo87oeqWURVqdeB7DvBaErkPxoe-DX2k</string>
-    <string name="chave_maps">@string/chave_desktop</string>
+    <string name="chave_maps">@string/chave_gustavo</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
