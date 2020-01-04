@@ -35,8 +35,10 @@ public class PassageiroAdapter extends RecyclerView.Adapter<PassageiroAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Passageiro passageiro = passageiros.get(position);
         holder.set(passageiro);
-        if (passageiros.indexOf(passageiro) == 0){
+        if (position == 0){
             holder.imageViewResponsavel.setVisibility(View.VISIBLE);
+        }else{
+            holder.imageViewResponsavel.setVisibility(View.GONE);
         }
     }
 
