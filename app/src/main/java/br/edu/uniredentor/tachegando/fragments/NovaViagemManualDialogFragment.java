@@ -57,8 +57,8 @@ public class NovaViagemManualDialogFragment extends DialogFragment {
 
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
-        String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
-        textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
+        textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " ");
+        GeralUtils.getEndereco(getContext(), latitude, longitude, textViewEndereco, false);
         getToolbar(view);
         return view;
     }

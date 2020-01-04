@@ -162,8 +162,7 @@ public class InformacaoOnibusDialogFragment extends DialogFragment {
             textViewNomeDaRota.setText(viagem.getNome());
             textViewQuantidadeDeDenuncias.setText(viagem.getDenuncias().size() + " " + "denúncias");
             textViewDistancia.setText(getString(R.string.distancia) + " " + defineDistancia() + " m");
-            String enderecoAtual = GeralUtils.getEnderecoCurto(getContext(), viagem.getLatitude(), viagem.getLongitude());
-            textViewEndereco.setText(enderecoAtual);
+            GeralUtils.getEndereco(getContext(), viagem.getLatitude(), viagem.getLongitude(), textViewEndereco, true);
             defineBotaoDeEntrarOuSair();
         }catch (Exception e){
             e.printStackTrace();

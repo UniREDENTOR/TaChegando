@@ -55,8 +55,8 @@ public class NovoPontoManualDialogFragment extends DialogFragment {
         latitude = getArguments().getDouble(ConstantsUtils.LATITUDE);
         longitude = getArguments().getDouble(ConstantsUtils.LONGITUDE);
 
-        String enderecoAtual = GeralUtils.getEndereco(getContext(), latitude, longitude);
-        textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " " + enderecoAtual);
+        textViewEndereco.setText(getString(R.string.sua_localizacao_atual_e) + " ");
+
 
         return view;
 
