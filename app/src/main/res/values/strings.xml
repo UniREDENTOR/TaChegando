@@ -124,6 +124,7 @@
     <string name="deseja_sair_do_onibus">Deseja sair do onibus?</string>
     <string name="deseja_sair_do_app">Deseja sair do app?</string>
     <string name="detalhes">Detalhes</string>
+    <string name="location_updated">Location Updated: %1$s</string>
 
 
 </resources>

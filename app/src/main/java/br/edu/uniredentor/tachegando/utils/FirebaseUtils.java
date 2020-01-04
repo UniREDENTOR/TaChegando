@@ -134,7 +134,7 @@ public class FirebaseUtils extends AppCompatActivity {
                 viagem.setAtiva(true);
                 viagem.setId(proximoId);
                 getViagem(proximoId).set(viagem.getInicialMap());
-                getViagem(viagem.getId()).delete();
+                getViagem(passageiroId).delete();
             }else{
                 viagem.removePassageiro(passageiroId);
                 HashMap<String, Object> map = new HashMap<>();
