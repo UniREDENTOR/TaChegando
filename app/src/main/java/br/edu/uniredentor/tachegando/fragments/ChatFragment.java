@@ -61,8 +61,21 @@ public class ChatFragment extends Fragment {
         adapter = new ChatAdapter(mensagens);
         recyclerViewChat.setHasFixedSize(true);
         layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
         recyclerViewChat.setAdapter(adapter);
+        recyclerViewChat.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (bottom < oldBottom) {
+                    recyclerViewChat.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerViewChat.scrollToPosition(mensagens.size());
+                        }
+                    });
+                }
+            }
+        });
+
         user = FirebaseUtils.getUser();
 
         return view;
